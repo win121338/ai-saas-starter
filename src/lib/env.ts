@@ -48,7 +48,7 @@ const schema = z
 
     // ── Email via Resend (optional — emails no-op without it) ─────────────
     RESEND_API_KEY: z.string().optional(),
-    EMAIL_FROM: z.string().default("AI SaaS Starter <onboarding@resend.dev>"),
+    EMAIL_FROM: z.string().default("Artora <onboarding@resend.dev>"),
 
     // ── Stripe ────────────────────────────────────────────────────────────
     // Optional in development so a fresh clone boots without a Stripe
@@ -84,8 +84,18 @@ const schema = z
 
     // ── Storage via Vercel Blob (optional — ./.generated fallback in dev) ─
     BLOB_READ_WRITE_TOKEN: z.string().optional(),
+    ART_PROVIDER: z.enum(["mock", "fal"]).default("mock"),
+    FAL_KEY: z.string().optional(),
+    ART_WORKER_SECRET: z.string().min(32).optional(),
   })
   .superRefine((env, ctx) => {
+    if (env.ART_PROVIDER === "fal" && !env.FAL_KEY) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["FAL_KEY"],
+        message: "required when ART_PROVIDER=fal",
+      });
+    }
     const pairs = [
       ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
       ["GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET"],
@@ -116,6 +126,28 @@ const schema = z
           path: ["AI_MOCK"],
           message:
             "must not be enabled in production — it returns placeholder images while still charging credits",
+        });
+      }
+      if (!env.BLOB_READ_WRITE_TOKEN) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["BLOB_READ_WRITE_TOKEN"],
+          message:
+            "private Blob storage is required for production photo uploads",
+        });
+      }
+      if (env.ART_PROVIDER !== "fal" || !env.FAL_KEY) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["ART_PROVIDER"],
+          message: "set ART_PROVIDER=fal and FAL_KEY in production",
+        });
+      }
+      if (!env.ART_WORKER_SECRET) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["ART_WORKER_SECRET"],
+          message: "required for production job polling",
         });
       }
     }

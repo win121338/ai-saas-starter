@@ -18,8 +18,10 @@ const signupSchema = z.object({
 
 export function SignupForm({
   requiresVerification,
+  next = "/dashboard",
 }: {
   requiresVerification: boolean;
+  next?: string;
 }) {
   const router = useRouter();
   const [pending, setPending] = React.useState(false);
@@ -57,7 +59,7 @@ export function SignupForm({
       setVerifyNotice(true);
       return;
     }
-    router.push("/dashboard");
+    router.push(next as Parameters<typeof router.push>[0]);
     router.refresh();
   }
 
@@ -65,7 +67,7 @@ export function SignupForm({
     return (
       <p className="text-sm text-muted-foreground">
         Almost there — check your inbox and click the verification link to
-        activate your account. Your 10 welcome credits are already waiting.
+        activate your account.
       </p>
     );
   }

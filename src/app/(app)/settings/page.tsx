@@ -32,12 +32,11 @@ export default async function SettingsPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-[1000px] space-y-6">
       <PageHeader eyebrow="Account" title="Settings" />
 
-      <Card className="max-w-2xl pt-0">
-        {/* v4 medium-fun app register: panel-colored header strips. */}
-        <CardHeader className="border-b-2 bg-pop-yellow py-3.5">
+      <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
+        <CardHeader className="border-b border-border py-5">
           <p className="eyebrow">Profile</p>
           <CardTitle>Name and email</CardTitle>
         </CardHeader>
@@ -48,8 +47,8 @@ export default async function SettingsPage() {
       </Card>
 
       {hasPassword ? (
-        <Card className="max-w-2xl pt-0">
-          <CardHeader className="border-b-2 bg-pop-mint py-3.5">
+        <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
+          <CardHeader className="border-b border-border py-5">
             <p className="eyebrow">Security</p>
             <CardTitle>Password</CardTitle>
           </CardHeader>
@@ -59,8 +58,8 @@ export default async function SettingsPage() {
         </Card>
       ) : null}
 
-      <Card className="max-w-2xl pt-0">
-        <CardHeader className="border-b-2 bg-pop-sky py-3.5">
+      <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
+        <CardHeader className="border-b border-border py-5">
           <p className="eyebrow">Sign-in methods</p>
           <CardTitle>Connected accounts</CardTitle>
         </CardHeader>
@@ -73,8 +72,7 @@ export default async function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* v4.5: destructive zone framed with a debit border. */}
-      <Card className="max-w-2xl border-destructive">
+      <Card className="max-w-2xl border border-destructive/70 bg-card shadow-none">
         <CardHeader>
           <p className="eyebrow">Danger zone</p>
           <CardTitle>Delete account</CardTitle>

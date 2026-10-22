@@ -2,45 +2,63 @@ import Link from "next/link";
 
 import { SidebarNav } from "@/components/app/sidebar-nav";
 import { UserMenu } from "@/components/app/user-menu";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { requireSession } from "@/lib/auth/session";
+import { LogoMark } from "@/components/logo-mark";
 import { siteConfig } from "@/config/site";
+import { requireSession } from "@/lib/auth/session";
 
-// The layout renders user data, but it is NOT the security boundary — every
-// (app) page re-checks the session itself via requireSession() (layouts
-// don't re-run on soft navigation; AGENTS.md: never trust middleware alone).
 export default async function AppLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await requireSession();
-
   return (
-    <div className="flex min-h-dvh w-full">
-      <aside className="hidden w-56 shrink-0 flex-col border-r-2 bg-sidebar md:flex">
-        <div className="flex h-14 items-center border-b-2 px-4">
-          <Link href="/dashboard" className="font-mono text-sm font-medium">
-            {siteConfig.name}
-          </Link>
-        </div>
+    <div className="flex min-h-dvh w-full bg-background">
+      <aside className="hidden w-[240px] shrink-0 border-r border-border bg-[#11151d] md:flex md:flex-col">
+        <Link
+          href="/"
+          className="flex h-[72px] items-center gap-2.5 border-b border-border px-5 font-heading text-xl font-extrabold"
+        >
+          <LogoMark className="size-8" /> {siteConfig.name}
+        </Link>
         <div className="p-3">
           <SidebarNav />
         </div>
+        <div className="mt-auto p-5 text-xs leading-6 text-muted-foreground">
+          Private photo-to-art workspace
+          <br />
+          Live image generation is being tested.
+        </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b-2 px-6">
-          <span className="eyebrow md:hidden">{siteConfig.name}</span>
+        <header className="flex h-[72px] shrink-0 items-center justify-between gap-4 border-b border-border px-5 sm:px-7">
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-heading text-lg font-bold md:hidden"
+          >
+            <LogoMark className="size-7" /> {siteConfig.name}
+          </Link>
+          <span className="hidden text-sm font-medium text-muted-foreground md:block">
+            Your workspace
+          </span>
           <div className="ml-auto flex items-center gap-4">
-            <div className="flex items-baseline gap-2" title="Credit balance">
-              <span className="eyebrow">Credits</span>
-              <span className="font-mono text-sm" data-testid="credit-balance">
+            <div
+              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm"
+              title="Existing starter credit balance"
+            >
+              <span className="text-muted-foreground">Credits </span>
+              <span
+                className="font-semibold text-primary"
+                data-testid="credit-balance"
+              >
                 {session.user.creditBalance}
               </span>
             </div>
-            <ThemeToggle />
             <UserMenu name={session.user.name} email={session.user.email} />
           </div>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <div className="border-b border-border px-3 py-2 md:hidden">
+          <SidebarNav mobile />
+        </div>
+        <main className="flex-1 p-5 sm:p-7">{children}</main>
       </div>
     </div>
   );

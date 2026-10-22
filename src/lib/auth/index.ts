@@ -13,6 +13,7 @@ import {
   ensureStripeCustomer,
 } from "@/lib/billing/customer";
 import { grantWelcomeCredits } from "@/lib/credits";
+import { deleteArtAssetsForUser } from "@/lib/art/cleanup-user";
 import { sendEmail } from "@/lib/email";
 import { env, features } from "@/lib/env";
 
@@ -81,6 +82,7 @@ export const auth = betterAuth({
         if (features.billing) {
           await cancelSubscriptionsForUser(user.id);
         }
+        await deleteArtAssetsForUser(user.id);
       },
     },
   },

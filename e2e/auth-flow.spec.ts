@@ -30,12 +30,9 @@ test("signup → sign out → login → dashboard shows 10 welcome credits", asy
   await page.waitForURL("**/dashboard");
   await expect(creditBalance(page)).toHaveText("10");
 
-  // Signed-in marketing nav collapses to a single Dashboard button.
+  // Marketing navigation keeps a clear route back into the studio.
   await page.goto("/");
   await expect(
-    page.getByRole("banner").getByRole("link", { name: "Dashboard" }),
+    page.getByRole("banner").getByRole("link", { name: "Open studio" }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("banner").getByRole("link", { name: "Get started" }),
-  ).toHaveCount(0);
 });

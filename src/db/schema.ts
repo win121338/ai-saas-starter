@@ -8,6 +8,7 @@ import {
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
 
@@ -201,5 +202,86 @@ export const generations = pgTable(
       t.userId,
       t.createdAt.desc(),
     ),
+  ],
+);
+
+// ── Photo-to-art assets and durable jobs ────────────────────────────────────
+
+export const artAssetKind = pgEnum("art_asset_kind", ["input", "output"]);
+
+export const artAssets = pgTable(
+  "art_assets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    kind: artAssetKind("kind").notNull(),
+    storageKey: text("storage_key").notNull().unique(),
+    mediaType: text("media_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    width: integer("width").notNull(),
+    height: integer("height").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    index("art_assets_user_id_idx").on(t.userId),
+    index("art_assets_expires_at_idx").on(t.expiresAt),
+    check("art_assets_size_positive", sql`${t.sizeBytes} > 0`),
+    check("art_assets_dimensions_positive", sql`${t.width} > 0 AND ${t.height} > 0`),
+  ],
+);
+
+export const artJobStatus = pgEnum("art_job_status", [
+  "awaiting_charge",
+  "queued",
+  "submitting",
+  "processing",
+  "completed",
+  "failed",
+  "refund_pending",
+  "needs_reconciliation",
+]);
+
+export const artJobs = pgTable(
+  "art_jobs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    requestKey: uuid("request_key").notNull(),
+    inputAssetId: uuid("input_asset_id")
+      .notNull()
+      .references(() => artAssets.id),
+    outputAssetId: uuid("output_asset_id").references(() => artAssets.id, {
+      onDelete: "set null",
+    }),
+    styleSlug: text("style_slug").notNull(),
+    styleVersion: integer("style_version").notNull(),
+    provider: text("provider").notNull(),
+    model: text("model").notNull(),
+    providerRequestId: text("provider_request_id"),
+    costCredits: integer("cost_credits").notNull(),
+    status: artJobStatus("status").notNull().default("awaiting_charge"),
+    failureCode: text("failure_code"),
+    leaseUntil: timestamp("lease_until", { withTimezone: true }),
+    finishedAt: timestamp("finished_at", { withTimezone: true }),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("art_jobs_user_request_key_idx").on(t.userId, t.requestKey),
+    uniqueIndex("art_jobs_provider_request_idx").on(t.provider, t.providerRequestId),
+    index("art_jobs_user_created_at_idx").on(t.userId, t.createdAt.desc()),
+    index("art_jobs_status_lease_idx").on(t.status, t.leaseUntil),
+    index("art_jobs_input_asset_idx").on(t.inputAssetId),
+    index("art_jobs_output_asset_idx").on(t.outputAssetId),
+    check("art_jobs_cost_positive", sql`${t.costCredits} > 0`),
+    check("art_jobs_style_version_positive", sql`${t.styleVersion} > 0`),
   ],
 );

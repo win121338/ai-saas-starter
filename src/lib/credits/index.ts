@@ -234,6 +234,24 @@ export async function getBalance(userId: string): Promise<number> {
   return row.creditBalance;
 }
 
+/** Reconciliation probe for a durable art job. Ledger access stays in this module. */
+export async function hasRecordedSpend(
+  userId: string,
+  refId: string,
+): Promise<boolean> {
+  const [row] = await db
+    .select({ id: creditTransactions.id })
+    .from(creditTransactions)
+    .where(
+      and(
+        eq(creditTransactions.userId, userId),
+        eq(creditTransactions.idempotencyKey, `spend_${refId}`),
+      ),
+    )
+    .limit(1);
+  return Boolean(row);
+}
+
 export type CreditTransaction = typeof creditTransactions.$inferSelect;
 
 /** Newest-first ledger entries; backed by the (user_id, created_at DESC) index. */

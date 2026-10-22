@@ -4,7 +4,7 @@ import { creditBalance, signUp, uniqueEmail } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await signUp(page, uniqueEmail("gen"));
-  await page.goto("/generate");
+  await page.goto("/generate/text-demo");
 });
 
 test("mock generation spends 1 credit and serves the image", async ({

@@ -1,157 +1,106 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { eq, sql } from "drizzle-orm";
+import { ArrowRight, Palette, Sparkles, Wallet } from "lucide-react";
 
-import { plans } from "@/config/plans";
-import { db } from "@/db";
-import { generations, subscriptions } from "@/db/schema";
-import { requireSession } from "@/lib/auth/session";
-import { planByPriceId } from "@/lib/billing/plans";
-import { getHistory } from "@/lib/credits";
-import { features } from "@/lib/env";
-import { CountUpDigits } from "@/components/count-up-digits";
-import { PageHeader } from "@/components/app/page-header";
 import { LedgerTable, type LedgerEntry } from "@/components/ledger-table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getHistory } from "@/lib/credits";
+import { requireSession } from "@/lib/auth/session";
 
-export const metadata: Metadata = { title: "Dashboard" };
-
-function formatTimestamp(date: Date): string {
-  // UTC, ledger style: 2026-07-13 09:14
-  return date.toISOString().slice(0, 16).replace("T", " ");
-}
-
-function formatRef(refType: string | null, refId: string | null): string {
-  if (!refType || !refId) return "—";
-  const id = refId.length > 16 ? `${refId.slice(0, 16)}…` : refId;
-  return `${refType} ${id}`;
-}
+export const metadata: Metadata = {
+  title: "Overview",
+  robots: { index: false },
+};
 
 export default async function DashboardPage() {
   const session = await requireSession();
-
-  const [history, [sub], [generated]] = await Promise.all([
-    getHistory(session.user.id, 10),
-    db
-      .select()
-      .from(subscriptions)
-      .where(eq(subscriptions.userId, session.user.id))
-      .limit(1),
-    db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(generations)
-      .where(eq(generations.userId, session.user.id)),
-  ]);
-
-  const isActive = sub?.status === "active" || sub?.status === "trialing";
-  const currentPlan =
-    (isActive && sub?.priceId && planByPriceId(sub.priceId)) || plans.free;
-
+  const history = await getHistory(session.user.id, 8);
   const entries: LedgerEntry[] = history.map((tx) => ({
     id: tx.id,
-    timestamp: formatTimestamp(tx.createdAt),
+    timestamp: tx.createdAt.toISOString().slice(0, 16).replace("T", " "),
     type: tx.type,
-    ref: formatRef(tx.refType, tx.refId),
+    ref:
+      tx.refType && tx.refId ? `${tx.refType} ${tx.refId.slice(0, 12)}…` : "—",
     amount: tx.amount,
   }));
 
   return (
-    <div className="space-y-6">
-      <PageHeader eyebrow="Overview" title="Dashboard" />
-
-      {features.email && !session.user.emailVerified ? (
-        <div className="max-w-2xl rounded-md border-2 border-l-[6px] border-l-pop-orange px-5 py-4">
-          <p className="eyebrow">Verify your email</p>
-          <p className="mt-1 text-sm">
-            We sent a link to {session.user.email}. Everything works meanwhile —
-            verifying keeps the account recoverable.
-          </p>
-        </div>
-      ) : null}
-
-      {(generated?.count ?? 0) === 0 ? (
-        <div className="flex max-w-2xl items-center gap-5 rounded-md border-2 border-l-[6px] border-l-pop-sky px-5 py-4">
-          <Image
-            src="/illustrations/mascot-hello.png"
-            alt="Gold coin mascot with sunglasses pushed up, waving hello"
-            width={96}
-            height={96}
-            className="illo size-24 shrink-0"
-          />
-          <div>
-            <p className="eyebrow">First steps</p>
-            <p className="mt-1 text-sm">
-              Your welcome credits are on the books. Head to{" "}
-              <Link href="/generate" className="link-pop">
-                Generate
-              </Link>{" "}
-              to spend the first one — each image costs 1 credit and failed
-              generations refund themselves. Plans and top-ups live in{" "}
-              <Link href="/billing" className="link-pop">
-                Billing
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
-      ) : null}
-
-      <div className="grid max-w-2xl gap-4 sm:grid-cols-2">
-        <Card className="pt-0">
-          {/* v4 medium-fun app register: panel-colored header strip with
-              an ink rule over a cream body. */}
-          <CardHeader className="border-b-2 bg-pop-yellow py-3.5">
-            <p className="eyebrow">Credits</p>
-            <CardTitle>
-              <CountUpDigits value={session.user.creditBalance ?? 0} />
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm">
-            <Link href="/billing" className="link-pop">
-              Buy more
-            </Link>{" "}
-            or{" "}
-            <Link href="/generate" className="link-pop">
-              generate an image
-            </Link>
-            .
-          </CardContent>
-        </Card>
-        <Card className="pt-0">
-          <CardHeader className="border-b-2 bg-pop-mint py-3.5">
-            <p className="eyebrow">Plan</p>
-            <CardTitle>{currentPlan.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm">
-            {isActive && sub?.currentPeriodEnd ? (
-              <>
-                {sub.cancelAtPeriodEnd ? "Ends" : "Renews"}{" "}
-                <span className="font-mono">
-                  {sub.currentPeriodEnd.toISOString().slice(0, 10)}
-                </span>
-              </>
-            ) : (
-              <>
-                No subscription —{" "}
-                <Link href="/billing" className="link-pop">
-                  see plans
-                </Link>
-              </>
-            )}
-          </CardContent>
-        </Card>
+    <div className="mx-auto max-w-[1100px] space-y-8">
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          Overview
+        </p>
+        <h1 className="mt-2 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
+          Welcome to Artora, {session.user.name}.
+        </h1>
+        <p className="mt-3 text-sm leading-7 text-muted-foreground">
+          Choose a style, create a private demo artwork, and revisit it in Creations.
+        </p>
       </div>
-
-      <section className="max-w-2xl">
-        <p className="eyebrow mb-3">credit_transactions</p>
-        {entries.length > 0 ? (
-          <LedgerTable entries={entries} />
-        ) : (
-          <p className="border-t-2 border-rule pt-3 text-sm">
-            No ledger entries yet.
+      <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+        <div className="artora-surface relative overflow-hidden bg-[radial-gradient(circle_at_80%_0%,#493126,#141821_60%)] p-7 sm:p-9">
+          <Sparkles
+            className="size-8 text-primary"
+            strokeWidth={1.5}
+            aria-hidden
+          />
+          <h2 className="mt-8 font-heading text-3xl font-bold">
+            Your creative space is ready to explore.
+          </h2>
+          <p className="mt-3 max-w-[520px] text-sm leading-7 text-muted-foreground">
+            Upload a photo and choose a style to try the full workflow. Results are clearly marked as local demos until the live image API is tested.
           </p>
-        )}
+          <Link href="/generate" className="artora-action mt-7">
+            Open studio <ArrowRight className="size-4" aria-hidden />
+          </Link>
+        </div>
+        <div className="grid gap-5">
+          <div className="artora-surface flex items-center gap-5 p-6">
+            <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Wallet className="size-6" aria-hidden />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">
+                Current credit balance
+              </p>
+              <p
+                className="mt-1 font-heading text-3xl font-bold"
+                data-testid="dashboard-balance"
+              >
+                {session.user.creditBalance ?? 0}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/styles"
+            className="artora-surface flex items-center gap-5 p-6 transition-colors hover:border-primary/50"
+          >
+            <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Palette className="size-6" aria-hidden />
+            </div>
+            <div>
+              <p className="font-semibold">Explore styles</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Six creative directions
+              </p>
+            </div>
+            <ArrowRight className="ml-auto size-4 text-primary" aria-hidden />
+          </Link>
+        </div>
+      </div>
+      <section className="artora-surface overflow-hidden">
+        <div className="border-b border-border px-6 py-5">
+          <h2 className="font-heading text-xl font-bold">Credit activity</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Existing starter credits and legacy demo activity appear here.
+          </p>
+        </div>
+        <div className="overflow-x-auto p-4 sm:p-6">
+          {entries.length ? (
+            <LedgerTable entries={entries} />
+          ) : (
+            <p className="text-sm text-muted-foreground">No activity yet.</p>
+          )}
+        </div>
       </section>
     </div>
   );

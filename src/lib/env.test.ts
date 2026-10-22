@@ -12,6 +12,13 @@ const validEnv = {
   STRIPE_PRICE_TOPUP_100: "price_topup",
 };
 
+const productionArtEnv = {
+  BLOB_READ_WRITE_TOKEN: "test-private-blob-token",
+  ART_PROVIDER: "fal",
+  FAL_KEY: "test-fal-key",
+  ART_WORKER_SECRET: "a".repeat(32),
+};
+
 describe("parseEnv", () => {
   it("accepts a minimal valid env and applies defaults", () => {
     const env = parseEnv(validEnv);
@@ -75,18 +82,28 @@ describe("parseEnv", () => {
   });
 
   it("accepts a fully configured production env", () => {
-    expect(parseEnv({ ...validEnv, NODE_ENV: "production" }).NODE_ENV).toBe(
-      "production",
-    );
+    expect(
+      parseEnv({ ...validEnv, ...productionArtEnv, NODE_ENV: "production" })
+        .NODE_ENV,
+    ).toBe("production");
   });
 
   it("refuses AI_MOCK in production — placeholders must never charge credits", () => {
     expect(() =>
-      parseEnv({ ...validEnv, NODE_ENV: "production", AI_MOCK: "true" }),
+      parseEnv({
+        ...validEnv,
+        ...productionArtEnv,
+        NODE_ENV: "production",
+        AI_MOCK: "true",
+      }),
     ).toThrowError(/AI_MOCK/);
     expect(
-      parseEnv({ ...validEnv, NODE_ENV: "production", AI_MOCK: "false" })
-        .AI_MOCK,
+      parseEnv({
+        ...validEnv,
+        ...productionArtEnv,
+        NODE_ENV: "production",
+        AI_MOCK: "false",
+      }).AI_MOCK,
     ).toBe(false);
   });
 

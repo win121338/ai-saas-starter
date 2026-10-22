@@ -129,10 +129,10 @@ export async function generateImageAction(
       .update(generations)
       .set({ status: "failed" })
       .where(eq(generations.id, generation.id));
-    revalidatePath("/generate");
+    revalidatePath("/generate/text-demo");
     return { ok: false, error: "generation_failed" };
   }
 
-  revalidatePath("/generate");
+  revalidatePath("/generate/text-demo");
   return { ok: true };
 }

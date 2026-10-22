@@ -11,7 +11,7 @@ test("image route: owner 200, anonymous 401, traversal 404", async ({
   browser,
 }) => {
   await signUp(page, uniqueEmail("authz"));
-  await page.goto("/generate");
+  await page.goto("/generate/text-demo");
   await page.getByLabel("Prompt").fill("An authz probe image");
   await page.getByRole("button", { name: /^Generate/ }).click();
   // Target the API-served generation specifically — the empty-state mascot

@@ -1,25 +1,32 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Terms of service",
-  robots: { index: false },
-};
+export const metadata: Metadata = { title: "Terms", robots: { index: false } };
 
-// Placeholder legal copy — replace with real terms before launch.
 export default function TermsPage() {
   return (
-    <div className="mx-auto w-full max-w-[720px] px-6 pt-24 pb-26">
-      <p className="eyebrow">Legal</p>
-      <h1 className="mt-4 mb-6 text-3xl">Terms of service</h1>
-      <div className="space-y-4 text-[15px] text-muted-foreground">
-        <p>
-          Template placeholder. Before launching, replace this page with terms
-          that match your product, jurisdiction, and refund policy.
+    <div className="artora-shell flex-1">
+      <div className="mx-auto max-w-[800px] px-5 py-20 md:px-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          Launch preparation
         </p>
-        <p>
-          The codebase itself is MIT-licensed — see LICENSE in the repository.
-          These terms govern your deployed service, not the source code.
-        </p>
+        <h1 className="mt-4 font-heading text-4xl font-extrabold">
+          Terms information
+        </h1>
+        <div className="artora-surface mt-8 space-y-4 p-7 text-sm leading-7 text-muted-foreground">
+          <p>
+            Artora is currently a working preview. Photo-to-art generation and
+            Artora checkout are not available yet.
+          </p>
+          <p>
+            Final service terms, including the operating entity, payment rules,
+            refunds, and content rights, will be published before those services
+            open.
+          </p>
+          <p>
+            The source project&apos;s MIT license applies to its code. It is
+            separate from the terms for a future hosted service.
+          </p>
+        </div>
       </div>
     </div>
   );

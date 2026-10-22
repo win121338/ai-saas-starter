@@ -79,7 +79,7 @@ export function DeleteAccount({
               <li>— your account and every sign-in method</li>
               <li>— all generated images</li>
               <li>— the entire credit ledger history</li>
-              <li>— any active subscription (canceled at Stripe first)</li>
+              <li>— any active subscription, where billing is configured</li>
             </ul>
           </DialogHeader>
           <form onSubmit={onDelete} className="grid gap-4">

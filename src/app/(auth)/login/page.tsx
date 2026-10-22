@@ -15,13 +15,20 @@ export default async function LoginPage({
   const { next } = await searchParams;
   // Same-origin paths only — never redirect to a caller-supplied host.
   const safeNext =
-    next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+    next?.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
+      ? next
+      : "/dashboard";
 
   return (
     <div className="grid gap-6">
       <div>
-        <p className="eyebrow">Sign in</p>
-        <h1 className="mt-2 text-2xl">Welcome back</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+          Artora account
+        </p>
+        <h1 className="mt-3 font-heading text-3xl font-bold">Welcome back.</h1>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          Sign in to your creative workspace.
+        </p>
       </div>
       <OAuthButtons
         google={features.googleOAuth}
@@ -31,7 +38,10 @@ export default async function LoginPage({
       <LoginForm magicLink={features.email} next={safeNext} />
       <p className="text-sm text-muted-foreground">
         No account?{" "}
-        <Link href="/signup" className="link-pop">
+        <Link
+          href={`/signup?next=${encodeURIComponent(safeNext)}`}
+          className="font-semibold text-primary hover:underline"
+        >
           Create one
         </Link>
       </p>

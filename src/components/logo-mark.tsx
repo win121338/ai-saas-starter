@@ -1,25 +1,12 @@
-// The logo mark (DESIGN.md v4): an ink-ringed pop-yellow coin with the
-// dashed inner ring — same character DNA as the mascot. Inline SVG so it
-// theme-shifts with the tokens; src/app/icon.svg is the static favicon twin.
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden className={className}>
-      <circle
-        cx="16"
-        cy="16"
-        r="13"
-        className="fill-pop-yellow stroke-foreground"
-        strokeWidth="3"
+    <svg viewBox="0 0 40 40" aria-hidden className={className} fill="none">
+      <rect x="2" y="2" width="36" height="36" rx="12" fill="#FFAA54" />
+      <path
+        d="M20 8.5 23.2 16.8 31.5 20l-8.3 3.2L20 31.5l-3.2-8.3L8.5 20l8.3-3.2L20 8.5Z"
+        fill="#17120D"
       />
-      <circle
-        cx="16"
-        cy="16"
-        r="8"
-        fill="none"
-        className="stroke-foreground"
-        strokeWidth="2"
-        strokeDasharray="2.5 3.5"
-      />
+      <circle cx="29.5" cy="10.5" r="2" fill="#17120D" />
     </svg>
   );
 }

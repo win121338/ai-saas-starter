@@ -9,21 +9,16 @@ import {
   Text,
 } from "@react-email/components";
 
-// Shared chrome for every transactional email: mono wordmark header, ink
-// text on paper, one green accent (DESIGN.md, translated to email-safe hex —
-// oklch doesn't survive email clients). Font stacks instead of webfonts.
-
-// v3 playful palette in email-safe hex: warm cream, near-black ink, yellow
-// action button with ink text, credit green for amounts, 2px ink borders.
+// Email-safe Artora colors; web font variables are unavailable in mail clients.
 export const emailTheme = {
-  paper: "#f7f2df",
-  paper2: "#ece5cf",
-  ink: "#26241d",
-  muted: "#6e6a5c",
-  hairline: "#cfc8b2",
-  accent: "#f3d84a",
-  accentInk: "#26241d",
-  credit: "#27a562",
+  paper: "#141821",
+  paper2: "#0b0d12",
+  ink: "#f4f6fa",
+  muted: "#a8b1c2",
+  hairline: "#2c3342",
+  accent: "#ffaa54",
+  accentInk: "#17120d",
+  credit: "#8de0b8",
   mono: "'Courier New', Courier, monospace",
   sans: "Helvetica, Arial, sans-serif",
 } as const;
@@ -51,13 +46,13 @@ export function EmailLayout({
         <Container
           style={{
             backgroundColor: emailTheme.paper,
-            border: `2px solid ${emailTheme.ink}`,
-            borderRadius: 6,
+            border: `1px solid ${emailTheme.hairline}`,
+            borderRadius: 16,
             maxWidth: 520,
             padding: "0 32px 28px",
           }}
         >
-          <Section style={{ borderBottom: `2px solid ${emailTheme.ink}` }}>
+          <Section style={{ borderBottom: `1px solid ${emailTheme.hairline}` }}>
             <Text
               style={{
                 fontFamily: emailTheme.mono,
@@ -66,8 +61,7 @@ export function EmailLayout({
                 margin: "18px 0 14px",
               }}
             >
-              <span style={{ color: emailTheme.accent }}>▮</span>{" "}
-              ai-saas-starter
+              <span style={{ color: emailTheme.accent }}>✦</span> Artora
             </Text>
           </Section>
           {children}
@@ -86,7 +80,7 @@ export function EmailLayout({
               margin: 0,
             }}
           >
-            ai-saas-starter · open source · MIT
+            Artora · Your creative space
           </Text>
         </Container>
       </Body>

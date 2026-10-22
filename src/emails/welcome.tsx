@@ -17,23 +17,19 @@ export default function WelcomeEmail({
   appUrl?: string;
 }) {
   return (
-    <EmailLayout preview={`${WELCOME_CREDITS} credits are on your account.`}>
+    <EmailLayout preview="Welcome to your Artora workspace.">
       <EmailHeading>Welcome, {name}.</EmailHeading>
       <EmailText>
         Your account is live and{" "}
         <span style={{ color: emailTheme.credit, fontWeight: 600 }}>
           {WELCOME_CREDITS} welcome credits
         </span>{" "}
-        are already on it — enough to generate your first images. Each
-        generation costs 1 credit; failed generations are refunded
-        automatically.
+        are already on it for the starter&apos;s existing text-to-image demo.
+        The new photo-to-art studio is being prepared separately.
       </EmailText>
-      <EmailButton href={`${appUrl}/generate`}>
-        Generate your first image
-      </EmailButton>
+      <EmailButton href={`${appUrl}/generate`}>Explore the studio</EmailButton>
       <EmailMuted>
-        Credits never expire. When you run out, plans and top-ups live under
-        Billing.
+        You can preview a photo and choose a style without spending credits.
       </EmailMuted>
     </EmailLayout>
   );

@@ -36,6 +36,7 @@ yarn-error.log*
 
 # locally generated images (dev fallback for Vercel Blob)
 /.generated/
+/.artora-private/
 
 # vercel
 .vercel
@@ -46,6 +47,8 @@ next-env.d.ts
 
 # local scratch/review artifacts
 /_to_delete/
+/.research/
+/.local-postgres/
 
 # playwright artifacts
 /test-results/

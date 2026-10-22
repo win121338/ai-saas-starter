@@ -7,22 +7,41 @@ import { features } from "@/lib/env";
 
 export const metadata: Metadata = { title: "Create account" };
 
-export default function SignupPage() {
+export default async function SignupPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
+  const safeNext =
+    next?.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
+      ? next
+      : "/dashboard";
   return (
     <div className="grid gap-6">
       <div>
-        <p className="eyebrow">Create account</p>
-        <h1 className="mt-2 text-2xl">Start with 10 free credits</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+          Create account
+        </p>
+        <h1 className="mt-3 font-heading text-3xl font-bold">
+          Make space for art.
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+          Save your place in the Artora studio.
+        </p>
       </div>
       <OAuthButtons
         google={features.googleOAuth}
         github={features.githubOAuth}
-        next="/dashboard"
+        next={safeNext}
       />
-      <SignupForm requiresVerification={features.email} />
+      <SignupForm requiresVerification={features.email} next={safeNext} />
       <p className="text-sm text-muted-foreground">
         Already registered?{" "}
-        <Link href="/login" className="link-pop">
+        <Link
+          href={`/login?next=${encodeURIComponent(safeNext)}`}
+          className="font-semibold text-primary hover:underline"
+        >
           Sign in
         </Link>
       </p>

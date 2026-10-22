@@ -31,7 +31,7 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `pnpm exec next dev --port ${PORT}`,
+    command: `node ./node_modules/next/dist/bin/next dev --port ${PORT}`,
     url: BASE_URL,
     reuseExistingServer: false,
     timeout: 120_000,
@@ -44,10 +44,9 @@ export default defineConfig({
       BETTER_AUTH_URL: BASE_URL,
       BETTER_AUTH_SECRET:
         process.env.BETTER_AUTH_SECRET ?? "e2e-only-secret-e2e-only-secret-e2e",
-      // Dummy Stripe env (same values as the CI build step): turns
-      // features.billing ON so /billing renders the plan cards. The
-      // billing spec never submits a checkout — dummies also OVERRIDE
-      // any real test keys in .env, so e2e can never reach Stripe.
+      // Dummy Stripe env keeps the inherited auth/billing hooks bootable.
+      // Artora's P1 billing page has no checkout actions. These values also
+      // override any real local test keys, so e2e cannot reach Stripe.
       STRIPE_SECRET_KEY: "sk_test_ci_dummy",
       STRIPE_WEBHOOK_SECRET: "whsec_ci_dummy",
       STRIPE_PRICE_PRO_MONTHLY: "price_ci_pro",

@@ -2,44 +2,44 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  CreditCardIcon,
-  ImageIcon,
-  LayoutDashboardIcon,
-  SettingsIcon,
-} from "lucide-react";
+import { CreditCard, Images, LayoutDashboard, Palette, Settings } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const items = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboardIcon },
-  { href: "/generate", label: "Generate", icon: ImageIcon },
-  { href: "/billing", label: "Billing", icon: CreditCardIcon },
-  { href: "/settings", label: "Settings", icon: SettingsIcon },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/generate", label: "Studio", icon: Palette },
+  { href: "/creations", label: "Creations", icon: Images },
+  { href: "/billing", label: "Billing", icon: CreditCard },
+  { href: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
-export function SidebarNav() {
+export function SidebarNav({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
-
   return (
-    <nav className="flex flex-col gap-1">
+    <nav
+      aria-label="Workspace navigation"
+      className={
+        mobile ? "flex gap-1 overflow-x-auto" : "flex flex-col gap-1.5"
+      }
+    >
       {items.map((item) => {
         const active =
-          pathname === item.href || pathname.startsWith(`${item.href}/`);
+          pathname === item.href ||
+          (item.href !== "/generate" && pathname.startsWith(`${item.href}/`));
         return (
           <Link
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex items-center gap-2.5 rounded-full px-3 py-1.5 text-sm transition-colors",
-              // Active nav gets the marker treatment (DESIGN.md v3).
+              "flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors",
               active
-                ? "border-2 bg-pop-yellow-bold font-semibold text-ink-deep"
-                : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                ? "border border-primary/30 bg-primary/10 text-primary"
+                : "border border-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",
             )}
           >
-            <item.icon className="size-4" aria-hidden />
+            <item.icon className="size-[18px]" strokeWidth={1.8} aria-hidden />
             {item.label}
           </Link>
         );

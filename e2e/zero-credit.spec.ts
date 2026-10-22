@@ -6,7 +6,7 @@ test("draining to 0 credits blocks the form with a Billing link and no spend", a
   page,
 }) => {
   await signUp(page, uniqueEmail("drain"));
-  await page.goto("/generate");
+  await page.goto("/generate/text-demo");
 
   const prompt = page.getByLabel("Prompt");
   const generate = page.getByRole("button", { name: /^Generate/ });

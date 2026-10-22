@@ -1,102 +1,74 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { LogoMark } from "@/components/logo-mark";
 import { siteConfig } from "@/config/site";
-
-// v4.1 footer — a destination, not an afterthought: full-width ink block,
-// giant Archivo wordmark with the yellow offset shadow, chunky mono link
-// chips with the nav hover physics, the mascot in the corner. Light-on-
-// ink text stays >=4.5:1 (canvas/ink 17.8, on-ink-muted 10.3).
-const columns = [
-  {
-    title: "Product",
-    links: [
-      { label: "sign in", href: "/login" },
-      { label: "sign up", href: "/signup" },
-      { label: "pricing", href: "/pricing" },
-    ],
-  },
-  {
-    title: "Repo",
-    links: [
-      { label: "github", href: siteConfig.github, external: true },
-      { label: "pro version", href: siteConfig.pro, external: true },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "privacy", href: "/privacy" },
-      { label: "terms", href: "/terms" },
-    ],
-  },
-] as const;
 
 export function MarketingFooter() {
   return (
-    <footer className="bg-(--band-bg) text-(--band-fg) [--muted-ink:var(--band-muted)] [--title-shadow:var(--pop-yellow-bold)]">
-      <div className="mx-auto w-full max-w-[1160px] px-6 pt-16 pb-10">
-        <div className="flex flex-wrap items-start justify-between gap-x-16 gap-y-12">
-          <div className="max-w-full">
-            <p className="font-display text-[clamp(3rem,1.6rem+3.5vw,6rem)] leading-none tracking-tight uppercase [text-shadow:0.05em_0.05em_0_var(--title-shadow)]">
-              ai-saas-
-              <br />
-              starter
-            </p>
-            <p className="mt-6 font-mono text-xs">
-              Built by{" "}
-              <a
-                href="https://nikandr.com"
-                target="_blank"
-                rel="noreferrer"
-                className="marker-hover underline underline-offset-4"
-              >
-                Nikandr Surkov
-              </a>
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-x-14 gap-y-10">
-            {columns.map((column) => (
-              <nav key={column.title} aria-label={column.title}>
-                <p className="eyebrow mb-3.5">{column.title}</p>
-                <ul className="flex flex-col items-start gap-3">
-                  {column.links.map((link) =>
-                    "external" in link && link.external ? (
-                      <li key={link.label}>
-                        <a
-                          href={link.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="footer-chip"
-                        >
-                          {link.label}
-                        </a>
-                      </li>
-                    ) : (
-                      <li key={link.label}>
-                        <Link href={link.href} className="footer-chip">
-                          {link.label}
-                        </Link>
-                      </li>
-                    ),
-                  )}
-                </ul>
-              </nav>
-            ))}
-          </div>
-        </div>
-        <div className="mt-14 flex flex-wrap items-end justify-between gap-6">
-          <p className="font-mono text-[10.5px] tracking-wider text-muted-foreground">
-            © 2026 {siteConfig.name} · MIT license · ledger-true since day one
+    <footer className="border-t border-border bg-[#0e1117]">
+      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-12 md:grid-cols-[1.4fr_1fr_1fr] md:px-6">
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2.5 font-heading text-xl font-bold"
+          >
+            <LogoMark className="size-8" /> {siteConfig.name}
+          </Link>
+          <p className="mt-4 max-w-xs text-sm leading-7 text-muted-foreground">
+            A place for the photos you love to become something you can keep.
           </p>
-          <Image
-            src="/illustrations/mascot-hello.png"
-            alt="Gold coin mascot with sunglasses pushed up, waving goodbye"
-            width={72}
-            height={72}
-            className="illo size-18"
-          />
+          <p className="mt-7 text-xs text-muted-foreground">
+            © {new Date().getFullYear()} {siteConfig.name}. Working preview.
+          </p>
         </div>
+        <nav
+          aria-label="Product links"
+          className="flex flex-col items-start gap-3 text-sm"
+        >
+          <p className="mb-1 font-semibold text-foreground">Explore</p>
+          <Link
+            href="/styles"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Styles
+          </Link>
+          <Link
+            href="/pricing"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/generate"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Studio
+          </Link>
+        </nav>
+        <nav
+          aria-label="Account and legal links"
+          className="flex flex-col items-start gap-3 text-sm"
+        >
+          <p className="mb-1 font-semibold text-foreground">More</p>
+          <Link
+            href="/login"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Sign in
+          </Link>
+          <Link
+            href="/privacy"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Privacy
+          </Link>
+          <Link
+            href="/terms"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Terms
+          </Link>
+        </nav>
       </div>
     </footer>
   );

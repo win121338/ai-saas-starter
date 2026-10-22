@@ -20,7 +20,7 @@ describe("email templates", () => {
     const text = await render(email, { plainText: true });
     const html = await render(email);
     expect(text).toContain(`${WELCOME_CREDITS} welcome credits`);
-    expect(text).toContain("ai-saas-starter");
+    expect(text).toContain("Artora");
     expect(html).toContain("https://example.test/generate");
   });
 

@@ -1,49 +1,43 @@
 import { expect, test } from "@playwright/test";
 
-test("landing renders the ledger sections with signed-out auth CTAs", async ({
-  page,
-}) => {
+test("landing and style pages lead into the studio", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "A complete AI SaaS. Free.",
+    "Your photo.",
   );
-  // Signed-out nav: Sign in + Get started; hero CTA goes to signup.
   await expect(
-    page.getByRole("banner").getByRole("link", { name: "Get started" }),
-  ).toHaveAttribute("href", "/signup");
+    page.getByRole("banner").getByRole("link", { name: "Open studio" }),
+  ).toHaveAttribute("href", "/generate");
   await expect(
     page.getByRole("banner").getByRole("link", { name: "Sign in" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Start free — 10 credits" }),
-  ).toHaveAttribute("href", "/signup");
-  await expect(page.locator("#features")).toBeVisible();
-  // Pricing section reads from config/plans.ts.
-  await expect(page.locator("#pricing")).toBeVisible();
-  await expect(page.locator("#pricing")).toContainText("$9/mo");
-  // The clarity block states the product in plain words.
-  await expect(page.locator("#what")).toContainText(
-    "This website is the demo.",
+    page.locator("#styles").locator("a.artora-style-card"),
+  ).toHaveCount(6);
+  await expect(page.locator("#how-it-works")).toContainText("Bring a photo");
+  await expect(
+    page.getByText(/Live image API testing is in progress/),
+  ).toBeVisible();
+
+  await page.goto("/styles/watercolor");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Watercolor",
   );
-  await expect(page.locator("#how")).toContainText("Clone it");
-  // The gallery renders all six generated posters with caption chips.
-  await expect(page.locator("#gallery img")).toHaveCount(6);
-  await expect(page.locator("#gallery")).toContainText("sunset over mountains");
-  await expect(page.locator('details[name="faq"]').first()).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Try this style" }),
+  ).toHaveAttribute("href", "/generate?style=watercolor");
 });
 
-test("theme toggle flips to dark, renders, and persists across reloads", async ({
+test("pricing preview does not expose the starter's paid offers", async ({
   page,
 }) => {
-  await page.goto("/");
-  const html = page.locator("html");
-  await expect(html).not.toHaveClass(/dark/);
-
-  await page.getByRole("button", { name: "Toggle theme" }).click();
-  await expect(html).toHaveClass(/dark/);
-  // Dark theme actually renders the page (not just a class flip).
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-
-  await page.reload();
-  await expect(html).toHaveClass(/dark/);
+  await page.goto("/pricing");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Create on your terms.",
+  );
+  await expect(page.getByText("Price to be announced")).toHaveCount(2);
+  await expect(page.getByRole("link", { name: "Open studio" })).toBeVisible();
+  await expect(page.getByRole("button", { name: /checkout|buy/i })).toHaveCount(
+    0,
+  );
 });
