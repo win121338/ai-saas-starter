@@ -39,6 +39,8 @@ const schema = z
       .string()
       .min(32, "min 32 chars — generate with `openssl rand -base64 32`"),
     BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
+    // Exact existing Better Auth user ID for the initial console owner.
+    ADMIN_BOOTSTRAP_USER_ID: z.string().min(1).optional(),
 
     // ── OAuth (optional — a missing pair hides that login button) ─────────
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -84,8 +86,14 @@ const schema = z
 
     // ── Storage via Vercel Blob (optional — ./.generated fallback in dev) ─
     BLOB_READ_WRITE_TOKEN: z.string().optional(),
-    ART_PROVIDER: z.enum(["mock", "fal"]).default("mock"),
+    ART_PROVIDER: z.enum(["mock", "live", "fal"]).default("mock"),
     FAL_KEY: z.string().optional(),
+    DASHSCOPE_API_KEY: z.string().optional(),
+    ARK_API_KEY: z.string().optional(),
+    DASHSCOPE_WORKSPACE_ID: z
+      .string()
+      .regex(/^[a-zA-Z0-9-]+$/)
+      .optional(),
     ART_WORKER_SECRET: z.string().min(32).optional(),
   })
   .superRefine((env, ctx) => {
@@ -94,6 +102,17 @@ const schema = z
         code: "custom",
         path: ["FAL_KEY"],
         message: "required when ART_PROVIDER=fal",
+      });
+    }
+    if (
+      env.ART_PROVIDER === "live" &&
+      !env.DASHSCOPE_API_KEY &&
+      !env.ARK_API_KEY
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["ART_PROVIDER"],
+        message: "set DASHSCOPE_API_KEY or ARK_API_KEY when ART_PROVIDER=live",
       });
     }
     const pairs = [
@@ -136,11 +155,11 @@ const schema = z
             "private Blob storage is required for production photo uploads",
         });
       }
-      if (env.ART_PROVIDER !== "fal" || !env.FAL_KEY) {
+      if (env.ART_PROVIDER === "mock") {
         ctx.addIssue({
           code: "custom",
           path: ["ART_PROVIDER"],
-          message: "set ART_PROVIDER=fal and FAL_KEY in production",
+          message: "select a configured live image provider in production",
         });
       }
       if (!env.ART_WORKER_SECRET) {

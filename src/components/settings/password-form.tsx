@@ -9,6 +9,8 @@ import { authClient } from "@/lib/auth/client";
 import { BusyButton } from "@/components/busy-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocale } from "@/components/locale-provider";
+import { t } from "@/lib/i18n-copy";
 
 const schema = z.object({
   currentPassword: z.string().min(1, "Enter your current password"),
@@ -16,6 +18,7 @@ const schema = z.object({
 });
 
 export function PasswordForm() {
+  const locale = useLocale();
   const [pending, setPending] = React.useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -27,7 +30,9 @@ export function PasswordForm() {
       newPassword: form.get("newPassword"),
     });
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Check your input");
+      toast.error(
+        t(locale, parsed.error.issues[0]?.message ?? "Check your input"),
+      );
       return;
     }
     setPending(true);
@@ -38,17 +43,21 @@ export function PasswordForm() {
     });
     setPending(false);
     if (error) {
-      toast.error(error.message ?? "Could not change the password");
+      toast.error(error.message ?? t(locale, "Could not change the password"));
       return;
     }
-    toast.success("Password changed — other sessions were signed out");
+    toast.success(
+      t(locale, "Password changed — other sessions were signed out"),
+    );
     formElement.reset();
   }
 
   return (
     <form onSubmit={onSubmit} className="grid max-w-sm gap-4">
       <div className="grid gap-1.5">
-        <Label htmlFor="current-password">Current password</Label>
+        <Label htmlFor="current-password">
+          {t(locale, "Current password")}
+        </Label>
         <Input
           id="current-password"
           name="currentPassword"
@@ -58,7 +67,7 @@ export function PasswordForm() {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="new-password">New password</Label>
+        <Label htmlFor="new-password">{t(locale, "New password")}</Label>
         <Input
           id="new-password"
           name="newPassword"
@@ -72,9 +81,9 @@ export function PasswordForm() {
           type="submit"
           variant="outline"
           busy={pending}
-          busyLabel="Saving…"
+          busyLabel={t(locale, "Saving…")}
         >
-          Change password
+          {t(locale, "Change password")}
         </BusyButton>
       </div>
     </form>

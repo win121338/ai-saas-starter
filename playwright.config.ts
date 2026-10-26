@@ -29,29 +29,43 @@ export default defineConfig({
     baseURL: BASE_URL,
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    {
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(process.env.PLAYWRIGHT_USE_SYSTEM_CHROME === "true"
+          ? { channel: "chrome" as const }
+          : {}),
+      },
+    },
+  ],
   webServer: {
     command: `node ./node_modules/next/dist/bin/next dev --port ${PORT}`,
-    url: BASE_URL,
+    // Probe a static route. Global setup creates/migrates the isolated DB
+    // after the server starts, so probing `/` would race the first DB query.
+    url: `${BASE_URL}/icon.svg`,
     reuseExistingServer: false,
     timeout: 120_000,
     env: {
+      PLAYWRIGHT_E2E: "true",
       // These OVERRIDE .env (real environment beats env files in Next):
       // mock generation, isolated database, and a base URL matching the
       // e2e port so Better Auth's origin checks pass.
       AI_MOCK: "true",
+      ART_PROVIDER: "mock",
+      BLOB_READ_WRITE_TOKEN: "",
       DATABASE_URL: E2E_DATABASE_URL,
       BETTER_AUTH_URL: BASE_URL,
       BETTER_AUTH_SECRET:
         process.env.BETTER_AUTH_SECRET ?? "e2e-only-secret-e2e-only-secret-e2e",
-      // Dummy Stripe env keeps the inherited auth/billing hooks bootable.
-      // Artora's P1 billing page has no checkout actions. These values also
-      // override any real local test keys, so e2e cannot reach Stripe.
-      STRIPE_SECRET_KEY: "sk_test_ci_dummy",
-      STRIPE_WEBHOOK_SECRET: "whsec_ci_dummy",
-      STRIPE_PRICE_PRO_MONTHLY: "price_ci_pro",
-      STRIPE_PRICE_ULTRA_MONTHLY: "price_ci_ultra",
-      STRIPE_PRICE_TOPUP_100: "price_ci_topup",
+      // Billing is optional in development; prevent signup and admin pages
+      // from contacting Stripe or inheriting a real local key.
+      STRIPE_SECRET_KEY: "",
+      STRIPE_WEBHOOK_SECRET: "",
+      STRIPE_PRICE_PRO_MONTHLY: "",
+      STRIPE_PRICE_ULTRA_MONTHLY: "",
+      STRIPE_PRICE_TOPUP_100: "",
     },
   },
 });

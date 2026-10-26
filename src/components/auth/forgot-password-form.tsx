@@ -8,8 +8,12 @@ import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 export function ForgotPasswordForm() {
+  const locale = useLocale();
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [sent, setSent] = React.useState(false);
@@ -21,17 +25,19 @@ export function ForgotPasswordForm() {
       .email()
       .safeParse(new FormData(event.currentTarget).get("email"));
     if (!email.success) {
-      setError("Enter a valid email address");
+      setError(t(locale, "Enter a valid email address"));
       return;
     }
     setPending(true);
     const { error: requestError } = await authClient.requestPasswordReset({
       email: email.data,
-      redirectTo: "/reset-password",
+      redirectTo: localizedHref("/reset-password", locale),
     });
     setPending(false);
     if (requestError) {
-      setError(requestError.message ?? "Could not send the reset email");
+      setError(
+        requestError.message ?? t(locale, "Could not send the reset email"),
+      );
       return;
     }
     setSent(true);
@@ -40,7 +46,10 @@ export function ForgotPasswordForm() {
   if (sent) {
     return (
       <p className="text-sm text-muted-foreground">
-        If an account exists for that address, a reset link is on its way.
+        {t(
+          locale,
+          "If an account exists for that address, a reset link is on its way.",
+        )}
       </p>
     );
   }
@@ -48,7 +57,7 @@ export function ForgotPasswordForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid gap-1.5">
-        <Label htmlFor="forgot-email">Email</Label>
+        <Label htmlFor="forgot-email">{t(locale, "Email")}</Label>
         <Input
           id="forgot-email"
           name="email"
@@ -59,7 +68,7 @@ export function ForgotPasswordForm() {
       </div>
       {error ? <p className="text-sm text-debit-text">{error}</p> : null}
       <Button type="submit" disabled={pending}>
-        {pending ? "Sending…" : "Send reset link"}
+        {t(locale, pending ? "Sending…" : "Send reset link")}
       </Button>
     </form>
   );

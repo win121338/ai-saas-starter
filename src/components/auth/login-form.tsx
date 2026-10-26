@@ -11,6 +11,9 @@ import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email address"),
@@ -25,6 +28,7 @@ export function LoginForm({
   next: string;
 }) {
   const router = useRouter();
+  const locale = useLocale();
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [magicSent, setMagicSent] = React.useState(false);
@@ -38,7 +42,9 @@ export function LoginForm({
       password: form.get("password"),
     });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Check your input");
+      setError(
+        t(locale, parsed.error.issues[0]?.message ?? "Check your input"),
+      );
       return;
     }
     setPending(true);
@@ -47,8 +53,11 @@ export function LoginForm({
       const message = signInError.message ?? "";
       setError(
         /invalid|credential|password/i.test(message)
-          ? "That email and password don't match — try again, or reset your password below."
-          : message || "Sign-in failed — try again in a moment.",
+          ? t(
+              locale,
+              "That email and password don't match — try again, or reset your password below.",
+            )
+          : message || t(locale, "Sign-in failed — try again in a moment."),
       );
       setPending(false);
       return;
@@ -62,7 +71,7 @@ export function LoginForm({
     const form = new FormData(event.currentTarget);
     const email = z.email().safeParse(form.get("email"));
     if (!email.success) {
-      toast.error("Enter a valid email address");
+      toast.error(t(locale, "Enter a valid email address"));
       return;
     }
     setPending(true);
@@ -72,7 +81,7 @@ export function LoginForm({
     });
     setPending(false);
     if (magicError) {
-      toast.error(magicError.message ?? "Could not send the link");
+      toast.error(magicError.message ?? t(locale, "Could not send the link"));
       return;
     }
     setMagicSent(true);
@@ -81,8 +90,10 @@ export function LoginForm({
   if (magicSent) {
     return (
       <p className="text-sm text-muted-foreground">
-        Check your inbox — the sign-in link is on its way. It expires in five
-        minutes.
+        {t(
+          locale,
+          "Check your inbox — the sign-in link is on its way. It expires in five minutes.",
+        )}
       </p>
     );
   }
@@ -91,7 +102,7 @@ export function LoginForm({
     <div className="grid gap-6">
       <form onSubmit={onSubmit} className="grid gap-4">
         <div className="grid gap-1.5">
-          <Label htmlFor="login-email">Email</Label>
+          <Label htmlFor="login-email">{t(locale, "Email")}</Label>
           <Input
             id="login-email"
             name="email"
@@ -102,9 +113,12 @@ export function LoginForm({
         </div>
         <div className="grid gap-1.5">
           <div className="flex items-center justify-between">
-            <Label htmlFor="login-password">Password</Label>
-            <Link href="/forgot-password" className="link-pop text-xs">
-              Forgot password
+            <Label htmlFor="login-password">{t(locale, "Password")}</Label>
+            <Link
+              href={localizedHref("/forgot-password", locale)}
+              className="link-pop text-xs"
+            >
+              {t(locale, "Forgot password")}
             </Link>
           </div>
           <Input
@@ -117,13 +131,13 @@ export function LoginForm({
         </div>
         {error ? <p className="text-sm text-debit-text">{error}</p> : null}
         <Button type="submit" disabled={pending}>
-          {pending ? "Signing in…" : "Sign in"}
+          {t(locale, pending ? "Signing in…" : "Sign in")}
         </Button>
       </form>
       {magicLink ? (
         <form onSubmit={onMagicLink} className="grid gap-2 border-t-2 pt-4">
           <Label htmlFor="magic-email" className="text-muted-foreground">
-            Or get a sign-in link by email
+            {t(locale, "Or get a sign-in link by email")}
           </Label>
           <div className="flex gap-2">
             <Input
@@ -134,7 +148,7 @@ export function LoginForm({
               placeholder="you@example.com"
             />
             <Button type="submit" variant="outline" disabled={pending}>
-              {pending ? "Sending…" : "Send link"}
+              {t(locale, pending ? "Sending…" : "Send link")}
             </Button>
           </div>
         </form>

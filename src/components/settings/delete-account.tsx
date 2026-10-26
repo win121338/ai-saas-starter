@@ -19,6 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 export function DeleteAccount({
   hasPassword,
@@ -28,6 +31,7 @@ export function DeleteAccount({
   canSendEmail: boolean;
 }) {
   const router = useRouter();
+  const locale = useLocale();
   const [pending, setPending] = React.useState(false);
 
   async function onDelete(event: React.FormEvent<HTMLFormElement>) {
@@ -37,55 +41,69 @@ export function DeleteAccount({
     const { error } = await authClient.deleteUser(
       hasPassword && typeof password === "string" && password.length > 0
         ? { password }
-        : { callbackURL: "/" },
+        : { callbackURL: localizedHref("/", locale) },
     );
     setPending(false);
     if (error) {
-      toast.error(error.message ?? "Could not delete the account");
+      toast.error(error.message ?? t(locale, "Could not delete the account"));
       return;
     }
     if (hasPassword) {
       // Deleted immediately. Subscription cancellation runs in beforeDelete (M3).
-      router.push("/");
+      router.push(localizedHref("/", locale));
       router.refresh();
       return;
     }
     toast.success(
       canSendEmail
-        ? "Check your inbox to confirm deletion"
-        : "Deletion requested",
+        ? t(locale, "Check your inbox to confirm deletion")
+        : t(locale, "Deletion requested"),
     );
   }
 
   return (
     <div className="max-w-sm space-y-3">
       <p className="text-sm text-muted-foreground">
-        Deletes your account, generations, and ledger history. Cancels any
-        active subscription. This cannot be undone.
+        {t(
+          locale,
+          "Deletes your account, generations, and ledger history. Cancels any active subscription. This cannot be undone.",
+        )}
       </p>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="destructive">Delete account</Button>
+          <Button variant="destructive">{t(locale, "Delete account")}</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete this account?</DialogTitle>
+            <DialogTitle>{t(locale, "Delete this account?")}</DialogTitle>
             <DialogDescription>
               {hasPassword
-                ? "Confirm with your password. This permanently removes:"
-                : "We send a confirmation link to your email. Confirming permanently removes:"}
+                ? t(
+                    locale,
+                    "Confirm with your password. This permanently removes:",
+                  )
+                : t(
+                    locale,
+                    "We send a confirmation link to your email. Confirming permanently removes:",
+                  )}
             </DialogDescription>
             <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>— your account and every sign-in method</li>
-              <li>— all generated images</li>
-              <li>— the entire credit ledger history</li>
-              <li>— any active subscription, where billing is configured</li>
+              <li>— {t(locale, "your account and every sign-in method")}</li>
+              <li>— {t(locale, "all generated images")}</li>
+              <li>— {t(locale, "the entire credit ledger history")}</li>
+              <li>
+                —{" "}
+                {t(
+                  locale,
+                  "any active subscription, where billing is configured",
+                )}
+              </li>
             </ul>
           </DialogHeader>
           <form onSubmit={onDelete} className="grid gap-4">
             {hasPassword ? (
               <div className="grid gap-1.5">
-                <Label htmlFor="delete-password">Password</Label>
+                <Label htmlFor="delete-password">{t(locale, "Password")}</Label>
                 <Input
                   id="delete-password"
                   name="password"
@@ -100,9 +118,9 @@ export function DeleteAccount({
                 type="submit"
                 variant="destructive"
                 busy={pending}
-                busyLabel="Deleting…"
+                busyLabel={t(locale, "Deleting…")}
               >
-                Delete permanently
+                {t(locale, "Delete permanently")}
               </BusyButton>
             </DialogFooter>
           </form>

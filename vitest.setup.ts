@@ -13,3 +13,5 @@ process.env.STRIPE_PRICE_PRO_MONTHLY ??= "price_vitest_pro";
 process.env.STRIPE_PRICE_ULTRA_MONTHLY ??= "price_vitest_ultra";
 process.env.STRIPE_PRICE_TOPUP_100 ??= "price_vitest_topup";
 process.env.AI_MOCK ??= "true";
+process.env.DASHSCOPE_API_KEY ??= "vitest-only-qwen";
+process.env.ARK_API_KEY ??= "vitest-only-ark";

@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
 
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export const metadata: Metadata = {
-  title: "Reset password",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: t(await getLocale(), "Reset password") };
+}
 
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  const locale = await getLocale();
   return (
     <div className="grid gap-6">
       <div>
-        <p className="eyebrow">Reset password</p>
-        <h1 className="mt-2 text-2xl">Forgot your password?</h1>
+        <p className="eyebrow">{t(locale, "Reset password")}</p>
+        <h1 className="mt-2 text-2xl">{t(locale, "Forgot your password?")}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Enter your email and we send a reset link.
+          {t(locale, "Enter your email and we send a reset link.")}
         </p>
       </div>
       <ForgotPasswordForm />

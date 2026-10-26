@@ -5,10 +5,21 @@ const fake = vi.hoisted(() => ({
   submit: vi.fn(),
   status: vi.fn(),
   result: vi.fn(),
+  env: {
+    FAL_KEY: "test-key",
+    ART_PROVIDER: "live",
+    DASHSCOPE_API_KEY: "qwen-test-key",
+    ARK_API_KEY: "ark-test-key",
+  } as {
+    FAL_KEY: string;
+    ART_PROVIDER: string;
+    DASHSCOPE_API_KEY?: string;
+    ARK_API_KEY?: string;
+  },
 }));
 
 vi.mock("server-only", () => ({}));
-vi.mock("@/lib/env", () => ({ env: { FAL_KEY: "test-key" } }));
+vi.mock("@/lib/env", () => ({ env: fake.env }));
 vi.mock("@fal-ai/client", () => ({
   ApiError: class extends Error {},
   fal: {
@@ -17,11 +28,14 @@ vi.mock("@fal-ai/client", () => ({
   },
 }));
 
-import { FAL_MODEL, pollFal, submitFal } from "./provider";
+import { FAL_MODEL, artProviderConfig, pollFal, submitFal } from "./provider";
 
 beforeEach(() => {
   vi.clearAllMocks();
   vi.unstubAllGlobals();
+  fake.env.ART_PROVIDER = "live";
+  fake.env.DASHSCOPE_API_KEY = "qwen-test-key";
+  fake.env.ARK_API_KEY = "ark-test-key";
 });
 
 describe("fal Kontext adapter", () => {
@@ -66,5 +80,51 @@ describe("fal Kontext adapter", () => {
     await expect(pollFal("req-2")).rejects.toThrow(
       "Unexpected provider image host",
     );
+  });
+});
+
+describe("model selection", () => {
+  it("maps only listed models to configured providers", () => {
+    expect(artProviderConfig("qwen-image-2.1-turbo")).toEqual({
+      provider: "qwen",
+      model: "qwen-image-2.1-turbo",
+    });
+    expect(artProviderConfig("doubao-seedream-5-0-flash-260915")).toEqual({
+      provider: "seedream",
+      model: "doubao-seedream-5-0-flash-260915",
+    });
+    expect(artProviderConfig("qwen-image-3.0-pro")).toEqual({
+      provider: "qwen",
+      model: "qwen-image-3.0-pro",
+    });
+    expect(artProviderConfig("wan2.7-image-pro")).toEqual({
+      provider: "wanx",
+      model: "wan2.7-image-pro",
+    });
+    expect(artProviderConfig("wan2.7-image")).toEqual({
+      provider: "wanx",
+      model: "wan2.7-image",
+    });
+    expect(artProviderConfig("wanx2.1-imageedit")).toBeNull();
+    expect(artProviderConfig("arbitrary-model")).toBeNull();
+  });
+
+  it("does not offer an unconfigured provider", () => {
+    fake.env.ARK_API_KEY = undefined;
+    expect(artProviderConfig("doubao-seedream-5-0-flash-260915")).toBeNull();
+    expect(artProviderConfig("qwen-image-2.1-turbo")?.provider).toBe("qwen");
+    expect(artProviderConfig("wan2.7-image-pro")?.provider).toBe("wanx");
+    fake.env.DASHSCOPE_API_KEY = undefined;
+    expect(artProviderConfig("wan2.7-image-pro")).toBeNull();
+    expect(artProviderConfig("qwen-image-3.0-pro")).toBeNull();
+  });
+
+  it("keeps the legacy fal mode tied to its own model ID", () => {
+    fake.env.ART_PROVIDER = "fal";
+    expect(artProviderConfig(FAL_MODEL)).toEqual({
+      provider: "fal",
+      model: FAL_MODEL,
+    });
+    expect(artProviderConfig("qwen-image-2.1-turbo")).toBeNull();
   });
 });

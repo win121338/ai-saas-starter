@@ -88,6 +88,25 @@ describe("parseEnv", () => {
     ).toBe("production");
   });
 
+  it("accepts Qwen or Seedream credentials in live production mode", () => {
+    const live = {
+      ...validEnv,
+      NODE_ENV: "production",
+      BLOB_READ_WRITE_TOKEN: "test-private-blob-token",
+      ART_PROVIDER: "live",
+      ART_WORKER_SECRET: "a".repeat(32),
+    };
+    expect(
+      parseEnv({ ...live, DASHSCOPE_API_KEY: "qwen-key" }).ART_PROVIDER,
+    ).toBe("live");
+    expect(parseEnv({ ...live, ARK_API_KEY: "ark-key" }).ART_PROVIDER).toBe(
+      "live",
+    );
+    expect(() => parseEnv(live)).toThrowError(
+      /DASHSCOPE_API_KEY or ARK_API_KEY/,
+    );
+  });
+
   it("refuses AI_MOCK in production — placeholders must never charge credits", () => {
     expect(() =>
       parseEnv({

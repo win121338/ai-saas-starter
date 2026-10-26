@@ -1,18 +1,39 @@
 import type { MetadataRoute } from "next";
 
-import { artStyles } from "@/config/art-styles";
 import { siteConfig } from "@/config/site";
+import { listConfiguredArtStyles } from "@/lib/art/templates";
 
 // Public pages only — the (app) group is session-gated and noindexed.
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const artStyles = (await listConfiguredArtStyles()).filter(
+    (style) => style.enabled,
+  );
+  const paths = [
     "/",
     "/styles",
     ...artStyles.map((style) => `/styles/${style.slug}`),
     "/pricing",
-  ].map((path) => ({
-    url: `${siteConfig.url}${path === "/" ? "" : path}`,
-    changeFrequency: "weekly",
-    priority: path === "/" ? 1 : 0.6,
-  }));
+  ];
+  return paths.flatMap((path) => {
+    const zhPath = path === "/" ? "/zh" : `/zh${path}`;
+    const enUrl = `${siteConfig.url}${path === "/" ? "" : path}`;
+    const zhUrl = `${siteConfig.url}${zhPath}`;
+    const alternates = { languages: { en: enUrl, "zh-CN": zhUrl } };
+    return [
+      {
+        url: enUrl,
+        changeFrequency: "weekly" as const,
+        priority: path === "/" ? 1 : 0.6,
+        alternates,
+      },
+      {
+        url: zhUrl,
+        changeFrequency: "weekly" as const,
+        priority: path === "/" ? 0.7 : 0.5,
+        alternates,
+      },
+    ];
+  });
 }

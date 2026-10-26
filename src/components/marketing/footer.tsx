@@ -2,71 +2,84 @@ import Link from "next/link";
 
 import { LogoMark } from "@/components/logo-mark";
 import { siteConfig } from "@/config/site";
+import { getSession } from "@/lib/auth/session";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export function MarketingFooter() {
+export async function MarketingFooter() {
+  const [locale, session] = await Promise.all([getLocale(), getSession()]);
   return (
     <footer className="border-t border-border bg-[#0e1117]">
       <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-12 md:grid-cols-[1.4fr_1fr_1fr] md:px-6">
         <div>
           <Link
-            href="/"
+            href={localizedHref("/", locale)}
             className="inline-flex items-center gap-2.5 font-heading text-xl font-bold"
           >
             <LogoMark className="size-8" /> {siteConfig.name}
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-7 text-muted-foreground">
-            A place for the photos you love to become something you can keep.
+            {t(
+              locale,
+              "A place for the photos you love to become something you can keep.",
+            )}
           </p>
           <p className="mt-7 text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {siteConfig.name}. Working preview.
+            © {new Date().getFullYear()} {siteConfig.name}.{" "}
+            {t(locale, "Working preview.")}
           </p>
         </div>
         <nav
-          aria-label="Product links"
+          aria-label={t(locale, "Product links")}
           className="flex flex-col items-start gap-3 text-sm"
         >
-          <p className="mb-1 font-semibold text-foreground">Explore</p>
+          <p className="mb-1 font-semibold text-foreground">
+            {t(locale, "Explore")}
+          </p>
           <Link
-            href="/styles"
+            href={localizedHref("/styles", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Styles
+            {t(locale, "Styles")}
           </Link>
           <Link
-            href="/pricing"
+            href={localizedHref("/pricing", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Pricing
+            {t(locale, "Pricing")}
           </Link>
           <Link
-            href="/generate"
+            href={localizedHref("/generate", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Studio
+            {t(locale, "Studio")}
           </Link>
         </nav>
         <nav
-          aria-label="Account and legal links"
+          aria-label={t(locale, "Account and legal links")}
           className="flex flex-col items-start gap-3 text-sm"
         >
-          <p className="mb-1 font-semibold text-foreground">More</p>
+          <p className="mb-1 font-semibold text-foreground">
+            {t(locale, "More")}
+          </p>
           <Link
-            href="/login"
+            href={localizedHref(session ? "/dashboard" : "/login", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Sign in
+            {t(locale, session ? "Your workspace" : "Sign in")}
           </Link>
           <Link
-            href="/privacy"
+            href={localizedHref("/privacy", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Privacy
+            {t(locale, "Privacy")}
           </Link>
           <Link
-            href="/terms"
+            href={localizedHref("/terms", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            Terms
+            {t(locale, "Terms")}
           </Link>
         </nav>
       </div>

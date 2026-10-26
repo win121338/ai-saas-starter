@@ -5,14 +5,17 @@ import { ArrowRight, Palette, Sparkles, Wallet } from "lucide-react";
 import { LedgerTable, type LedgerEntry } from "@/components/ledger-table";
 import { getHistory } from "@/lib/credits";
 import { requireSession } from "@/lib/auth/session";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export const metadata: Metadata = {
-  title: "Overview",
-  robots: { index: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: t(await getLocale(), "Overview"), robots: { index: false } };
+}
 
 export default async function DashboardPage() {
   const session = await requireSession();
+  const locale = await getLocale();
   const history = await getHistory(session.user.id, 8);
   const entries: LedgerEntry[] = history.map((tx) => ({
     id: tx.id,
@@ -27,13 +30,18 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-[1100px] space-y-8">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-          Overview
+          {t(locale, "Overview")}
         </p>
         <h1 className="mt-2 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Welcome to Artora, {session.user.name}.
+          {locale === "zh"
+            ? `欢迎来到 Artora，${session.user.name}。`
+            : `Welcome to Artora, ${session.user.name}.`}
         </h1>
         <p className="mt-3 text-sm leading-7 text-muted-foreground">
-          Choose a style, create a private demo artwork, and revisit it in Creations.
+          {t(
+            locale,
+            "Choose a style, create a private demo artwork, and revisit it in Creations.",
+          )}
         </p>
       </div>
       <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
@@ -44,13 +52,20 @@ export default async function DashboardPage() {
             aria-hidden
           />
           <h2 className="mt-8 font-heading text-3xl font-bold">
-            Your creative space is ready to explore.
+            {t(locale, "Your creative space is ready to explore.")}
           </h2>
           <p className="mt-3 max-w-[520px] text-sm leading-7 text-muted-foreground">
-            Upload a photo and choose a style to try the full workflow. Results are clearly marked as local demos until the live image API is tested.
+            {t(
+              locale,
+              "Upload a photo and choose a style to try the full workflow. Results are clearly marked as local demos until the live image API is tested.",
+            )}
           </p>
-          <Link href="/generate" className="artora-action mt-7">
-            Open studio <ArrowRight className="size-4" aria-hidden />
+          <Link
+            href={localizedHref("/generate", locale)}
+            className="artora-action mt-7"
+          >
+            {t(locale, "Open studio")}{" "}
+            <ArrowRight className="size-4" aria-hidden />
           </Link>
         </div>
         <div className="grid gap-5">
@@ -60,7 +75,7 @@ export default async function DashboardPage() {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">
-                Current credit balance
+                {t(locale, "Current credit balance")}
               </p>
               <p
                 className="mt-1 font-heading text-3xl font-bold"
@@ -71,16 +86,16 @@ export default async function DashboardPage() {
             </div>
           </div>
           <Link
-            href="/styles"
+            href={localizedHref("/styles", locale)}
             className="artora-surface flex items-center gap-5 p-6 transition-colors hover:border-primary/50"
           >
             <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <Palette className="size-6" aria-hidden />
             </div>
             <div>
-              <p className="font-semibold">Explore styles</p>
+              <p className="font-semibold">{t(locale, "Explore styles")}</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Six creative directions
+                {t(locale, "Six creative directions")}
               </p>
             </div>
             <ArrowRight className="ml-auto size-4 text-primary" aria-hidden />
@@ -89,16 +104,23 @@ export default async function DashboardPage() {
       </div>
       <section className="artora-surface overflow-hidden">
         <div className="border-b border-border px-6 py-5">
-          <h2 className="font-heading text-xl font-bold">Credit activity</h2>
+          <h2 className="font-heading text-xl font-bold">
+            {t(locale, "Credit activity")}
+          </h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Existing starter credits and legacy demo activity appear here.
+            {t(
+              locale,
+              "Existing starter credits and legacy demo activity appear here.",
+            )}
           </p>
         </div>
         <div className="overflow-x-auto p-4 sm:p-6">
           {entries.length ? (
             <LedgerTable entries={entries} />
           ) : (
-            <p className="text-sm text-muted-foreground">No activity yet.</p>
+            <p className="text-sm text-muted-foreground">
+              {t(locale, "No activity yet.")}
+            </p>
           )}
         </div>
       </section>

@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -232,7 +233,10 @@ export const artAssets = pgTable(
     index("art_assets_user_id_idx").on(t.userId),
     index("art_assets_expires_at_idx").on(t.expiresAt),
     check("art_assets_size_positive", sql`${t.sizeBytes} > 0`),
-    check("art_assets_dimensions_positive", sql`${t.width} > 0 AND ${t.height} > 0`),
+    check(
+      "art_assets_dimensions_positive",
+      sql`${t.width} > 0 AND ${t.height} > 0`,
+    ),
   ],
 );
 
@@ -263,6 +267,7 @@ export const artJobs = pgTable(
     }),
     styleSlug: text("style_slug").notNull(),
     styleVersion: integer("style_version").notNull(),
+    promptOverride: text("prompt_override"),
     provider: text("provider").notNull(),
     model: text("model").notNull(),
     providerRequestId: text("provider_request_id"),
@@ -276,7 +281,10 @@ export const artJobs = pgTable(
   },
   (t) => [
     uniqueIndex("art_jobs_user_request_key_idx").on(t.userId, t.requestKey),
-    uniqueIndex("art_jobs_provider_request_idx").on(t.provider, t.providerRequestId),
+    uniqueIndex("art_jobs_provider_request_idx").on(
+      t.provider,
+      t.providerRequestId,
+    ),
     index("art_jobs_user_created_at_idx").on(t.userId, t.createdAt.desc()),
     index("art_jobs_status_lease_idx").on(t.status, t.leaseUntil),
     index("art_jobs_input_asset_idx").on(t.inputAssetId),
@@ -285,3 +293,74 @@ export const artJobs = pgTable(
     check("art_jobs_style_version_positive", sql`${t.styleVersion} > 0`),
   ],
 );
+
+// ── Operations console ──────────────────────────────────────────────────────
+// Admin roles are granted explicitly. ADMIN_BOOTSTRAP_USER_ID is an optional
+// owner escape hatch; no email-based self-enrollment is allowed.
+export const adminMembers = pgTable("admin_members", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  role: text("role").notNull().default("admin"),
+  grantedBy: text("granted_by"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export const adminAuditEvents = pgTable(
+  "admin_audit_events",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    actorUserId: text("actor_user_id").notNull(),
+    action: text("action").notNull(),
+    targetType: text("target_type").notNull(),
+    targetId: text("target_id").notNull(),
+    details: text("details"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [index("admin_audit_events_created_at_idx").on(t.createdAt.desc())],
+);
+
+export const artStyleSettings = pgTable("art_style_settings", {
+  slug: text("slug").primaryKey(),
+  displayName: text("display_name"),
+  sampleImageUrl: text("sample_image_url"),
+  enabled: boolean("enabled").notNull().default(true),
+  activeVersion: integer("active_version"),
+  updatedBy: text("updated_by"),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const artStyleTemplateVersions = pgTable(
+  "art_style_template_versions",
+  {
+    slug: text("slug").notNull(),
+    version: integer("version").notNull(),
+    preset: text("preset").notNull(),
+    rule: text("rule").notNull(),
+    createdBy: text("created_by").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.slug, t.version] }),
+    check("art_style_template_version_positive", sql`${t.version} > 0`),
+  ],
+);
+
+export const systemSettings = pgTable("system_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});

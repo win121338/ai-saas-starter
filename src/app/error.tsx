@@ -4,6 +4,9 @@ import * as React from "react";
 
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 // Route-segment error boundary — renders inside the root layout, so the
 // theme and fonts still apply. Errors surface as human sentences with a
@@ -15,6 +18,7 @@ export default function ErrorPage({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const locale = useLocale();
   React.useEffect(() => {
     console.error(error);
   }, [error]);
@@ -25,18 +29,23 @@ export default function ErrorPage({
         <Sparkles className="size-7 text-primary" aria-hidden />
       </div>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-        A pause in the process
+        {t(locale, "A pause in the process")}
       </p>
-      <h1 className="font-heading text-3xl font-bold">Something went wrong.</h1>
+      <h1 className="font-heading text-3xl font-bold">
+        {t(locale, "Something went wrong.")}
+      </h1>
       <p className="max-w-md leading-7 text-muted-foreground">
-        Please try again. If this happens again, come back in a moment.
+        {t(
+          locale,
+          "Please try again. If this happens again, come back in a moment.",
+        )}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">
         <button type="button" onClick={reset} className="artora-action">
-          Try again
+          {t(locale, "Try again")}
         </button>
-        <Link href="/" className="artora-quiet-action">
-          Back to home
+        <Link href={localizedHref("/", locale)} className="artora-quiet-action">
+          {t(locale, "Back to home")}
         </Link>
       </div>
     </div>

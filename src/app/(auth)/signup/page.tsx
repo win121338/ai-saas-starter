@@ -4,8 +4,13 @@ import Link from "next/link";
 import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { SignupForm } from "@/components/auth/signup-form";
 import { features } from "@/lib/env";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export const metadata: Metadata = { title: "Create account" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: t(await getLocale(), "Create account") };
+}
 
 export default async function SignupPage({
   searchParams,
@@ -13,21 +18,22 @@ export default async function SignupPage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { next } = await searchParams;
+  const locale = await getLocale();
   const safeNext =
     next?.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
-      ? next
-      : "/dashboard";
+      ? localizedHref(next, locale)
+      : localizedHref("/dashboard", locale);
   return (
     <div className="grid gap-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-          Create account
+          {t(locale, "Create account")}
         </p>
         <h1 className="mt-3 font-heading text-3xl font-bold">
-          Make space for art.
+          {t(locale, "Make space for art.")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          Save your place in the Artora studio.
+          {t(locale, "Save your place in the Artora studio.")}
         </p>
       </div>
       <OAuthButtons
@@ -37,12 +43,15 @@ export default async function SignupPage({
       />
       <SignupForm requiresVerification={features.email} next={safeNext} />
       <p className="text-sm text-muted-foreground">
-        Already registered?{" "}
+        {t(locale, "Already registered?")}{" "}
         <Link
-          href={`/login?next=${encodeURIComponent(safeNext)}`}
+          href={localizedHref(
+            `/login?next=${encodeURIComponent(safeNext)}`,
+            locale,
+          )}
           className="font-semibold text-primary hover:underline"
         >
-          Sign in
+          {t(locale, "Sign in")}
         </Link>
       </p>
     </div>

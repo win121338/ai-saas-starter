@@ -2,9 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CreditCard, Images, LayoutDashboard, Palette, Settings } from "lucide-react";
+import {
+  CreditCard,
+  Images,
+  LayoutDashboard,
+  Palette,
+  Settings,
+  Shield,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref, stripLocale } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 const items = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -14,23 +24,37 @@ const items = [
   { href: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
-export function SidebarNav({ mobile = false }: { mobile?: boolean }) {
+export function SidebarNav({
+  mobile = false,
+  admin = false,
+}: {
+  mobile?: boolean;
+  admin?: boolean;
+}) {
   const pathname = usePathname();
+  const locale = useLocale();
+  const route = stripLocale(pathname);
   return (
     <nav
-      aria-label="Workspace navigation"
+      aria-label={t(locale, "Workspace navigation")}
       className={
         mobile ? "flex gap-1 overflow-x-auto" : "flex flex-col gap-1.5"
       }
     >
-      {items.map((item) => {
+      {[
+        ...items,
+        ...(admin
+          ? [{ href: "/admin", label: "Admin console", icon: Shield }]
+          : []),
+      ].map((item) => {
+        const href = localizedHref(item.href, locale);
         const active =
-          pathname === item.href ||
-          (item.href !== "/generate" && pathname.startsWith(`${item.href}/`));
+          route === item.href ||
+          (item.href !== "/generate" && route.startsWith(`${item.href}/`));
         return (
           <Link
             key={item.href}
-            href={item.href}
+            href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
               "flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors",
@@ -40,7 +64,7 @@ export function SidebarNav({ mobile = false }: { mobile?: boolean }) {
             )}
           >
             <item.icon className="size-[18px]" strokeWidth={1.8} aria-hidden />
-            {item.label}
+            {t(locale, item.label)}
           </Link>
         );
       })}

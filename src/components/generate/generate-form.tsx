@@ -12,6 +12,9 @@ import {
 import { BusyButton } from "@/components/busy-button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 const initialState: GenerateResult = { ok: true };
 
@@ -33,6 +36,7 @@ export function GenerateForm({
   /** AI_MOCK is on — surface the "FAIL" failure switch in the placeholder. */
   mock: boolean;
 }) {
+  const locale = useLocale();
   const formRef = React.useRef<HTMLFormElement>(null);
   // The server action goes to useActionState directly, keeping the form
   // functional before hydration. Every invocation returns a fresh object,
@@ -45,26 +49,33 @@ export function GenerateForm({
   React.useEffect(() => {
     if (state === initialState) return;
     if (state.error) {
-      toast.error(errorMessages[state.error]);
+      toast.error(t(locale, errorMessages[state.error]));
       return;
     }
-    toast.success(`Image generated! ${cost} credit spent.`);
+    toast.success(
+      locale === "zh"
+        ? `图片已生成，消耗 ${cost} 积分。`
+        : `Image generated! ${cost} credit spent.`,
+    );
     formRef.current?.reset();
-  }, [state, cost]);
+  }, [state, cost, locale]);
 
   const outOfCredits = balance < cost;
 
   return (
     <form ref={formRef} action={formAction} className="grid max-w-xl gap-3">
       <div className="grid gap-1.5">
-        <Label htmlFor="generate-prompt">Prompt</Label>
+        <Label htmlFor="generate-prompt">{t(locale, "Prompt")}</Label>
         <Textarea
           id="generate-prompt"
           name="prompt"
           placeholder={
             mock
-              ? 'A ledger book on a desk, studio light — mock mode: "FAIL" in the prompt simulates a provider error and refunds the credit'
-              : "A ledger book on a desk, studio light"
+              ? t(
+                  locale,
+                  'A ledger book on a desk, studio light — mock mode: "FAIL" in the prompt simulates a provider error and refunds the credit',
+                )
+              : t(locale, "A ledger book on a desk, studio light")
           }
           minLength={3}
           maxLength={1000}
@@ -76,18 +87,20 @@ export function GenerateForm({
         <BusyButton
           type="submit"
           busy={pending}
-          busyLabel="Generating…"
+          busyLabel={t(locale, "Generating…")}
           disabled={outOfCredits}
         >
-          {`Generate — ${cost} credit`}
+          {locale === "zh"
+            ? `生成 — ${cost} 积分`
+            : `Generate — ${cost} credit`}
         </BusyButton>
         {outOfCredits ? (
           <p className="text-sm text-muted-foreground">
-            You&apos;re out of credits —{" "}
-            <Link href="/billing" className="link-pop">
-              top up in Billing
+            {t(locale, "You're out of credits —")}{" "}
+            <Link href={localizedHref("/billing", locale)} className="link-pop">
+              {t(locale, "top up in Billing")}
             </Link>{" "}
-            and the balance updates the moment payment lands.
+            {t(locale, "and the balance updates the moment payment lands.")}
           </p>
         ) : null}
       </div>

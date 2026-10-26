@@ -5,14 +5,29 @@ import { ApiError, fal } from "@fal-ai/client";
 import { z } from "zod";
 
 import { env } from "@/lib/env";
+import { getArtModel } from "@/config/image-model-catalog";
 
 export const FAL_MODEL = "fal-ai/flux-pro/kontext";
 export class DefiniteArtFailure extends Error {}
 
-export function artProviderConfig() {
-  return env.ART_PROVIDER === "fal"
-    ? { provider: "fal", model: FAL_MODEL }
-    : { provider: "mock", model: "local-demo" };
+export function artProviderConfig(modelId: string) {
+  if (env.ART_PROVIDER === "fal")
+    return modelId === FAL_MODEL ? { provider: "fal", model: FAL_MODEL } : null;
+  const selected = getArtModel(modelId);
+  if (!selected) return null;
+  if (env.ART_PROVIDER === "mock")
+    return { provider: "mock", model: selected.id };
+  if (
+    ((selected.provider === "qwen" || selected.provider === "wanx") &&
+      !env.DASHSCOPE_API_KEY) ||
+    (selected.provider === "seedream" && !env.ARK_API_KEY)
+  )
+    return null;
+  return { provider: selected.provider, model: selected.id };
+}
+
+export function artModelAvailable(modelId: string) {
+  return artProviderConfig(modelId) !== null;
 }
 
 export async function makeMockArt(input: Buffer): Promise<Buffer> {

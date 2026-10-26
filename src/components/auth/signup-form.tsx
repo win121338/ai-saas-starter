@@ -9,6 +9,8 @@ import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocale } from "@/components/locale-provider";
+import { t } from "@/lib/i18n-copy";
 
 const signupSchema = z.object({
   name: z.string().min(1, "Enter your name").max(100),
@@ -24,6 +26,7 @@ export function SignupForm({
   next?: string;
 }) {
   const router = useRouter();
+  const locale = useLocale();
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [verifyNotice, setVerifyNotice] = React.useState(false);
@@ -38,19 +41,27 @@ export function SignupForm({
       password: form.get("password"),
     });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? "Check your input");
+      setError(
+        t(locale, parsed.error.issues[0]?.message ?? "Check your input"),
+      );
       return;
     }
     setPending(true);
-    const { error: signUpError } = await authClient.signUp.email(parsed.data);
+    const { error: signUpError } = await authClient.signUp.email({
+      ...parsed.data,
+      callbackURL: next,
+    });
     if (signUpError) {
       const message = signUpError.message ?? "";
       setError(
         /exist|already/i.test(message)
-          ? "That email already has an account — sign in instead."
+          ? t(locale, "That email already has an account — sign in instead.")
           : /password/i.test(message)
-            ? "That password is too easy to guess — use at least 8 characters."
-            : message || "Sign-up failed — try again in a moment.",
+            ? t(
+                locale,
+                "That password is too easy to guess — use at least 8 characters.",
+              )
+            : message || t(locale, "Sign-up failed — try again in a moment."),
       );
       setPending(false);
       return;
@@ -66,8 +77,10 @@ export function SignupForm({
   if (verifyNotice) {
     return (
       <p className="text-sm text-muted-foreground">
-        Almost there — check your inbox and click the verification link to
-        activate your account.
+        {t(
+          locale,
+          "Almost there — check your inbox and click the verification link to activate your account.",
+        )}
       </p>
     );
   }
@@ -75,11 +88,11 @@ export function SignupForm({
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid gap-1.5">
-        <Label htmlFor="signup-name">Name</Label>
+        <Label htmlFor="signup-name">{t(locale, "Name")}</Label>
         <Input id="signup-name" name="name" autoComplete="name" required />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="signup-email">Email</Label>
+        <Label htmlFor="signup-email">{t(locale, "Email")}</Label>
         <Input
           id="signup-email"
           name="email"
@@ -89,7 +102,7 @@ export function SignupForm({
         />
       </div>
       <div className="grid gap-1.5">
-        <Label htmlFor="signup-password">Password</Label>
+        <Label htmlFor="signup-password">{t(locale, "Password")}</Label>
         <Input
           id="signup-password"
           name="password"
@@ -100,7 +113,7 @@ export function SignupForm({
       </div>
       {error ? <p className="text-sm text-debit-text">{error}</p> : null}
       <Button type="submit" disabled={pending}>
-        {pending ? "Creating account…" : "Create account"}
+        {t(locale, pending ? "Creating account…" : "Create account")}
       </Button>
     </form>
   );

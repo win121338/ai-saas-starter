@@ -7,6 +7,9 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 
 type Provider = "google" | "github";
 
@@ -28,16 +31,22 @@ export function ConnectedAccounts({
   hasPassword: boolean;
 }) {
   const router = useRouter();
+  const locale = useLocale();
   const [pending, setPending] = React.useState<Provider | null>(null);
 
   async function link(provider: Provider) {
     setPending(provider);
     const { error } = await authClient.linkSocial({
       provider,
-      callbackURL: "/settings",
+      callbackURL: localizedHref("/settings", locale),
     });
     if (error) {
-      toast.error(error.message ?? `Could not link ${labels[provider]}`);
+      toast.error(
+        error.message ??
+          (locale === "zh"
+            ? `无法连接 ${labels[provider]}`
+            : `Could not link ${labels[provider]}`),
+      );
       setPending(null);
     }
   }
@@ -45,25 +54,36 @@ export function ConnectedAccounts({
   async function unlink(provider: Provider) {
     const remaining = linked.length + (hasPassword ? 1 : 0);
     if (remaining <= 1) {
-      toast.error("Keep at least one sign-in method");
+      toast.error(t(locale, "Keep at least one sign-in method"));
       return;
     }
     setPending(provider);
     const { error } = await authClient.unlinkAccount({ providerId: provider });
     setPending(null);
     if (error) {
-      toast.error(error.message ?? `Could not unlink ${labels[provider]}`);
+      toast.error(
+        error.message ??
+          (locale === "zh"
+            ? `无法取消连接 ${labels[provider]}`
+            : `Could not unlink ${labels[provider]}`),
+      );
       return;
     }
-    toast.success(`${labels[provider]} unlinked`);
+    toast.success(
+      locale === "zh"
+        ? `已取消连接 ${labels[provider]}`
+        : `${labels[provider]} unlinked`,
+    );
     router.refresh();
   }
 
   if (available.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">
-        No OAuth providers are configured. Add Google or GitHub keys to .env to
-        enable provider sign-in.
+        {t(
+          locale,
+          "No OAuth providers are configured. Add Google or GitHub keys to .env to enable provider sign-in.",
+        )}
       </p>
     );
   }
@@ -80,7 +100,7 @@ export function ConnectedAccounts({
             <div className="flex items-baseline gap-3">
               <span className="text-sm">{labels[provider]}</span>
               <span className="eyebrow">
-                {isLinked ? "Linked" : "Not linked"}
+                {t(locale, isLinked ? "Linked" : "Not linked")}
               </span>
             </div>
             <Button
@@ -89,7 +109,7 @@ export function ConnectedAccounts({
               disabled={pending !== null}
               onClick={() => (isLinked ? unlink(provider) : link(provider))}
             >
-              {isLinked ? "Unlink" : "Link"}
+              {t(locale, isLinked ? "Unlink" : "Link")}
             </Button>
           </li>
         );

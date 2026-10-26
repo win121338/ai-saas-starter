@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth/client";
 import { Button } from "@/components/ui/button";
+import { useLocale } from "@/components/locale-provider";
+import { t } from "@/lib/i18n-copy";
 
 // Brand marks are inline SVGs: lucide-react dropped brand icons, and
 // DESIGN.md's lucide-only rule is about UI glyphs, not provider logos.
@@ -41,6 +43,7 @@ export function OAuthButtons({
   github: boolean;
   next: string;
 }) {
+  const locale = useLocale();
   const [pending, setPending] = React.useState<"google" | "github" | null>(
     null,
   );
@@ -52,7 +55,7 @@ export function OAuthButtons({
       callbackURL: next,
     });
     if (error) {
-      toast.error(error.message ?? "Sign-in failed");
+      toast.error(error.message ?? t(locale, "Sign-in failed"));
       setPending(null);
     }
     // On success the browser navigates to the provider — no state to reset.
@@ -69,7 +72,7 @@ export function OAuthButtons({
           onClick={() => signIn("google")}
         >
           <GoogleMark />
-          Continue with Google
+          {t(locale, "Continue with Google")}
         </Button>
       ) : null}
       {github ? (
@@ -79,7 +82,7 @@ export function OAuthButtons({
           onClick={() => signIn("github")}
         >
           <GitHubMark />
-          Continue with GitHub
+          {t(locale, "Continue with GitHub")}
         </Button>
       ) : null}
     </div>

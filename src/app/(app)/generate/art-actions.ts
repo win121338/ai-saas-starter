@@ -7,17 +7,19 @@ import { after } from "next/server";
 import { z } from "zod";
 
 import { GENERATION_COST_CREDITS } from "@/config/plans";
-import { getArtStyle } from "@/config/art-styles";
 import { db } from "@/db";
 import { artAssets, artJobs } from "@/db/schema";
 import { requireSession } from "@/lib/auth/session";
 import { InsufficientCreditsError, spendCredits } from "@/lib/credits";
 import { artProviderConfig } from "@/lib/art/provider";
-import { ART_PROMPT_VERSION } from "@/lib/art/prompts";
+import { parseArtPromptInput } from "@/lib/art/prompts";
+import { getConfiguredArtStyle } from "@/lib/art/templates";
+import { getModelEnabled } from "@/lib/admin/settings";
 import { InvalidArtImageError, normalizeArtImage } from "@/lib/art/image";
 import { processOneArtJob } from "@/lib/art/jobs";
 import { deleteArtAsset, writeArtAsset } from "@/lib/art/storage";
 import { limitGeneration } from "@/lib/rate-limit";
+import { env } from "@/lib/env";
 
 export type ArtActionState = { ok: boolean; error?: string; jobId?: string };
 
@@ -28,8 +30,32 @@ export async function createArtJobAction(
   const user = (await requireSession()).user;
   const requestKey = z.uuid().safeParse(formData.get("requestKey"));
   const style = z.string().safeParse(formData.get("style"));
-  if (!requestKey.success || !style.success || !getArtStyle(style.data))
+  const model = z.string().safeParse(formData.get("model"));
+  const version = z.coerce
+    .number()
+    .int()
+    .positive()
+    .safeParse(formData.get("promptVersion"));
+  const configuredStyle = style.success
+    ? await getConfiguredArtStyle(style.data)
+    : null;
+  if (!requestKey.success || !configuredStyle?.enabled)
     return { ok: false, error: "Choose a valid style and try again." };
+  if (!version.success || version.data !== configuredStyle.version)
+    return {
+      ok: false,
+      error: "The style template changed. Refresh the studio and try again.",
+    };
+  const promptInput = parseArtPromptInput(
+    configuredStyle.slug,
+    formData.get("prompt"),
+    configuredStyle.preset,
+  );
+  if (!promptInput)
+    return {
+      ok: false,
+      error: "Write a prompt between 3 and 2,000 characters.",
+    };
   const [existing] = await db
     .select({ id: artJobs.id })
     .from(artJobs)
@@ -38,6 +64,16 @@ export async function createArtJobAction(
     )
     .limit(1);
   if (existing) return { ok: true, jobId: existing.id };
+  const provider =
+    model.success &&
+    (env.ART_PROVIDER === "fal" || (await getModelEnabled(model.data)))
+      ? artProviderConfig(model.data)
+      : null;
+  if (!provider)
+    return {
+      ok: false,
+      error: "Choose an available image model and try again.",
+    };
   const file = formData.get("photo");
   if (!(file instanceof File))
     return { ok: false, error: "Choose a photo first." };
@@ -56,27 +92,29 @@ export async function createArtJobAction(
           : "Image processing failed.",
     };
   }
+  if (provider.provider === "wanx" && (image.width < 240 || image.height < 240))
+    return {
+      ok: false,
+      error: "Wan needs a photo at least 240 × 240 pixels.",
+    };
   const assetId = randomUUID();
   const jobId = randomUUID();
   const key = `art/${assetId}/input.webp`;
-  const provider = artProviderConfig();
   await writeArtAsset(key, image.bytes);
   let inserted = false;
   try {
     await db.transaction(async (tx) => {
-      await tx
-        .insert(artAssets)
-        .values({
-          id: assetId,
-          userId: user.id,
-          kind: "input",
-          storageKey: key,
-          mediaType: image.mediaType,
-          sizeBytes: image.bytes.length,
-          width: image.width,
-          height: image.height,
-          expiresAt: new Date(Date.now() + 30 * 86_400_000),
-        });
+      await tx.insert(artAssets).values({
+        id: assetId,
+        userId: user.id,
+        kind: "input",
+        storageKey: key,
+        mediaType: image.mediaType,
+        sizeBytes: image.bytes.length,
+        width: image.width,
+        height: image.height,
+        expiresAt: new Date(Date.now() + 30 * 86_400_000),
+      });
       const result = await tx
         .insert(artJobs)
         .values({
@@ -84,8 +122,9 @@ export async function createArtJobAction(
           userId: user.id,
           requestKey: requestKey.data,
           inputAssetId: assetId,
-          styleSlug: style.data,
-          styleVersion: ART_PROMPT_VERSION,
+          styleSlug: configuredStyle.slug,
+          styleVersion: configuredStyle.version,
+          promptOverride: promptInput.promptOverride,
           provider: provider.provider,
           model: provider.model,
           costCredits: GENERATION_COST_CREDITS,
@@ -149,7 +188,24 @@ export async function createArtJobAction(
     .where(eq(artJobs.id, jobId));
   after(async () => {
     await processOneArtJob();
+    if (
+      env.NODE_ENV !== "development" ||
+      (provider.provider !== "qwen" && provider.provider !== "wanx")
+    )
+      return;
+    for (let attempt = 0; attempt < 18; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 10_000));
+      const [current] = await db
+        .select({ status: artJobs.status })
+        .from(artJobs)
+        .where(eq(artJobs.id, jobId))
+        .limit(1);
+      if (current?.status !== "processing" && current?.status !== "queued")
+        break;
+      await processOneArtJob();
+    }
   });
   revalidatePath("/creations");
+  revalidatePath("/zh/creations");
   return { ok: true, jobId };
 }

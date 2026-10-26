@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/lib/auth";
+import { getLocale } from "@/lib/i18n-server";
 
 // Server-side session helpers. Every (app) page and every server action
 // calls one of these — the proxy redirect is an optimistic UX nicety, never
@@ -18,7 +19,7 @@ export const getSession = cache(async () => {
 export async function requireSession() {
   const session = await getSession();
   if (!session) {
-    redirect("/login");
+    redirect((await getLocale()) === "zh" ? "/zh/login" : "/login");
   }
   return session;
 }

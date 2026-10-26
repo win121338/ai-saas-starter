@@ -6,6 +6,9 @@ import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth/client";
+import { useLocale } from "@/components/locale-provider";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,21 +21,26 @@ import {
 
 export function UserMenu({ name, email }: { name: string; email: string }) {
   const router = useRouter();
+  const locale = useLocale();
 
   async function signOut() {
     const { error } = await authClient.signOut();
     if (error) {
-      toast.error(error.message ?? "Sign-out failed");
+      toast.error(error.message ?? t(locale, "Sign-out failed"));
       return;
     }
-    router.push("/login");
+    router.push(localizedHref("/login", locale));
     router.refresh();
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" aria-label="Account">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          aria-label={t(locale, "Account")}
+        >
           <UserIcon />
         </Button>
       </DropdownMenuTrigger>
@@ -44,15 +52,15 @@ export function UserMenu({ name, email }: { name: string; email: string }) {
           </span>
         </DropdownMenuLabel>
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <Link href={localizedHref("/settings", locale)}>
             <SettingsIcon />
-            Settings
+            {t(locale, "Settings")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={signOut}>
           <LogOutIcon />
-          Sign out
+          {t(locale, "Sign out")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

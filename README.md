@@ -1,8 +1,8 @@
 # Artora — photo-to-art website (working name)
 
-Artora is being built from the MIT-licensed [ai-saas-starter](https://github.com/nikandr-surkov/ai-saas-starter) in the [win121338 fork](https://github.com/win121338/ai-saas-starter). This repository now includes the **P2 photo-to-art workflow** in local demo mode.
+Artora is being built from the MIT-licensed [ai-saas-starter](https://github.com/nikandr-surkov/ai-saas-starter) in the [win121338 fork](https://github.com/win121338/ai-saas-starter). This repository includes the **P2 photo-to-art workflow** with Qwen, Wanx, and Seedream image-to-image adapters.
 
-The public site has an English home page, a style catalog and detail pages, a pricing preview, and an account area. The studio accepts a photo, creates a durable private job, spends one starter credit, and offers a private result in Creations. **Local default is a visibly labeled mock image, not AI art.** The fal adapter is present but needs an API key and live validation. Artora checkout is not connected yet. Case image slots stay empty until the product owner supplies examples made with the final prompt presets.
+The public site has an English home page, a style catalog and detail pages, a pricing preview, and an account area. The studio accepts a photo, offers a model selector, creates a durable private job, spends one starter credit, and offers a private result in Creations. `ART_PROVIDER=mock` is a visibly labeled local demo; `ART_PROVIDER=live` exposes configured Qwen, Wanx, and Seedream models. Qwen and Wanx use the same Beijing DashScope API key, but Wanx has its own image-editing endpoint and is listed as a legacy Beijing-only model. The fal adapter remains available for later integration. Artora checkout is not connected yet. Case image slots stay empty until the product owner supplies examples made with the final prompt presets.
 
 The original starter text-to-image demonstration is available at `/generate/text-demo` after signing in. The new `/generate` studio spends one starter credit and refunds a definite failure. Final credit pricing is pending provider-cost testing.
 
@@ -29,7 +29,9 @@ Next.js 16, React 19, TypeScript, Tailwind CSS v4, Better Auth, Drizzle, Postgre
 3. Copy `.env.example` to `.env` and set `DATABASE_URL` and a random `BETTER_AUTH_SECRET` of at least 32 characters. Keep `AI_MOCK=true` for the legacy demo in development.
 4. Run `pnpm db:migrate`, then `pnpm dev`.
 
-See [P2 API candidates and operations](docs/P2-IMAGE-API-AND-OPERATIONS.zh-CN.md) for private storage, fal configuration, and the authenticated worker schedule. Production needs a **private** Vercel Blob store, fal credentials, and a trusted scheduler calling `/api/internal/art-worker`.
+See [P2 API candidates and operations](docs/P2-IMAGE-API-AND-OPERATIONS.zh-CN.md) for model configuration, private storage, and the authenticated worker schedule. Production needs a **private** Vercel Blob store, a live image-provider key, and a trusted scheduler calling `/api/internal/art-worker`.
+
+The owner-only operations console at `/admin` covers member, payment, and job views, style template publishing, model switches, and an audit log. See [admin setup and scope](docs/ADMIN-BACKOFFICE-PLAN.zh-CN.md). Set `ADMIN_BOOTSTRAP_USER_ID` to an existing `users.id` in each environment before accessing it.
 
 This Windows checkout also has a local PostgreSQL 17 installation under the ignored
 `.local-postgres/` folder. The database `ai_saas_starter` has been migrated, and the

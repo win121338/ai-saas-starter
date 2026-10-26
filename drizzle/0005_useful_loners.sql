@@ -1,0 +1,1 @@
+ALTER TABLE "art_jobs" ADD COLUMN "prompt_override" text;

@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { Pool } from "pg";
 import sharp from "sharp";
 
+import { E2E_DATABASE_URL } from "../playwright.config";
 import { creditBalance, signUp, uniqueEmail } from "./helpers";
 
 test("photo-to-art job persists, downloads privately, and spends once", async ({
@@ -17,15 +19,47 @@ test("photo-to-art job persists, downloads privately, and spends once", async ({
   await expect(
     page.getByRole("button", { name: /Watercolor/ }),
   ).toHaveAttribute("aria-pressed", "true");
-  await page
-    .locator("#studio-photo")
-    .setInputFiles({
-      name: "portrait.png",
-      mimeType: "image/png",
-      buffer: png,
-    });
+  const prompt = page.getByRole("textbox", { name: "Generation prompt" });
+  await expect(prompt).toHaveValue(/translucent washes/);
+  await expect(page.getByText(/STYLE RULE — WATERCOLOR/)).toBeVisible();
+  const customPrompt =
+    "Keep the original composition and use soft blue washes.";
+  await prompt.fill(customPrompt);
+  await page.getByRole("button", { name: /Oil painting/ }).click();
+  await expect(prompt).toHaveValue(customPrompt);
+  await expect(page.getByText(/STYLE RULE — OIL PAINTING/)).toBeVisible();
+  await page.getByRole("button", { name: "Restore style preset" }).click();
+  await expect(prompt).toHaveValue(/layered brushwork/);
+  await page.getByRole("button", { name: /Watercolor/ }).click();
+  await expect(prompt).toHaveValue(/translucent washes/);
+  await prompt.fill(customPrompt);
+  await page.locator("#studio-photo").setInputFiles({
+    name: "portrait.png",
+    mimeType: "image/png",
+    buffer: png,
+  });
   await page.getByRole("button", { name: /Create for 1 credit/ }).click();
   await expect(page).toHaveURL(/\/creations\/[0-9a-f-]+/);
+  const jobId = page.url().match(/\/creations\/([0-9a-f-]+)/)?.[1];
+  expect(jobId).toBeTruthy();
+  const pool = new Pool({ connectionString: E2E_DATABASE_URL, max: 1 });
+  try {
+    const saved = await pool.query<{
+      prompt_override: string | null;
+      style_slug: string;
+      style_version: number;
+    }>(
+      "SELECT prompt_override, style_slug, style_version FROM art_jobs WHERE id = $1",
+      [jobId],
+    );
+    expect(saved.rows[0]).toMatchObject({
+      prompt_override: customPrompt,
+      style_slug: "watercolor",
+      style_version: 3,
+    });
+  } finally {
+    await pool.end();
+  }
   await expect(page.getByText(/Status: completed/)).toBeVisible({
     timeout: 30_000,
   });

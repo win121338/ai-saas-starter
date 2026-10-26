@@ -12,11 +12,16 @@ import { GenerateForm } from "@/components/generate/generate-form";
 import { TryAgainButton } from "@/components/generate/try-again-button";
 import { PageHeader } from "@/components/app/page-header";
 import { SparkleSpinner } from "@/components/sparkle-spinner";
+import { localizedHref } from "@/lib/i18n";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export const metadata: Metadata = {
-  title: "Legacy text demo",
-  robots: { index: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: t(await getLocale(), "Legacy text demo"),
+    robots: { index: false },
+  };
+}
 
 function formatTimestamp(date: Date): string {
   return date.toISOString().slice(0, 16).replace("T", " ");
@@ -24,6 +29,7 @@ function formatTimestamp(date: Date): string {
 
 export default async function GeneratePage() {
   const session = await requireSession();
+  const locale = await getLocale();
 
   const history = await db
     .select()
@@ -35,22 +41,23 @@ export default async function GeneratePage() {
   return (
     <div className="space-y-8">
       <div className="rounded-2xl border border-primary/30 bg-primary/10 px-5 py-4 text-sm leading-6">
-        This is the original starter&apos;s text-to-image demo. It spends
-        existing starter credits. The new photo-to-art studio is a separate
-        workflow.{" "}
+        {t(
+          locale,
+          "This is the original starter's text-to-image demo. It spends existing starter credits. The new photo-to-art studio is a separate workflow.",
+        )}{" "}
         <Link
-          href="/generate"
+          href={localizedHref("/generate", locale)}
           className="font-semibold text-primary underline underline-offset-4"
         >
-          Go to studio
+          {t(locale, "Go to studio")}
         </Link>
       </div>
       <PageHeader
-        eyebrow="Legacy demo"
-        title="Text to image"
+        eyebrow={t(locale, "Legacy demo")}
+        title={t(locale, "Text to image")}
         action={
           <span className="chip-mono">
-            {session.user.creditBalance ?? 0} credits
+            {session.user.creditBalance ?? 0} {t(locale, "credits")}
           </span>
         }
       />
@@ -62,23 +69,24 @@ export default async function GeneratePage() {
       />
 
       <section>
-        <p className="eyebrow mb-3">generations</p>
+        <p className="eyebrow mb-3">{t(locale, "generations")}</p>
         {history.length === 0 ? (
           <div className="flex max-w-md items-start gap-4 rounded-md border-2 border-l-[6px] border-l-pop-mint px-5 py-6 shadow-hard-sm">
             {/* The coin mascot (DESIGN.md v3.1 illustration set). */}
             <Image
               src="/illustrations/mascot-paint.png"
-              alt="Gold coin mascot painting at a tiny easel"
+              alt={t(locale, "Gold coin mascot painting at a tiny easel")}
               width={96}
               height={96}
               className="illo size-24 shrink-0"
             />
             <div>
-              <p className="eyebrow">First entry pending</p>
+              <p className="eyebrow">{t(locale, "First entry pending")}</p>
               <p className="mt-2 text-sm">
-                Nothing generated yet — and your welcome credits are ready.
-                Describe an image in the form above; the result lands here and
-                the ledger records the spend.
+                {t(
+                  locale,
+                  "Nothing generated yet — and your welcome credits are ready. Describe an image in the form above; the result lands here and the ledger records the spend.",
+                )}
               </p>
             </div>
           </div>
@@ -106,7 +114,7 @@ export default async function GeneratePage() {
                   ) : generation.status === "failed" ? (
                     <div className="flex h-full flex-col items-center justify-center gap-2 px-3 text-center">
                       <p className="font-mono text-[11px] tracking-wider text-debit-text uppercase">
-                        Failed — credit refunded
+                        {t(locale, "Failed — credit refunded")}
                       </p>
                       <TryAgainButton prompt={generation.prompt} />
                     </div>

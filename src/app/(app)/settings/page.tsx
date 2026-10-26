@@ -11,11 +11,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { requireSession } from "@/lib/auth/session";
 import { features } from "@/lib/env";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 
-export const metadata: Metadata = { title: "Settings" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: t(await getLocale(), "Settings"), robots: { index: false } };
+}
 
 export default async function SettingsPage() {
   const session = await requireSession();
+  const locale = await getLocale();
   const accounts = await auth.api.listUserAccounts({
     headers: await headers(),
   });
@@ -33,12 +38,15 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-[1000px] space-y-6">
-      <PageHeader eyebrow="Account" title="Settings" />
+      <PageHeader
+        eyebrow={t(locale, "Account")}
+        title={t(locale, "Settings")}
+      />
 
       <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
         <CardHeader className="border-b border-border py-5">
-          <p className="eyebrow">Profile</p>
-          <CardTitle>Name and email</CardTitle>
+          <p className="eyebrow">{t(locale, "Profile")}</p>
+          <CardTitle>{t(locale, "Name and email")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <ProfileForm name={session.user.name} />
@@ -49,8 +57,8 @@ export default async function SettingsPage() {
       {hasPassword ? (
         <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
           <CardHeader className="border-b border-border py-5">
-            <p className="eyebrow">Security</p>
-            <CardTitle>Password</CardTitle>
+            <p className="eyebrow">{t(locale, "Security")}</p>
+            <CardTitle>{t(locale, "Password")}</CardTitle>
           </CardHeader>
           <CardContent>
             <PasswordForm />
@@ -60,8 +68,8 @@ export default async function SettingsPage() {
 
       <Card className="max-w-2xl border border-border bg-card pt-0 shadow-none">
         <CardHeader className="border-b border-border py-5">
-          <p className="eyebrow">Sign-in methods</p>
-          <CardTitle>Connected accounts</CardTitle>
+          <p className="eyebrow">{t(locale, "Sign-in methods")}</p>
+          <CardTitle>{t(locale, "Connected accounts")}</CardTitle>
         </CardHeader>
         <CardContent>
           <ConnectedAccounts
@@ -74,8 +82,8 @@ export default async function SettingsPage() {
 
       <Card className="max-w-2xl border border-destructive/70 bg-card shadow-none">
         <CardHeader>
-          <p className="eyebrow">Danger zone</p>
-          <CardTitle>Delete account</CardTitle>
+          <p className="eyebrow">{t(locale, "Danger zone")}</p>
+          <CardTitle>{t(locale, "Delete account")}</CardTitle>
         </CardHeader>
         <CardContent>
           <DeleteAccount

@@ -7,41 +7,56 @@ import { db } from "@/db";
 import { artAssets, artJobs } from "@/db/schema";
 import { hasRecordedSpend, refundCredits } from "@/lib/credits";
 import { normalizeArtImage } from "./image";
-import { artPrompt } from "./prompts";
 import {
   DefiniteArtFailure,
   makeMockArt,
   pollFal,
   submitFal,
 } from "./provider";
+import {
+  ArtProviderRateLimitError,
+  ArtProviderUnavailableError,
+  generateSeedream,
+  pollQwen,
+  pollWanx,
+  submitQwen,
+  submitWanx,
+  UnknownArtTask,
+} from "./domestic-providers";
 import { deleteArtAsset, readArtAsset, writeArtAsset } from "./storage";
+import { resolveJobPrompt } from "./templates";
 
 const lease = () => new Date(Date.now() + 2 * 60_000);
 const days = (count: number) => new Date(Date.now() + count * 86_400_000);
 
-async function claimJob() {
+async function claimJob(jobId?: string) {
+  const idFilter = jobId ? sql`AND id = ${jobId}::uuid` : sql``;
   const [job] = await db
     .update(artJobs)
     .set({ status: "submitting", leaseUntil: lease() })
     .where(
       and(
         eq(artJobs.status, "queued"),
-        sql`${artJobs.id} = (SELECT id FROM art_jobs WHERE status = 'queued' ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1)`,
+        jobId ? eq(artJobs.id, jobId) : undefined,
+        or(isNull(artJobs.leaseUntil), lt(artJobs.leaseUntil, new Date())),
+        sql`${artJobs.id} = (SELECT id FROM art_jobs WHERE status = 'queued' AND (lease_until IS NULL OR lease_until < NOW()) ${idFilter} ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1)`,
       ),
     )
     .returning();
   return job;
 }
 
-async function claimPoll() {
+async function claimPoll(jobId?: string) {
+  const idFilter = jobId ? sql`AND id = ${jobId}::uuid` : sql``;
   const [job] = await db
     .update(artJobs)
     .set({ leaseUntil: lease() })
     .where(
       and(
         eq(artJobs.status, "processing"),
+        jobId ? eq(artJobs.id, jobId) : undefined,
         or(isNull(artJobs.leaseUntil), lt(artJobs.leaseUntil, new Date())),
-        sql`${artJobs.id} = (SELECT id FROM art_jobs WHERE status = 'processing' AND (lease_until IS NULL OR lease_until < NOW()) ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1)`,
+        sql`${artJobs.id} = (SELECT id FROM art_jobs WHERE status = 'processing' AND (lease_until IS NULL OR lease_until < NOW()) ${idFilter} ORDER BY created_at FOR UPDATE SKIP LOCKED LIMIT 1)`,
       ),
     )
     .returning();
@@ -84,6 +99,7 @@ async function complete(job: typeof artJobs.$inferSelect, result: Buffer) {
       .set({
         status: "completed",
         outputAssetId: outputId,
+        failureCode: null,
         leaseUntil: null,
         finishedAt: new Date(),
       })
@@ -114,8 +130,8 @@ async function failAndRefund(job: typeof artJobs.$inferSelect, code: string) {
     .where(eq(artAssets.id, job.inputAssetId));
 }
 
-export async function processOneArtJob(): Promise<boolean> {
-  const queued = await claimJob();
+export async function processOneArtJob(jobId?: string): Promise<boolean> {
+  const queued = await claimJob(jobId);
   if (queued) {
     if (queued.provider === "mock") {
       try {
@@ -144,19 +160,58 @@ export async function processOneArtJob(): Promise<boolean> {
         .from(artAssets)
         .where(eq(artAssets.id, queued.inputAssetId))
         .limit(1);
-      const requestId = await submitFal(
-        await readArtAsset(asset.key),
-        artPrompt(queued.styleSlug),
+      const input = await readArtAsset(asset.key);
+      const prompt = await resolveJobPrompt(
+        queued.styleSlug,
+        queued.styleVersion,
+        queued.promptOverride,
       );
+      if (queued.provider === "seedream") {
+        await complete(
+          queued,
+          await generateSeedream(input, prompt, queued.model),
+        );
+        return true;
+      }
+      const requestId =
+        queued.provider === "qwen"
+          ? await submitQwen(input, prompt, queued.model)
+          : queued.provider === "wanx"
+            ? await submitWanx(input, prompt, queued.model)
+            : queued.provider === "fal"
+              ? await submitFal(input, prompt)
+              : null;
+      if (!requestId)
+        throw new DefiniteArtFailure("Unsupported image provider");
       await db
         .update(artJobs)
         .set({
           status: "processing",
           providerRequestId: requestId,
+          failureCode: null,
           leaseUntil: new Date(),
         })
         .where(eq(artJobs.id, queued.id));
     } catch (error) {
+      if (error instanceof ArtProviderRateLimitError) {
+        if (queued.createdAt < days(-1)) {
+          await failAndRefund(queued, "provider_rate_limit_timeout");
+          return true;
+        }
+        await db
+          .update(artJobs)
+          .set({
+            status: "queued",
+            failureCode: "provider_rate_limited",
+            leaseUntil: new Date(Date.now() + 30_000),
+          })
+          .where(eq(artJobs.id, queued.id));
+        return true;
+      }
+      if (error instanceof ArtProviderUnavailableError) {
+        await failAndRefund(queued, "provider_unavailable");
+        return true;
+      }
       if (error instanceof DefiniteArtFailure) {
         await failAndRefund(queued, "provider_rejected_input");
         return true;
@@ -173,7 +228,7 @@ export async function processOneArtJob(): Promise<boolean> {
     }
     return true;
   }
-  const job = await claimPoll();
+  const job = await claimPoll(jobId);
   if (!job) return false;
   if (!job.providerRequestId) {
     await db
@@ -187,20 +242,44 @@ export async function processOneArtJob(): Promise<boolean> {
     return true;
   }
   try {
-    const result = await pollFal(job.providerRequestId);
+    const result =
+      job.provider === "qwen"
+        ? await pollQwen(job.providerRequestId)
+        : job.provider === "wanx"
+          ? await pollWanx(job.providerRequestId)
+          : job.provider === "fal"
+            ? await pollFal(job.providerRequestId)
+            : null;
+    if (!result) throw new Error("Unsupported polling provider");
     if (result.done) await complete(job, result.bytes);
     else
       await db
         .update(artJobs)
-        .set({ leaseUntil: new Date(Date.now() + 20_000) })
+        .set({ failureCode: null, leaseUntil: new Date(Date.now() + 20_000) })
         .where(eq(artJobs.id, job.id));
   } catch (error) {
-    if (error instanceof DefiniteArtFailure)
+    if (
+      error instanceof UnknownArtTask ||
+      ((job.provider === "qwen" || job.provider === "wanx") &&
+        job.createdAt < days(-1))
+    ) {
+      await db
+        .update(artJobs)
+        .set({
+          status: "needs_reconciliation",
+          failureCode: "provider_task_unavailable",
+          leaseUntil: null,
+        })
+        .where(eq(artJobs.id, job.id));
+    } else if (error instanceof DefiniteArtFailure)
       await failAndRefund(job, "provider_processing_failed");
     else
       await db
         .update(artJobs)
-        .set({ leaseUntil: new Date(Date.now() + 60_000) })
+        .set({
+          failureCode: "provider_check_failed",
+          leaseUntil: new Date(Date.now() + 60_000),
+        })
         .where(eq(artJobs.id, job.id));
   }
   return true;

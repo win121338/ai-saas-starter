@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n-copy";
+import { getLocale } from "@/lib/i18n-server";
 import {
   Table,
   TableBody,
@@ -34,7 +36,7 @@ function formatAmount(amount: number): string {
   return amount > 0 ? `+${amount}` : `−${Math.abs(amount)}`;
 }
 
-function LedgerTable({
+async function LedgerTable({
   entries,
   animated = false,
   className,
@@ -43,14 +45,15 @@ function LedgerTable({
   animated?: boolean;
   className?: string;
 }) {
+  const locale = await getLocale();
   return (
     <Table className={className}>
       <TableHeader>
         <TableRow className="hover:bg-transparent">
-          <TableHead>Date</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Ref</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead>{t(locale, "Date")}</TableHead>
+          <TableHead>{t(locale, "Type")}</TableHead>
+          <TableHead>{t(locale, "Ref")}</TableHead>
+          <TableHead className="text-right">{t(locale, "Amount")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -67,7 +70,9 @@ function LedgerTable({
             <TableCell className="font-mono text-xs text-muted-foreground">
               {entry.timestamp}
             </TableCell>
-            <TableCell className="font-mono text-xs">{entry.type}</TableCell>
+            <TableCell className="font-mono text-xs">
+              {t(locale, entry.type.replaceAll("_", " "))}
+            </TableCell>
             <TableCell className="font-mono text-xs text-muted-foreground">
               {entry.ref}
             </TableCell>
