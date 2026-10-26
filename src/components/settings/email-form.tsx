@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 import { z } from "zod";
@@ -15,18 +16,26 @@ import { t } from "@/lib/i18n-copy";
 
 export function EmailForm({
   email,
+  emailVerified,
   canSendEmail,
 }: {
   email: string;
+  emailVerified: boolean;
   canSendEmail: boolean;
 }) {
   const locale = useLocale();
+  const router = useRouter();
+  const unavailable = emailVerified && !canSendEmail;
   const [pending, setPending] = React.useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending || unavailable) return;
     const parsed = z
-      .email("Enter a valid email address")
+      .string()
+      .trim()
+      .toLowerCase()
+      .pipe(z.email("Enter a valid email address"))
       .safeParse(new FormData(event.currentTarget).get("email"));
     if (!parsed.success) {
       toast.error(
@@ -39,44 +48,74 @@ export function EmailForm({
       return;
     }
     setPending(true);
-    const { error } = await authClient.changeEmail({
-      newEmail: parsed.data,
-      callbackURL: localizedHref("/settings", locale),
-    });
-    setPending(false);
-    if (error) {
-      toast.error(
-        error.message ?? t(locale, "Could not start the email change"),
+    try {
+      const { error } = await authClient.changeEmail({
+        newEmail: parsed.data,
+        callbackURL: localizedHref("/settings", locale),
+      });
+      if (error) {
+        toast.error(
+          error.message ?? t(locale, "Could not start the email change"),
+        );
+        return;
+      }
+      if (!canSendEmail) {
+        const { data } = await authClient.getSession();
+        if (data?.user.email !== parsed.data) {
+          toast.error(t(locale, "Could not start the email change"));
+          return;
+        }
+        router.refresh();
+      }
+      toast.success(
+        canSendEmail
+          ? t(
+              locale,
+              emailVerified
+                ? "Approve the change in your current inbox, then verify your new email."
+                : "Check your new inbox to verify the email change.",
+            )
+          : t(locale, "Email updated"),
       );
-      return;
+    } catch {
+      toast.error(t(locale, "Could not start the email change"));
+    } finally {
+      setPending(false);
     }
-    toast.success(
-      canSendEmail
-        ? t(locale, "Check your current inbox to approve the change")
-        : t(locale, "Email updated"),
-    );
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex max-w-sm items-end gap-2">
-      <div className="grid flex-1 gap-1.5">
-        <Label htmlFor="settings-email">{t(locale, "Email")}</Label>
-        <Input
-          id="settings-email"
-          name="email"
-          type="email"
-          defaultValue={email}
-          required
-        />
-      </div>
-      <BusyButton
-        type="submit"
-        variant="outline"
-        busy={pending}
-        busyLabel={t(locale, "Saving…")}
-      >
-        {t(locale, "Change")}
-      </BusyButton>
-    </form>
+    <div className="max-w-sm space-y-2">
+      <form onSubmit={onSubmit} className="flex items-end gap-2">
+        <div className="grid flex-1 gap-1.5">
+          <Label htmlFor="settings-email">{t(locale, "Email")}</Label>
+          <Input
+            id="settings-email"
+            name="email"
+            type="email"
+            defaultValue={email}
+            required
+            disabled={unavailable || pending}
+          />
+        </div>
+        <BusyButton
+          type="submit"
+          variant="outline"
+          busy={pending}
+          disabled={unavailable}
+          busyLabel={t(locale, "Saving…")}
+        >
+          {t(locale, "Change")}
+        </BusyButton>
+      </form>
+      {unavailable ? (
+        <p role="status" className="text-sm text-muted-foreground">
+          {t(
+            locale,
+            "Email changes require email delivery. Please contact the site administrator.",
+          )}
+        </p>
+      ) : null}
+    </div>
   );
 }

@@ -1,6 +1,30 @@
 import type { Locale } from "@/lib/i18n";
 
 const zh: Record<string, string> = {
+  "Request received. If this address has an account, check your inbox and spam folder for a reset link. If no email arrives, try again or contact the site administrator.":
+    "请求已受理。如该邮箱已注册，请检查收件箱和垃圾邮件中的重设链接。未收到邮件时，可重试或联系管理员。",
+  "Could not reset your password. Please try again.":
+    "无法重设密码，请稍后重试。",
+  "Password reset email is unavailable. Please contact the site administrator to configure email delivery.":
+    "暂时无法发送密码重设邮件，请联系管理员配置邮件服务。",
+  "Email changes require email delivery. Please contact the site administrator.":
+    "更改已验证邮箱需要邮件确认，请联系管理员配置邮件服务。",
+  "Approve the change in your current inbox, then verify your new email.":
+    "请先在当前邮箱确认更改，再到新邮箱完成验证。",
+  "Check your new inbox to verify the email change.":
+    "请到新邮箱完成更改验证。",
+  "Sign in again before deleting your account.": "请重新登录后再删除账户。",
+  "A recent sign-in is required. Confirming permanently removes:":
+    "需要近期登录才能操作。确认后将永久删除：",
+  "Photo ratio": "图片比例",
+  Crop: "裁切",
+  "Original ratio": "原图比例",
+  "Ratios center-crop your photo before upload. The preview shows the crop.":
+    "上传前将按所选比例居中裁切，预览即为裁切效果。",
+  "Choose a valid photo ratio.": "请选择有效的图片比例。",
+  Advanced: "高级设置",
+  "Custom prompt": "自定义提示词",
+  "Style preset": "风格默认提示词",
   Operations: "运营管理",
   "Admin console": "运营后台",
   "Admin navigation": "后台导航",

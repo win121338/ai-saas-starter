@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,17 +19,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function UserMenu({ name, email }: { name: string; email: string }) {
-  const router = useRouter();
   const locale = useLocale();
 
   async function signOut() {
-    const { error } = await authClient.signOut();
-    if (error) {
-      toast.error(error.message ?? t(locale, "Sign-out failed"));
-      return;
+    try {
+      const { error } = await authClient.signOut();
+      if (error) {
+        toast.error(error.message ?? t(locale, "Sign-out failed"));
+        return;
+      }
+      window.location.replace(localizedHref("/login", locale));
+    } catch {
+      toast.error(t(locale, "Sign-out failed"));
     }
-    router.push(localizedHref("/login", locale));
-    router.refresh();
   }
 
   return (

@@ -55,6 +55,7 @@ export default defineConfig({
       AI_MOCK: "true",
       ART_PROVIDER: "mock",
       BLOB_READ_WRITE_TOKEN: "",
+      RESEND_API_KEY: "",
       DATABASE_URL: E2E_DATABASE_URL,
       BETTER_AUTH_URL: BASE_URL,
       BETTER_AUTH_SECRET:

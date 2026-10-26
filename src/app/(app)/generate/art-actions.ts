@@ -7,6 +7,7 @@ import { after } from "next/server";
 import { z } from "zod";
 
 import { GENERATION_COST_CREDITS } from "@/config/plans";
+import { artAspectRatioSchema } from "@/config/art-aspect-ratios";
 import { db } from "@/db";
 import { artAssets, artJobs } from "@/db/schema";
 import { requireSession } from "@/lib/auth/session";
@@ -31,6 +32,11 @@ export async function createArtJobAction(
   const requestKey = z.uuid().safeParse(formData.get("requestKey"));
   const style = z.string().safeParse(formData.get("style"));
   const model = z.string().safeParse(formData.get("model"));
+  const aspectRatio = artAspectRatioSchema.safeParse(
+    formData.get("aspectRatio") ?? "original",
+  );
+  if (!aspectRatio.success)
+    return { ok: false, error: "Choose a valid photo ratio." };
   const version = z.coerce
     .number()
     .int()
@@ -82,7 +88,7 @@ export async function createArtJobAction(
     return { ok: false, error: "Please wait a minute before trying again." };
   let image;
   try {
-    image = await normalizeArtImage(file);
+    image = await normalizeArtImage(file, undefined, aspectRatio.data);
   } catch (error) {
     return {
       ok: false,

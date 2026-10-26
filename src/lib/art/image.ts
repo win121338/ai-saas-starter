@@ -1,4 +1,8 @@
 import sharp, { type Metadata } from "sharp";
+import {
+  aspectRatioValue,
+  type ArtAspectRatio,
+} from "@/config/art-aspect-ratios";
 
 const MAX_INPUT = 10 * 1024 * 1024;
 const MAX_PIXELS = 30_000_000;
@@ -9,6 +13,7 @@ export class InvalidArtImageError extends Error {}
 export async function normalizeArtImage(
   file: File | Buffer,
   maxBytes = MAX_INPUT,
+  aspectRatio: ArtAspectRatio = "original",
 ) {
   const bytes = Buffer.isBuffer(file)
     ? file
@@ -36,8 +41,24 @@ export async function normalizeArtImage(
     );
   }
   try {
-    const { data, info } = await sharp(bytes, { limitInputPixels: MAX_PIXELS })
-      .rotate()
+    const ratio = aspectRatioValue(aspectRatio);
+    const rotatedWidth = metadata.autoOrient?.width ?? metadata.width;
+    const rotatedHeight = metadata.autoOrient?.height ?? metadata.height;
+    const cropWidth = ratio
+      ? Math.min(rotatedWidth, Math.floor(rotatedHeight * ratio))
+      : rotatedWidth;
+    const cropHeight = ratio
+      ? Math.min(rotatedHeight, Math.floor(rotatedWidth / ratio))
+      : rotatedHeight;
+    const pipeline = sharp(bytes, { limitInputPixels: MAX_PIXELS }).rotate();
+    if (ratio)
+      pipeline.extract({
+        left: Math.floor((rotatedWidth - cropWidth) / 2),
+        top: Math.floor((rotatedHeight - cropHeight) / 2),
+        width: Math.max(1, cropWidth),
+        height: Math.max(1, cropHeight),
+      });
+    const { data, info } = await pipeline
       .resize({
         width: 2048,
         height: 2048,

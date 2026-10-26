@@ -26,6 +26,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     setError(null);
     const parsed = schema.safeParse({
       newPassword: new FormData(event.currentTarget).get("newPassword"),
@@ -37,20 +38,27 @@ export function ResetPasswordForm({ token }: { token: string }) {
       return;
     }
     setPending(true);
-    const { error: resetError } = await authClient.resetPassword({
-      newPassword: parsed.data.newPassword,
-      token,
-    });
-    setPending(false);
-    if (resetError) {
-      setError(
-        resetError.message ??
-          t(locale, "The link may have expired — try again"),
-      );
-      return;
+    try {
+      const { error: resetError } = await authClient.resetPassword({
+        newPassword: parsed.data.newPassword,
+        token,
+      });
+      if (resetError) {
+        setError(
+          resetError.code === "INVALID_TOKEN"
+            ? t(locale, "The link may have expired — try again")
+            : (resetError.message ??
+                t(locale, "The link may have expired — try again")),
+        );
+        return;
+      }
+      toast.success(t(locale, "Password updated — sign in with the new one"));
+      router.push(localizedHref("/login", locale));
+    } catch {
+      setError(t(locale, "Could not reset your password. Please try again."));
+    } finally {
+      setPending(false);
     }
-    toast.success(t(locale, "Password updated — sign in with the new one"));
-    router.push(localizedHref("/login", locale));
   }
 
   return (
@@ -65,7 +73,11 @@ export function ResetPasswordForm({ token }: { token: string }) {
           required
         />
       </div>
-      {error ? <p className="text-sm text-debit-text">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-sm text-debit-text">
+          {error}
+        </p>
+      ) : null}
       <Button type="submit" disabled={pending}>
         {t(locale, pending ? "Saving…" : "Set new password")}
       </Button>

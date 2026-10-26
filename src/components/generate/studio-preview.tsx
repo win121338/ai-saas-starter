@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
+  ChevronDown,
   ImagePlus,
   Info,
   RotateCcw,
@@ -14,6 +15,11 @@ import {
 } from "lucide-react";
 
 import { ART_PROMPT_MAX_LENGTH } from "@/config/art-prompts";
+import {
+  ART_ASPECT_RATIOS,
+  aspectRatioValue,
+  type ArtAspectRatio,
+} from "@/config/art-aspect-ratios";
 import { DEFAULT_ART_MODEL } from "@/config/image-model-catalog";
 import { createArtJobAction } from "@/app/(app)/generate/art-actions";
 import { Label } from "@/components/ui/label";
@@ -49,6 +55,13 @@ export function StudioPreview({
   }[];
 }) {
   const [selected, setSelected] = React.useState(initialStyle);
+  const [aspectRatio, setAspectRatio] =
+    React.useState<ArtAspectRatio>("original");
+  const [uploadOpen, setUploadOpen] = React.useState(true);
+  const [styleOpen, setStyleOpen] = React.useState(true);
+  const [ratioOpen, setRatioOpen] = React.useState(true);
+  const [modelOpen, setModelOpen] = React.useState(false);
+  const [promptOpen, setPromptOpen] = React.useState(false);
   const [prompt, setPrompt] = React.useState(promptPresets[initialStyle] ?? "");
   const [promptError, setPromptError] = React.useState<string | null>(null);
   const [selectedModel, setSelectedModel] = React.useState<string>(
@@ -90,6 +103,7 @@ export function StudioPreview({
     setError(null);
     setFile(candidate);
     setPreview(URL.createObjectURL(candidate));
+    setUploadOpen(false);
   }
 
   function removeFile() {
@@ -97,6 +111,7 @@ export function StudioPreview({
     setFile(null);
     setPreview(null);
     setError(null);
+    setUploadOpen(true);
     if (fileInput.current) fileInput.current.value = "";
   }
 
@@ -111,6 +126,7 @@ export function StudioPreview({
       submittedPrompt.length < 3 ||
       submittedPrompt.length > ART_PROMPT_MAX_LENGTH
     ) {
+      setPromptOpen(true);
       setPromptError(
         t(locale, "Write a prompt between 3 and 2,000 characters."),
       );
@@ -123,6 +139,7 @@ export function StudioPreview({
     form.set("style", selected);
     form.set("promptVersion", String(promptVersions[selected]));
     form.set("model", selectedModel);
+    form.set("aspectRatio", aspectRatio);
     form.set("prompt", submittedPrompt);
     form.set("photo", file);
     startTransition(async () => {
@@ -137,30 +154,15 @@ export function StudioPreview({
   }
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
-      <div className="space-y-6">
-        <section
-          className="artora-surface p-5 sm:p-6"
-          aria-labelledby="upload-title"
+    <div className="grid items-start gap-6 xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
+      <div className="space-y-4">
+        <StudioSection
+          title={t(locale, "Upload a photo")}
+          eyebrow={t(locale, "Step 01")}
+          summary={file?.name ?? t(locale, "Choose photo")}
+          open={uploadOpen}
+          onOpenChange={setUploadOpen}
         >
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                {t(locale, "Step 01")}
-              </p>
-              <h2
-                id="upload-title"
-                className="mt-2 font-heading text-xl font-bold"
-              >
-                {t(locale, "Upload a photo")}
-              </h2>
-            </div>
-            <ImagePlus
-              className="size-6 text-primary"
-              strokeWidth={1.5}
-              aria-hidden
-            />
-          </div>
           <input
             ref={fileInput}
             id="studio-photo"
@@ -178,13 +180,20 @@ export function StudioPreview({
             className="mt-5 rounded-2xl border border-dashed border-[#4a5567] bg-secondary/45 p-6 text-center"
           >
             {preview ? (
-              <div className="relative mx-auto aspect-[4/3] w-full max-w-xs overflow-hidden rounded-xl bg-background">
+              <div
+                style={{ aspectRatio: aspectRatioValue(aspectRatio) ?? 4 / 3 }}
+                className="relative mx-auto w-full max-w-xs overflow-hidden rounded-xl bg-background"
+              >
                 <Image
                   src={preview}
                   alt={t(locale, "Selected photo preview")}
                   fill
                   unoptimized
-                  className="object-contain"
+                  className={
+                    aspectRatio === "original"
+                      ? "object-contain"
+                      : "object-cover"
+                  }
                 />
               </div>
             ) : (
@@ -218,11 +227,6 @@ export function StudioPreview({
               ) : null}
             </div>
           </div>
-          {error ? (
-            <p role="alert" className="mt-3 text-sm text-debit-text">
-              {error}
-            </p>
-          ) : null}
           <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
             <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />{" "}
             {t(
@@ -237,18 +241,60 @@ export function StudioPreview({
                 )}{" "}
             {t(locale, "Inputs are kept for 24 hours after the job finishes.")}
           </p>
-        </section>
-
-        <section
-          className="artora-surface p-5 sm:p-6"
-          aria-labelledby="style-title"
-        >
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            {t(locale, "Step 02")}
+        </StudioSection>
+        {error ? (
+          <p role="alert" className="text-sm text-debit-text">
+            {error}
           </p>
-          <h2 id="style-title" className="mt-2 font-heading text-xl font-bold">
-            {t(locale, "Choose a style")}
-          </h2>
+        ) : null}
+
+        <StudioSection
+          title={t(locale, "Photo ratio")}
+          eyebrow={t(locale, "Crop")}
+          summary={
+            aspectRatio === "original"
+              ? t(locale, "Original ratio")
+              : aspectRatio
+          }
+          open={ratioOpen}
+          onOpenChange={setRatioOpen}
+        >
+          <div
+            className="mt-4 grid grid-cols-3 gap-2"
+            role="group"
+            aria-label={t(locale, "Photo ratio")}
+          >
+            {ART_ASPECT_RATIOS.map((ratio) => (
+              <button
+                key={ratio}
+                type="button"
+                aria-pressed={aspectRatio === ratio}
+                onClick={() => {
+                  setAspectRatio(ratio);
+                  setRatioOpen(false);
+                  requestKey.current = null;
+                }}
+                className={`min-h-10 rounded-xl border px-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${aspectRatio === ratio ? "border-primary bg-primary/10" : "border-border bg-secondary/45 hover:border-primary/50"}`}
+              >
+                {ratio === "original" ? t(locale, "Original ratio") : ratio}
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 text-xs leading-5 text-muted-foreground">
+            {t(
+              locale,
+              "Ratios center-crop your photo before upload. The preview shows the crop.",
+            )}
+          </p>
+        </StudioSection>
+
+        <StudioSection
+          title={t(locale, "Choose a style")}
+          eyebrow={t(locale, "Step 02")}
+          summary={activeStyle ? t(locale, activeStyle.name) : "—"}
+          open={styleOpen}
+          onOpenChange={setStyleOpen}
+        >
           <div className="mt-5 grid grid-cols-2 gap-2.5">
             {styles.map((style) => (
               <button
@@ -259,6 +305,7 @@ export function StudioPreview({
                   if (!isCustomPrompt)
                     setPrompt(promptPresets[style.slug] ?? "");
                   setSelected(style.slug);
+                  setStyleOpen(false);
                   setPromptError(null);
                   requestKey.current = null;
                 }}
@@ -278,6 +325,14 @@ export function StudioPreview({
               {t(locale, "No art styles are currently available.")}
             </p>
           ) : null}
+        </StudioSection>
+        <StudioSection
+          title={t(locale, "Generation prompt")}
+          eyebrow={t(locale, "Advanced")}
+          summary={t(locale, isCustomPrompt ? "Custom prompt" : "Style preset")}
+          open={promptOpen}
+          onOpenChange={setPromptOpen}
+        >
           <div className="mt-6 space-y-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <Label htmlFor="studio-prompt">
@@ -303,11 +358,11 @@ export function StudioPreview({
                 setPromptError(null);
                 requestKey.current = null;
               }}
-              rows={7}
+              rows={4}
               maxLength={ART_PROMPT_MAX_LENGTH}
               aria-invalid={Boolean(promptError)}
               aria-describedby="studio-prompt-help"
-              className="min-h-40 resize-y bg-secondary/45 leading-6"
+              className="min-h-28 resize-y bg-secondary/45 leading-6"
             />
             <div
               id="studio-prompt-help"
@@ -344,24 +399,24 @@ export function StudioPreview({
               {t(locale, "Demo mode does not apply the prompt to an AI model.")}
             </p>
           ) : null}
-        </section>
+        </StudioSection>
 
-        <section
-          className="artora-surface p-5 sm:p-6"
-          aria-labelledby="model-title"
+        <StudioSection
+          title={t(locale, "Choose a model")}
+          eyebrow={t(locale, "Image model")}
+          summary={
+            models.find((model) => model.id === selectedModel)?.label ?? "—"
+          }
+          open={modelOpen}
+          onOpenChange={setModelOpen}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-            {t(locale, "Image model")}
-          </p>
-          <h2 id="model-title" className="mt-2 font-heading text-xl font-bold">
-            {t(locale, "Choose a model")}
-          </h2>
           <select
             id="studio-model"
-            aria-labelledby="model-title"
+            aria-label={t(locale, "Choose a model")}
             value={selectedModel}
             onChange={(event) => {
               setSelectedModel(event.target.value);
+              setModelOpen(false);
               requestKey.current = null;
             }}
             className="mt-4 w-full rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-primary"
@@ -392,7 +447,7 @@ export function StudioPreview({
               )}
             </p>
           )}
-        </section>
+        </StudioSection>
 
         <section className="artora-surface p-5 sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -442,7 +497,7 @@ export function StudioPreview({
         </section>
       </div>
 
-      <div className="artora-surface flex min-h-[650px] flex-col overflow-hidden">
+      <div className="artora-surface flex min-h-[650px] flex-col overflow-hidden xl:sticky xl:top-24">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4 sm:px-7">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -459,13 +514,20 @@ export function StudioPreview({
         <div className="flex flex-1 flex-col items-center justify-center p-5 sm:p-8">
           {preview ? (
             <div className="w-full max-w-[600px]">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-[#0b0d12]">
+              <div
+                style={{ aspectRatio: aspectRatioValue(aspectRatio) ?? 4 / 3 }}
+                className="relative mx-auto overflow-hidden rounded-2xl border border-border bg-[#0b0d12]"
+              >
                 <Image
                   src={preview}
                   alt={t(locale, "Your selected photo")}
                   fill
                   unoptimized
-                  className="object-contain"
+                  className={
+                    aspectRatio === "original"
+                      ? "object-contain"
+                      : "object-cover"
+                  }
                 />
               </div>
               <div className="mt-5 flex flex-wrap items-start justify-between gap-3">
@@ -536,5 +598,51 @@ export function StudioPreview({
         </div>
       </div>
     </div>
+  );
+}
+
+function StudioSection({
+  title,
+  eyebrow,
+  summary,
+  open,
+  onOpenChange,
+  children,
+}: {
+  title: string;
+  eyebrow: string;
+  summary: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <details
+      className={`artora-surface group ${open ? "p-5 sm:p-6" : "px-5 py-3 sm:px-6 sm:py-4"}`}
+      open={open}
+      onToggle={(event) => onOpenChange(event.currentTarget.open)}
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            {eyebrow}
+          </p>
+          <h2 className="mt-1 font-heading text-lg font-bold">{title}</h2>
+          {!open ? (
+            <p
+              className="mt-1 truncate text-xs text-muted-foreground"
+              title={summary}
+            >
+              {summary}
+            </p>
+          ) : null}
+        </div>
+        <ChevronDown
+          aria-hidden
+          className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180"
+        />
+      </summary>
+      {children}
+    </details>
   );
 }

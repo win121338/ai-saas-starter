@@ -50,7 +50,11 @@ export default async function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <ProfileForm name={session.user.name} />
-          <EmailForm email={session.user.email} canSendEmail={features.email} />
+          <EmailForm
+            email={session.user.email}
+            emailVerified={session.user.emailVerified}
+            canSendEmail={features.email}
+          />
         </CardContent>
       </Card>
 
@@ -86,10 +90,7 @@ export default async function SettingsPage() {
           <CardTitle>{t(locale, "Delete account")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <DeleteAccount
-            hasPassword={hasPassword}
-            canSendEmail={features.email}
-          />
+          <DeleteAccount hasPassword={hasPassword} />
         </CardContent>
       </Card>
     </div>

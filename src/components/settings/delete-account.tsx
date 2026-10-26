@@ -23,42 +23,42 @@ import { useLocale } from "@/components/locale-provider";
 import { localizedHref } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
 
-export function DeleteAccount({
-  hasPassword,
-  canSendEmail,
-}: {
-  hasPassword: boolean;
-  canSendEmail: boolean;
-}) {
+export function DeleteAccount({ hasPassword }: { hasPassword: boolean }) {
   const router = useRouter();
   const locale = useLocale();
   const [pending, setPending] = React.useState(false);
 
   async function onDelete(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     const password = new FormData(event.currentTarget).get("password");
     setPending(true);
-    const { error } = await authClient.deleteUser(
-      hasPassword && typeof password === "string" && password.length > 0
-        ? { password }
-        : { callbackURL: localizedHref("/", locale) },
-    );
-    setPending(false);
-    if (error) {
-      toast.error(error.message ?? t(locale, "Could not delete the account"));
-      return;
+    try {
+      const { data, error } = await authClient.deleteUser(
+        hasPassword && typeof password === "string" && password.length > 0
+          ? { password }
+          : { callbackURL: localizedHref("/", locale) },
+      );
+      if (error) {
+        toast.error(
+          error.code === "SESSION_EXPIRED"
+            ? t(locale, "Sign in again before deleting your account.")
+            : (error.message ?? t(locale, "Could not delete the account")),
+        );
+        return;
+      }
+      if (data?.message === "User deleted") {
+        // Deleted immediately. Subscription cancellation runs in beforeDelete (M3).
+        router.push(localizedHref("/", locale));
+        router.refresh();
+        return;
+      }
+      toast.error(t(locale, "Could not delete the account"));
+    } catch {
+      toast.error(t(locale, "Could not delete the account"));
+    } finally {
+      setPending(false);
     }
-    if (hasPassword) {
-      // Deleted immediately. Subscription cancellation runs in beforeDelete (M3).
-      router.push(localizedHref("/", locale));
-      router.refresh();
-      return;
-    }
-    toast.success(
-      canSendEmail
-        ? t(locale, "Check your inbox to confirm deletion")
-        : t(locale, "Deletion requested"),
-    );
   }
 
   return (
@@ -84,7 +84,7 @@ export function DeleteAccount({
                   )
                 : t(
                     locale,
-                    "We send a confirmation link to your email. Confirming permanently removes:",
+                    "A recent sign-in is required. Confirming permanently removes:",
                   )}
             </DialogDescription>
             <ul className="space-y-1 text-sm text-muted-foreground">

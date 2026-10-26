@@ -59,23 +59,19 @@ export const auth = betterAuth({
     },
     changeEmail: {
       enabled: true,
-      sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
-        await sendEmail({
-          to: user.email, // current address must approve the change
-          subject: "Approve your email change",
-          text: `Confirm changing your account email to ${newEmail}:\n\n${url}\n\nIf you didn't request this, ignore this email.`,
-        });
-      },
+      updateEmailWithoutVerification: !features.email,
+      sendChangeEmailConfirmation: features.email
+        ? async ({ user, newEmail, url }) => {
+            await sendEmail({
+              to: user.email, // current address must approve the change
+              subject: "Approve your email change",
+              text: `Confirm changing your account email to ${newEmail}:\n\n${url}\n\nIf you didn't request this, ignore this email.`,
+            });
+          }
+        : undefined,
     },
     deleteUser: {
       enabled: true,
-      sendDeleteAccountVerification: async ({ user, url }) => {
-        await sendEmail({
-          to: user.email,
-          subject: "Confirm account deletion",
-          text: `This permanently deletes your account and data:\n\n${url}\n\nIf you didn't request this, ignore this email.`,
-        });
-      },
       beforeDelete: async (user) => {
         // Cancel Stripe subscriptions before the DB rows cascade away —
         // afterwards there is no record left to find the customer by.
@@ -92,24 +88,29 @@ export const auth = betterAuth({
     // verification would brick signup. Degrade to unverified accounts in
     // keyless dev; production setups configure RESEND_API_KEY.
     requireEmailVerification: features.email,
-    sendResetPassword: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Reset your password",
-        react: ResetPasswordEmail({ url }),
-      });
-    },
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: features.email
+      ? async ({ user, url }) => {
+          await sendEmail({
+            to: user.email,
+            subject: "Reset your password",
+            react: ResetPasswordEmail({ url }),
+          });
+        }
+      : undefined,
   },
   emailVerification: {
     sendOnSignUp: features.email,
     autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Verify your email address",
-        react: VerifyEmail({ url }),
-      });
-    },
+    sendVerificationEmail: features.email
+      ? async ({ user, url }) => {
+          await sendEmail({
+            to: user.email,
+            subject: "Verify your email address",
+            react: VerifyEmail({ url }),
+          });
+        }
+      : undefined,
   },
   socialProviders,
   databaseHooks: {

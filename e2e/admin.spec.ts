@@ -50,6 +50,10 @@ test("admin console is restricted and publishes a versioned style template", asy
   await expect(page.getByText("Changes saved.")).toBeVisible();
 
   await page.goto("/generate?style=clay-portrait");
+  await page
+    .locator("summary")
+    .filter({ hasText: "Generation prompt" })
+    .click();
   await expect(
     page.getByRole("textbox", { name: "Generation prompt" }),
   ).toHaveValue("Make a miniature clay artwork from this photo.");

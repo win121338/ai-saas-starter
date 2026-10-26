@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { features } from "@/lib/env";
 import { t } from "@/lib/i18n-copy";
 import { getLocale } from "@/lib/i18n-server";
 
@@ -19,7 +20,7 @@ export default async function ForgotPasswordPage() {
           {t(locale, "Enter your email and we send a reset link.")}
         </p>
       </div>
-      <ForgotPasswordForm />
+      <ForgotPasswordForm canSendEmail={features.email} />
     </div>
   );
 }

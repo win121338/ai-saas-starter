@@ -26,7 +26,7 @@ Next.js 16, React 19, TypeScript, Tailwind CSS v4, Better Auth, Drizzle, Postgre
 
 1. `pnpm install`
 2. Start PostgreSQL 17 with `docker compose up -d` or point `DATABASE_URL` at another local PostgreSQL instance.
-3. Copy `.env.example` to `.env` and set `DATABASE_URL` and a random `BETTER_AUTH_SECRET` of at least 32 characters. Keep `AI_MOCK=true` for the legacy demo in development.
+3. Copy `.env.example` to `.env` and set `DATABASE_URL` and a random `BETTER_AUTH_SECRET` of at least 32 characters. Set `BETTER_AUTH_URL` to the exact browser origin, including the port (for example, `http://localhost:3000`), so authentication requests pass origin checks. Keep `AI_MOCK=true` for the legacy demo in development.
 4. Run `pnpm db:migrate`, then `pnpm dev`.
 
 See [P2 API candidates and operations](docs/P2-IMAGE-API-AND-OPERATIONS.zh-CN.md) for model configuration, private storage, and the authenticated worker schedule. Production needs a **private** Vercel Blob store, a live image-provider key, and a trusted scheduler calling `/api/internal/art-worker`.
