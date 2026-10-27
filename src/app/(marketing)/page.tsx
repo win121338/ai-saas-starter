@@ -49,14 +49,24 @@ export default async function Home() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href={localizedHref("/styles", locale)}
+              href={localizedHref(
+                catalog.templates.find(
+                  (item) => item.id === catalog.featuredTemplateId,
+                )?.generationStyleSlug
+                  ? `/generate?style=${catalog.featuredTemplateId}`
+                  : "/styles",
+                locale,
+              )}
               className="artora-action"
             >
-              {t(locale, "Explore the case wall")}{" "}
+              {t(locale, "Create your version")}{" "}
               <ArrowUpRight className="size-4" aria-hidden />
             </Link>
-            <Link href="#collections" className="artora-quiet-action">
-              {t(locale, "Find your collection")}{" "}
+            <Link
+              href={localizedHref("/styles", locale)}
+              className="artora-quiet-action"
+            >
+              {t(locale, "Explore the case wall")}{" "}
               <ArrowDown className="size-4" aria-hidden />
             </Link>
           </div>
@@ -189,7 +199,7 @@ export default async function Home() {
               [
                 "03",
                 "Make room for your moment",
-                "The new studio templates are being prepared. For now, find your inspiration here.",
+                "Choose a template, upload your photo, and create your version.",
               ],
             ].map(([number, title, copy]) => (
               <div key={number}>

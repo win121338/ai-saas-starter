@@ -1,7 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const fake = vi.hoisted(() => ({ getLocale: vi.fn() }));
+const fake = vi.hoisted(() => ({ getLocale: vi.fn(), getCatalog: vi.fn() }));
+vi.mock("@/lib/cases/catalog", async (original) => ({
+  ...(await original<typeof import("@/lib/cases/catalog")>()),
+  getCaseCatalog: fake.getCatalog,
+}));
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/i18n-server", () => ({ getLocale: fake.getLocale }));
 vi.mock("next/navigation", () => ({
@@ -16,9 +20,18 @@ import StylesPage from "@/app/(marketing)/styles/page";
 import StyleDetailPage from "@/app/(marketing)/styles/[slug]/page";
 import CaseDetailPage from "@/app/(marketing)/styles/[slug]/[caseId]/page";
 import sitemap from "@/app/sitemap";
+import { loadCaseCatalog } from "@/lib/cases/catalog";
 
-beforeEach(() => {
+beforeEach(async () => {
   fake.getLocale.mockResolvedValue("en");
+  const catalog = await loadCaseCatalog();
+  catalog.templates.forEach((item) => {
+    item.generationStyleSlug = item.id;
+    item.cases.forEach((art) => {
+      art.generationStyleSlug = item.id;
+    });
+  });
+  fake.getCatalog.mockResolvedValue(catalog);
 });
 
 describe("curated marketing routes", () => {
@@ -63,7 +76,8 @@ describe("curated marketing routes", () => {
       }),
     );
     expect((collection.match(/class="case-artwork /g) ?? []).length).toBe(10);
-    expect(collection).toContain("Studio template in preparation");
+    expect(collection).toContain("Create with this template");
+    expect(collection).toContain("/generate?style=blue-paper-comic");
     expect(collection).not.toContain("/generate?style=watercolor");
   });
 

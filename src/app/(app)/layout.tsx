@@ -32,7 +32,7 @@ export default async function AppLayout({
         <div className="mt-auto p-5 text-xs leading-6 text-muted-foreground">
           {t(locale, "Private photo-to-art workspace")}
           <br />
-          {t(locale, "Live image generation is being tested.")}
+          {t(locale, "Choose a template. Make it your own.")}
         </div>
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">

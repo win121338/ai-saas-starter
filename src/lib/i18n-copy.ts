@@ -1,6 +1,179 @@
 import type { Locale } from "@/lib/i18n";
 
 const zh: Record<string, string> = {
+  provider_model_not_open: "服务账号未开通该模型",
+  provider_authentication_failed: "服务密钥鉴权失败",
+  provider_access_denied: "服务账号无模型访问权限",
+  provider_model_not_found: "模型或接入点不存在或无权访问",
+  provider_account_unavailable: "服务账号状态或计费异常",
+  "This image model is not activated for the service account. Your credit was refunded. Contact the site operator.":
+    "图像服务账号尚未开通该模型，积分已退回，请联系站点管理员。",
+  "The image service credential was rejected. Your credit was refunded. Contact the site operator.":
+    "图像服务密钥鉴权失败，积分已退回，请联系站点管理员。",
+  "The image service account does not have permission to use this model. Your credit was refunded. Contact the site operator.":
+    "图像服务账号没有该模型的访问权限，积分已退回，请联系站点管理员。",
+  "The image model or endpoint does not exist or is not accessible to the service account. Your credit was refunded. Contact the site operator.":
+    "模型或推理接入点不存在，或服务账号无权访问，积分已退回，请联系站点管理员。",
+  "The image service account has a billing or account-status issue. Your credit was refunded. Contact the site operator.":
+    "图像服务账号存在计费或账号状态异常，积分已退回，请联系站点管理员。",
+  "Unavailable for this template": "此模板下暂不可用",
+  "Choose an image model": "请选择图像模型",
+  "Your selected model is unavailable for this template. Choose another model explicitly; it will not be replaced automatically.":
+    "你选择的模型在此模板下暂不可用，请明确选择其他模型，系统不会自动替换。",
+  "This task will use:": "本次使用模型：",
+  Default: "默认",
+  "Default output ratio": "默认输出比例（用户可自行选择）",
+  "Original ratio": "原图比例",
+  "Keep original": "保持原图",
+  "Social portrait": "社媒竖图",
+  "Social landscape": "社媒横图",
+  "Phone portrait": "手机竖屏",
+  "Wide cover": "宽屏封面",
+  Photography: "摄影横图",
+  Poster: "海报竖版",
+  Portrait: "人像竖版",
+  Landscape: "展示横版",
+  Square: "方形",
+  "Your full photo is preserved without cropping. The output ratio only changes the generated artwork. Pixel dimensions depend on the model.":
+    "原图完整保留，不作裁剪。输出画幅仅影响生成后的作品，实际像素尺寸由模型决定。",
+  "Available to every user. Your selected ratio overrides the template default and remains selected when changing templates.":
+    "所有用户均可选择。所选比例优先于模板默认值，切换模板时会保留当前比例。",
+  "Choose a photo ratio between 1:8 and 8:1.":
+    "请选择 1:8 至 8:1 范围内的照片比例。",
+  "View full size": "查看大图",
+  "View the full image. Use the arrows to switch images.":
+    "查看完整图片，可用左右箭头切换原照与作品。",
+  "Actual size": "按原始尺寸查看",
+  "Fit to screen": "适应屏幕",
+  "Close image": "关闭大图",
+  "Previous image": "上一张图片",
+  "Next image": "下一张图片",
+  "This image is unavailable. Refresh the page and try again.":
+    "图片暂时无法查看，请刷新页面后重试。",
+  "Search creative templates": "搜索创作模板",
+  "Show fewer templates": "收起模板列表",
+  "Show all templates": "展开全部模板",
+  "Advanced settings": "更多设置",
+  "Choose a template. Make it your own.": "选择模板，制作你的同款。",
+  "Make it your own.": "做一张属于你的作品。",
+  "Choose a template, upload your photo, and create your version.":
+    "选择喜欢的模板，上传照片，开始制作同款。",
+  "Choose a template": "选择创作模板",
+  "Selected template": "当前模板",
+  "Your photo": "你的照片",
+  "Your uploaded photo": "你上传的照片",
+  "View all examples": "浏览全部案例",
+  "Click the photo to replace it": "点击照片可更换",
+  "Your photo and the template instruction are sent to the selected image provider when you create.":
+    "开始创作时，照片与模板指令会发送至所选图像服务商。",
+  "Recipe not yet tested. The collected examples illustrate the intended direction.":
+    "此配方尚未完成模型实测，收集案例用于展示预期风格方向。",
+  "See the examples for composition ideas. Results vary with the photo and model.":
+    "案例可供构图参考，实际结果随照片与模型而变化。",
+  "No compatible image model is available for this template.":
+    "此模板暂时没有可用的兼容模型。",
+  "Create artwork": "开始创作",
+  "Creating…": "正在创建…",
+  credit: "积分",
+  "Create your version": "制作我的同款",
+  "Create with this template": "用这个模板创作",
+  "This template is not accepting new creations.": "此模板暂未开放创作。",
+  "No creative templates are available yet.": "暂时没有已开放的创作模板。",
+  "Local demo: the result is a labeled placeholder, not generated artwork.":
+    "本地演示模式：结果会标记为演示占位图。",
+  "Administrator test. Normal credits apply. This snapshot is not activated for users.":
+    "管理员试跑：按正常规则消耗积分，此测试版本尚未向用户启用。",
+  "Could not create the artwork. Try again.": "暂时无法创建作品，请重试。",
+  "Choose a JPEG, PNG, or WebP photo under 10 MB.":
+    "请选择小于 10 MB 的 JPEG、PNG 或 WebP 照片。",
+  "Check the template options and try again.": "请检查模板选项后重试。",
+  "Choose a compatible image model.": "请选择此模板支持的模型。",
+  "Use the photo ratio required by this template.":
+    "请使用此模板要求的照片比例。",
+  "This template preview is restricted to administrators.":
+    "此模板测试版本仅限管理员使用。",
+  "Creative templates": "创作模板管理",
+  "Manage cases, recipes and availability together. Imported packages update drafts; published versions stay unchanged.":
+    "统一管理案例、生成配方和上架状态。导入只更新草稿，已发布版本保持不变。",
+  "Archived styles": "旧风格归档",
+  "Back to creative templates": "返回创作模板管理",
+  "Archived styles are retained for historical jobs. They cannot accept new studio jobs.":
+    "旧风格保留历史任务资料，不再接受新的工作台任务。",
+  "Import a template": "导入新模板 / 更新草稿",
+  "Choose a prepared JSON package to create or update a draft. Media must already be uploaded or included in the approved static assets.":
+    "选择整理好的 JSON 资料包以新增或更新草稿；图片需已上传或属于已整理的静态素材。",
+  "Template package": "模板资料包",
+  "Import as draft": "导入为草稿",
+  "Import prepared local packages": "导入本地已整理资料包",
+  "Search templates": "搜索模板名称或标签",
+  Search: "搜索",
+  Draft: "草稿",
+  "Creation enabled": "创作已开放",
+  "Creation disabled": "创作未开放",
+  Featured: "主推",
+  "No matching templates.": "没有匹配的模板。",
+  "Availability and promotion": "上架与推广",
+  "Show in the case wall": "在案例墙展示",
+  "Allow new creations": "允许用户创建任务",
+  "Primary featured template (one site-wide)": "设为首页主推（全站仅一个）",
+  "Sort order (lower first)": "排序（数字小的靠前）",
+  "Save availability": "保存上架设置",
+  "Customer tasks": "用户任务",
+  "Administrator tests excluded": "已排除管理员试跑",
+  "Template details": "模板资料",
+  Summary: "简介",
+  "Suitable photos": "适用照片与限制",
+  "Tags (comma separated)": "标签（英文逗号分隔）",
+  "Cases and cover": "案例与封面",
+  "Upload public case material here. User photos belong in the private studio.":
+    "这里上传公开展示的案例素材；用户私密照片请在工作台上传。",
+  "Case title": "案例标题",
+  "Case source": "案例来源",
+  "Collected reference": "采集参考",
+  "Studio result": "本站实测作品",
+  Cover: "封面",
+  "Featured artwork": "首页精选",
+  "Move up": "上移",
+  "Move down": "下移",
+  "Remove from draft": "从草稿移除",
+  "Replace original": "替换原照",
+  "Add original": "添加原照",
+  "Replace artwork": "替换作品",
+  "Add case artwork": "上传新增案例",
+  "Uploading…": "上传中…",
+  "Image upload failed. Try again.": "图片上传失败，请重试。",
+  "Generation recipe": "生成配方",
+  "Single-photo recipe. Fixed style references are not supported in this release.":
+    "当前为单图创作配方，本版暂不支持额外风格参考图。",
+  "Internal prompt": "内部生成提示词",
+  "Output ratio": "输出画幅",
+  "Compatible models": "兼容模型",
+  "Default model": "默认模型",
+  "User option definitions (JSON)": "用户选项配置（JSON）",
+  "Each option needs key, bilingual label and placeholder, and maxLength. Values are supplied separately to the server recipe.":
+    "每项包含 key、双语 label 和 placeholder、maxLength；用户填写的值会单独传给服务端配方。",
+  "Enter valid JSON before saving.": "请填写有效 JSON 后保存。",
+  "Testing and publication": "测试与发布",
+  "A real model test has been recorded": "已记录真实模型实测",
+  "Test report": "实测记录（模型、配方版本、照片与问题）",
+  "Save and test creates a private administrator snapshot. Creating a test artwork uses normal credits. Publishing retains old versions and does not automatically change availability.":
+    "保存并试跑会建立仅管理员可用的版本快照；创建测试作品正常扣分。发布保留旧版本，不自动更改上架设置。",
+  "Export draft package": "导出草稿资料包",
+  "Save draft": "保存草稿",
+  "Saving…": "保存中…",
+  "Save and test": "保存并试跑",
+  "Version history": "版本历史",
+  "Activating an earlier version changes new jobs and public content; the current draft is retained.":
+    "切换版本会更新新任务与公开案例内容，当前草稿保留。",
+  Active: "当前启用",
+  "Activate this version": "启用此版本",
+  "Your test artworks": "我的试跑作品",
+  "No administrator test tasks yet.": "还没有管理员试跑任务。",
+  "Template version": "模板版本",
+  "Administrator test": "管理员试跑",
+  "Create again": "再做一张",
+  "An artwork created with this studio template.":
+    "使用本站工作台模板生成的作品。",
   "Case wall": "案例墙",
   "The case wall": "案例墙",
   "THE CASE WALL": "灵感案例墙",
@@ -89,7 +262,6 @@ const zh: Record<string, string> = {
     "需要近期登录才能操作。确认后将永久删除：",
   "Photo ratio": "图片比例",
   Crop: "裁切",
-  "Original ratio": "原图比例",
   "Ratios center-crop your photo before upload. The preview shows the crop.":
     "上传前将按所选比例居中裁切，预览即为裁切效果。",
   "Choose a valid photo ratio.": "请选择有效的图片比例。",
@@ -112,7 +284,6 @@ const zh: Record<string, string> = {
   "Search members by email. Balances are shown from the credit cache.":
     "按邮箱搜索会员；积分显示当前缓存余额。",
   "Email address": "邮箱地址",
-  Search: "搜索",
   "Administrator granted.": "已授予管理员权限。",
   "Could not grant administrator access.": "无法授予管理员权限，请检查账号。",
   Member: "会员",
@@ -233,7 +404,6 @@ const zh: Record<string, string> = {
     "为你珍爱的照片探索精心设计的艺术风格。选择一种方向，让这一刻拥有你的独特印记。",
   "Private studio workflow · Live image API testing is in progress":
     "私密创作流程 · 图像 API 正在测试中",
-  "Your photo": "你的照片",
   "Start with a moment": "从一个瞬间开始",
   "Your art, your way": "你的艺术，由你定义",
   "Final examples curated by you": "最终案例由你亲自挑选",
@@ -422,7 +592,6 @@ const zh: Record<string, string> = {
   "The link may have expired — try again": "链接可能已过期，请重试",
   "Password updated — sign in with the new one": "密码已更新，请使用新密码登录",
   "New password": "新密码",
-  "Saving…": "保存中…",
   "Your creative workspace": "你的创作空间",
   "Create something personal.": "创作一件只属于你的作品。",
   "Upload a photo, choose a style, and create a private artwork.":
@@ -485,13 +654,11 @@ const zh: Record<string, string> = {
   "Inputs are kept for 24 hours after the job finishes.":
     "任务完成后，输入图片保留 24 小时。",
   "Choose a style": "选择风格",
-  "Create artwork": "创作作品",
   "Choose a photo and style.": "选择照片和风格。",
   "This setup currently uses a local demo result until an image API is connected.":
     "接入图像 API 前，当前使用本地演示结果。",
   "Your artwork will be generated by the connected image provider.":
     "作品将由已连接的图像服务生成。",
-  "Uploading…": "上传中…",
   "Create for 1 credit": "消耗 1 积分创作",
   "Demo mode uses 1 starter credit": "演示模式消耗 1 个模板积分",
   "This edit uses 1 credit": "本次编辑消耗 1 积分",

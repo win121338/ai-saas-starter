@@ -12,6 +12,7 @@ vi.mock("@/lib/env", () => ({
 import { DefiniteArtFailure } from "./provider";
 import {
   ArtProviderRateLimitError,
+  ArtProviderUnavailableError,
   generateSeedream,
   pollQwen,
   pollWanx,
@@ -26,6 +27,91 @@ beforeEach(() => {
 });
 
 describe("domestic image providers", () => {
+  it.each([
+    [404, "ModelNotOpen", "provider_model_not_open"],
+    [401, "AuthenticationError", "provider_authentication_failed"],
+    [403, "AccessDenied", "provider_access_denied"],
+    [404, "InvalidEndpointOrModel.NotFound", "provider_model_not_found"],
+    [
+      404,
+      "InvalidEndpointOrModel.ModelIDAccessDisabled",
+      "provider_access_denied",
+    ],
+    [403, "AccountOverdueError", "provider_account_unavailable"],
+  ])(
+    "classifies Seedream HTTP %s / %s without exposing raw provider messages",
+    async (status, code, failureCode) => {
+      const privateMessage = "private-photo-data-and-test-key";
+      vi.stubGlobal(
+        "fetch",
+        vi
+          .fn()
+          .mockResolvedValue(
+            new Response(
+              JSON.stringify({ error: { code, message: privateMessage } }),
+              { status: Number(status) },
+            ),
+          ),
+      );
+      const error = await generateSeedream(
+        photo,
+        "paint",
+        "doubao-seedream-5-0-flash-260915",
+      ).catch((error: unknown) => error);
+      expect(error).toBeInstanceOf(ArtProviderUnavailableError);
+      expect(error).toMatchObject({ failureCode });
+      expect(String(error)).not.toContain(privateMessage);
+    },
+  );
+  it("keeps generic handling for a non-JSON Seedream 404", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response("not found", { status: 404 })),
+    );
+    await expect(
+      generateSeedream(photo, "paint", "doubao-seedream-5-0-flash-260915"),
+    ).rejects.toMatchObject({ failureCode: "provider_unavailable" });
+  });
+  it.each([
+    "qwen-image-2.1-turbo",
+    "qwen-image-3.0-pro",
+    "wan2.7-image",
+    "wan2.7-image-pro",
+    "doubao-seedream-5-0-flash-260915",
+  ])(
+    "sends a saved portrait canvas to %s using its native size field",
+    async (model) => {
+      const fetchMock = vi.fn().mockImplementation(
+        async () =>
+          new Response(
+            JSON.stringify({
+              output: { task_id: "ratio-task" },
+              data: [{ b64_json: Buffer.from("image").toString("base64") }],
+            }),
+            { status: 200 },
+          ),
+      );
+      vi.stubGlobal("fetch", fetchMock);
+      const canvas = { width: 4, height: 5 };
+      if (model.startsWith("qwen"))
+        await submitQwen(photo, "portrait", model, canvas);
+      else if (model.startsWith("wan"))
+        await submitWanx(photo, "portrait", model, canvas);
+      else await generateSeedream(photo, "portrait", model, canvas);
+      const body = JSON.parse(String(fetchMock.mock.calls[0][1].body));
+      const size: string = model.startsWith("doubao")
+        ? body.size
+        : body.parameters.size;
+      const [width, height] = size
+        .split(model.startsWith("doubao") ? "x" : "*")
+        .map(Number);
+      expect(width / height).toBeCloseTo(4 / 5, 2);
+      expect(width * height).toBeLessThanOrEqual(
+        model.startsWith("doubao") ? 1536 ** 2 : 2048 ** 2,
+      );
+      expect(width * height).toBeGreaterThan(921600);
+    },
+  );
   it("submits a Qwen edit asynchronously with the private photo and saved model", async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(

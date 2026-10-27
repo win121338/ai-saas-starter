@@ -25,6 +25,9 @@ import {
 } from "./domestic-providers";
 import { deleteArtAsset, readArtAsset, writeArtAsset } from "./storage";
 import { resolveJobPrompt } from "./templates";
+import { creativeSubmission } from "@/lib/creative/schema";
+import { aspectRatioValue } from "@/config/art-aspect-ratios";
+import { getArtStyle } from "@/config/art-styles";
 
 const lease = () => new Date(Date.now() + 2 * 60_000);
 const days = (count: number) => new Date(Date.now() + count * 86_400_000);
@@ -64,7 +67,18 @@ async function claimPoll(jobId?: string) {
 }
 
 async function complete(job: typeof artJobs.$inferSelect, result: Buffer) {
-  const image = await normalizeArtImage(result, 20 * 1024 * 1024);
+  const submission = getArtStyle(job.styleSlug)
+    ? null
+    : creativeSubmission(job.promptOverride);
+  const ratio = submission
+    ? (aspectRatioValue(submission.aspectRatio) ??
+      submission.canvas.width / submission.canvas.height)
+    : undefined;
+  const image = await normalizeArtImage(
+    result,
+    20 * 1024 * 1024,
+    ratio ?? "original",
+  );
   const id = randomUUID();
   const key = `art/${job.id}/output.webp`;
   await writeArtAsset(key, image.bytes, true);
@@ -166,20 +180,23 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
         queued.styleVersion,
         queued.promptOverride,
       );
+      const canvas = getArtStyle(queued.styleSlug)
+        ? undefined
+        : creativeSubmission(queued.promptOverride)?.canvas;
       if (queued.provider === "seedream") {
         await complete(
           queued,
-          await generateSeedream(input, prompt, queued.model),
+          await generateSeedream(input, prompt, queued.model, canvas),
         );
         return true;
       }
       const requestId =
         queued.provider === "qwen"
-          ? await submitQwen(input, prompt, queued.model)
+          ? await submitQwen(input, prompt, queued.model, canvas)
           : queued.provider === "wanx"
-            ? await submitWanx(input, prompt, queued.model)
+            ? await submitWanx(input, prompt, queued.model, canvas)
             : queued.provider === "fal"
-              ? await submitFal(input, prompt)
+              ? await submitFal(input, prompt, canvas)
               : null;
       if (!requestId)
         throw new DefiniteArtFailure("Unsupported image provider");
@@ -209,7 +226,7 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
         return true;
       }
       if (error instanceof ArtProviderUnavailableError) {
-        await failAndRefund(queued, "provider_unavailable");
+        await failAndRefund(queued, error.failureCode);
         return true;
       }
       if (error instanceof DefiniteArtFailure) {

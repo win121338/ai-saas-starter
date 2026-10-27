@@ -4,6 +4,7 @@ import {
   check,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -268,6 +269,7 @@ export const artJobs = pgTable(
     styleSlug: text("style_slug").notNull(),
     styleVersion: integer("style_version").notNull(),
     promptOverride: text("prompt_override"),
+    isTest: boolean("is_test").notNull().default(false),
     provider: text("provider").notNull(),
     model: text("model").notNull(),
     providerRequestId: text("provider_request_id"),
@@ -363,4 +365,55 @@ export const systemSettings = pgTable("system_settings", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
+});
+
+// Published creative recipes are immutable; drafts and availability live apart.
+export const creativeTemplates = pgTable(
+  "creative_templates",
+  {
+    id: text("id").primaryKey(),
+    draft: jsonb("draft").notNull(),
+    activeVersion: integer("active_version"),
+    displayEnabled: boolean("display_enabled").notNull().default(false),
+    creationEnabled: boolean("creation_enabled").notNull().default(false),
+    featured: boolean("featured").notNull().default(false),
+    sortOrder: integer("sort_order").notNull().default(0),
+    updatedBy: text("updated_by").notNull(),
+    ...timestamps,
+  },
+  (t) => [
+    uniqueIndex("creative_templates_one_featured_idx")
+      .on(t.featured)
+      .where(sql`${t.featured} = true`),
+  ],
+);
+
+export const creativeTemplateVersions = pgTable(
+  "creative_template_versions",
+  {
+    templateId: text("template_id")
+      .notNull()
+      .references(() => creativeTemplates.id),
+    version: integer("version").notNull(),
+    definition: jsonb("definition").notNull(),
+    createdBy: text("created_by").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.templateId, t.version] }),
+    check("creative_template_version_positive", sql`${t.version} > 0`),
+  ],
+);
+
+export const creativeTemplateMedia = pgTable("creative_template_media", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  storageKey: text("storage_key").notNull().unique(),
+  width: integer("width").notNull(),
+  height: integer("height").notNull(),
+  createdBy: text("created_by").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

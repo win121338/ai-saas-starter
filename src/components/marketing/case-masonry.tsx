@@ -34,7 +34,9 @@ export function CaseMasonry({ children }: { children: ReactNode }) {
     );
     let frame = 0;
     let previous = "";
-    const observer = new ResizeObserver(() => {
+    let disposed = false;
+    const schedule = () => {
+      if (disposed) return;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const style = getComputedStyle(element);
@@ -65,12 +67,20 @@ export function CaseMasonry({ children }: { children: ReactNode }) {
           setLayout(next);
         }
       });
-    });
+    };
+    const observer = new ResizeObserver(schedule);
     observer.observe(element);
     nodes.forEach((node) => observer.observe(node));
+    schedule();
+    window.addEventListener("resize", schedule);
+    // Font readiness and initial scheduling also cover delayed style/layout
+    // initialization when entering directly at the wall's hash anchor.
+    void document.fonts.ready.then(schedule);
     return () => {
+      disposed = true;
       cancelAnimationFrame(frame);
       observer.disconnect();
+      window.removeEventListener("resize", schedule);
     };
   }, [key]);
 

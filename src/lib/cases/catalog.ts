@@ -2,7 +2,7 @@ import "server-only";
 
 import { readFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
-import { cache } from "react";
+import { getCreativeCatalog } from "@/lib/creative/catalog";
 
 import { caseCatalogSchema, caseManifestSchema } from "@/lib/cases/schema";
 import type {
@@ -121,4 +121,4 @@ export async function loadCaseCatalog(
 
 // Static images may live on the deployment CDN rather than in the server
 // bundle. The catalog tests validate their files; rendering needs JSON only.
-export const getCaseCatalog = cache(() => loadCaseCatalog(contentRoot, false));
+export const getCaseCatalog = getCreativeCatalog;

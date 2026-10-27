@@ -2,7 +2,16 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function expectBalancedWall(page: Page, expectedColumns: number) {
   const wall = page.getByTestId("case-wall");
-  await expect(wall).toHaveAttribute("data-masonry", "true");
+  const measured = await wall.evaluate((element) => ({
+    columns: getComputedStyle(element).getPropertyValue("--case-columns"),
+    gap: getComputedStyle(element).columnGap,
+    width: element.getBoundingClientRect().width,
+    cards: element.children.length,
+  }));
+  await expect(wall, JSON.stringify(measured)).toHaveAttribute(
+    "data-masonry",
+    "true",
+  );
   await expect
     .poll(async () =>
       wall.evaluate((element, columns) => {

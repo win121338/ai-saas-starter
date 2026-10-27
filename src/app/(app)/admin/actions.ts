@@ -52,7 +52,7 @@ async function adminRedirect(
   const locale = await getLocale();
   redirect(
     localizedHref(
-      `/admin/${section}?result=${result}${style ? `&style=${encodeURIComponent(style)}` : ""}`,
+      `/admin/${section}?result=${result}${section === "templates" && style && getArtStyle(style) ? "&archive=1" : ""}${style ? `&style=${encodeURIComponent(style)}` : ""}`,
       locale,
     ),
   );
@@ -94,7 +94,10 @@ export async function publishTemplateAction(formData: FormData): Promise<void> {
 
 export async function updateStyleAction(formData: FormData): Promise<void> {
   const session = await requireAdmin();
-  const enabledInput = z.enum(["on"]).nullable().safeParse(formData.get("enabled"));
+  const enabledInput = z
+    .enum(["on"])
+    .nullable()
+    .safeParse(formData.get("enabled"));
   if (!enabledInput.success) return adminRedirect("templates", "invalid");
   const parsed = styleInput.safeParse({
     slug: formData.get("slug"),

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { ArtworkPair } from "@/components/marketing/artwork-pair";
+import { TemplateCreateLink } from "@/components/marketing/template-create-link";
 import { getCaseCatalog } from "@/lib/cases/catalog";
 import { artworkHref } from "@/lib/cases/types";
 import { localizedHref } from "@/lib/i18n";
@@ -64,6 +65,12 @@ export default async function CaseDetailPage({ params }: PageProps) {
           </h1>
         </div>
         <ArtworkPair artwork={artwork} locale={locale} preload />
+        <div className="mt-6">
+          <TemplateCreateLink
+            slug={template.generationStyleSlug}
+            locale={locale}
+          />
+        </div>
         <nav
           aria-label={t(locale, "Artwork navigation")}
           className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t border-border pt-6"

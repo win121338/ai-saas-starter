@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { artAssets, artJobs } from "@/db/schema";
 import { getArtStyle } from "@/config/art-styles";
 import { getArtModel } from "@/config/image-model-catalog";
+import { listCreativeTemplates } from "@/lib/creative/catalog";
 import { requireSession } from "@/lib/auth/session";
 import { localizedHref } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
@@ -20,6 +21,12 @@ export const dynamic = "force-dynamic";
 export default async function CreationsPage() {
   const session = await requireSession();
   const locale = await getLocale();
+  const names = new Map(
+    (await listCreativeTemplates()).map((row) => [
+      row.id,
+      (row.published ?? row.draft).name[locale],
+    ]),
+  );
   const jobs = await db
     .select()
     .from(artJobs)
@@ -80,7 +87,7 @@ export default async function CreationsPage() {
                   output.expiresAt > new Date() ? (
                     <Image
                       src={`/api/art-assets/${output.id}`}
-                      alt={`${t(locale, getArtStyle(job.styleSlug)?.name ?? "Artwork")} ${t(locale, "result")}`}
+                      alt={`${names.get(job.styleSlug) ?? t(locale, getArtStyle(job.styleSlug)?.name ?? "Artwork")} ${t(locale, "result")}`}
                       fill
                       unoptimized
                       className="object-contain"
@@ -95,7 +102,9 @@ export default async function CreationsPage() {
                   <p className="font-semibold">
                     {t(
                       locale,
-                      getArtStyle(job.styleSlug)?.name ?? job.styleSlug,
+                      names.get(job.styleSlug) ??
+                        getArtStyle(job.styleSlug)?.name ??
+                        job.styleSlug,
                     )}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">

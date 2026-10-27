@@ -8,35 +8,52 @@ import {
 } from "@/config/art-aspect-ratios";
 
 describe("private photo normalization", () => {
-  it("rejects unsupported photo ratios at the upload boundary", () => {
-    for (const value of ["", "16/9", "auto", "2:1", 16, null, {}]) {
-      expect(artAspectRatioSchema.safeParse(value).success).toBe(false);
-    }
-  });
-  it.each(ART_ASPECT_RATIOS)("applies the %s photo crop", async (ratio) => {
+  it("normalizes a returned canvas to the selected ratio without stretching", async () => {
     const source = await sharp({
       create: { width: 1600, height: 1200, channels: 3, background: "#6699aa" },
     })
       .png()
       .toBuffer();
-    const image = await normalizeArtImage(source, undefined, ratio);
-    const expected =
-      ratio === "original"
-        ? 4 / 3
-        : Number(ratio.split(":")[0]) / Number(ratio.split(":")[1]);
-    expect(image.width / image.height).toBeCloseTo(expected, 2);
-    expect(image.width).toBeLessThanOrEqual(1600);
-    expect(image.height).toBeLessThanOrEqual(1200);
+    const result = await normalizeArtImage(source, 20 * 1024 * 1024, 9 / 16);
+    expect([result.width, result.height]).toEqual([675, 1200]);
   });
+  it("rejects unsupported photo ratios at the upload boundary", () => {
+    for (const value of ["", "16/9", "auto", "2:1", 16, null, {}]) {
+      expect(artAspectRatioSchema.safeParse(value).success).toBe(false);
+    }
+  });
+  it.each(ART_ASPECT_RATIOS)(
+    "normalizes generated output to %s",
+    async (ratio) => {
+      const source = await sharp({
+        create: {
+          width: 1600,
+          height: 1200,
+          channels: 3,
+          background: "#6699aa",
+        },
+      })
+        .png()
+        .toBuffer();
+      const image = await normalizeArtImage(source, undefined, ratio);
+      const expected =
+        ratio === "original"
+          ? 4 / 3
+          : Number(ratio.split(":")[0]) / Number(ratio.split(":")[1]);
+      expect(image.width / image.height).toBeCloseTo(expected, 2);
+      expect(image.width).toBeLessThanOrEqual(1600);
+      expect(image.height).toBeLessThanOrEqual(1200);
+    },
+  );
 
-  it("crops after applying EXIF orientation", async () => {
+  it("preserves the full source after applying EXIF orientation", async () => {
     const source = await sharp({
       create: { width: 800, height: 600, channels: 3, background: "#6699aa" },
     })
       .jpeg()
       .withMetadata({ orientation: 6 })
       .toBuffer();
-    const image = await normalizeArtImage(source, undefined, "3:4");
+    const image = await normalizeArtImage(source);
     expect([image.width, image.height]).toEqual([600, 800]);
   });
   it("rejects spoofed data and oversized uploads", async () => {

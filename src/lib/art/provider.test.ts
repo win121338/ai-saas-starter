@@ -39,6 +39,20 @@ beforeEach(() => {
 });
 
 describe("fal Kontext adapter", () => {
+  it("selects a native canvas nearest to the saved user ratio", async () => {
+    fake.submit.mockResolvedValue({ request_id: "ratio-test" });
+    await submitFal(Buffer.from("photo"), "portrait", { width: 4, height: 5 });
+    expect(fake.submit).toHaveBeenCalledWith(FAL_MODEL, {
+      input: expect.objectContaining({ aspect_ratio: "3:4" }),
+    });
+    await submitFal(Buffer.from("photo"), "landscape", {
+      width: 16,
+      height: 9,
+    });
+    expect(fake.submit).toHaveBeenLastCalledWith(FAL_MODEL, {
+      input: expect.objectContaining({ aspect_ratio: "16:9" }),
+    });
+  });
   it("submits the private image as a data URI to the image-to-image endpoint", async () => {
     fake.submit.mockResolvedValue({ request_id: "req-1" });
     const requestId = await submitFal(Buffer.from("photo"), "Paint this");

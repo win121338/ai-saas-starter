@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "id": "bold-marker-doodle",
+  "name": {
+    "zh": "今天有点小脾气",
+    "en": "A Little Attitude"
+  },
+  "summary": {
+    "zh": "粗马克笔、夸张小表情，把人物和宠物画成随手涂鸦。",
+    "en": "Chunky marker lines and playful expressions turn people and pets into loose doodles."
+  },
+  "suitability": {
+    "zh": "适合人物、宠物或人宠合照，简洁背景更易突出动作。当前为单图文字配方，尚未实测。",
+    "en": "Portraits, pets and photos together. Simple backgrounds help the pose stand out. This single-photo recipe has not yet been tested."
+  },
+  "tags": [
+    "marker",
+    "doodle",
+    "chibi",
+    "hand-drawn"
+  ],
+  "coverCaseId": "006",
+  "featuredCaseIds": [
+    "006",
+    "007",
+    "001"
+  ],
+  "recipe": {
+    "inputMode": "single-photo",
+    "prompt": "将唯一用户照片中的人物或宠物画成有个性、稚拙的马克笔随手涂鸦。保留主体数量、姿态、朝向、发型、衣着和配件的识别特征。人物头身比约 1:2、几乎无脖子、窄肩；手套形手掌，手指至多三条短线，大块概括鞋子。采用粗且不规则的石板灰蓝马克笔轮廓，连续为主，留三四个自然断笔及少量墨团、错位笔触，头发为几何黑色大块。基本色板为灰蓝轮廓、肤色、衣服主色和黑色，对强识别性配件或宠物毛色允许极少量必要颜色。平涂、边缘略不齐、轻微纸纹；不用渐变、光影、矢量贴纸或赛璐璐质感。删除环境，只留正在接触的一两个物件；坐姿用支撑线概括，不臆造半身照以外的下肢。一般白纸背景，明确夜景可用朴拙黑色背景。朝视线与动作方向留呼吸空间。",
+    "rule": "这是单图文字配方，没有额外风格参考输入。所有主体来自用户照片，人宠同框时均保留；不改变数量，不凭空添加肢体。用少量粗线表达原有情绪与辨识度。禁止文字、签名、wibi、标志、水印及手机界面。只输出完整方形涂鸦作品。",
+    "aspectRatio": "1:1",
+    "modelIds": [
+      "qwen-image-2.1-turbo",
+      "qwen-image-3.0-pro",
+      "wan2.7-image-pro",
+      "wan2.7-image",
+      "doubao-seedream-5-0-flash-260915",
+      "fal-ai/flux-pro/kontext"
+    ],
+    "defaultModel": "qwen-image-2.1-turbo",
+    "fields": [],
+    "tested": false,
+    "testReport": ""
+  },
+  "cases": [
+    {
+      "id": "001",
+      "title": {
+        "zh": "上班也要喝一口",
+        "en": "A Sip Before Work"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿白衬衫、系深色领带的人举着饮料杯，粗线条与大色块绘在白纸上。",
+        "en": "Marker doodle of a person in a white shirt and dark tie holding a drink on white paper."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/001-before.webp",
+        "width": 402,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/001-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/001-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "002",
+      "title": {
+        "zh": "戴上耳机开饭",
+        "en": "Headphones On, Dinner Ready"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：戴浅色大耳机的人穿灰色上衣，坐在碗旁伸出一只手。",
+        "en": "Marker doodle of a person wearing large light-colored headphones and a gray top beside a bowl."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/002-before.webp",
+        "width": 506,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/002-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/002-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "003",
+      "title": {
+        "zh": "先吃这一口",
+        "en": "Just One More Bite"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿黑色背心的人拿筷子吃东西，面前是一碗食物和一条桌沿。",
+        "en": "Marker doodle of a person in a black sleeveless top eating with chopsticks above a bowl and a simple table edge."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/003-before.webp",
+        "width": 402,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/003-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/003-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "004",
+      "title": {
+        "zh": "双份甜也要开心",
+        "en": "Double the Sweetness"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿深色外套的人笑着举起两份甜品，白纸背景保留手绘色块。",
+        "en": "Marker doodle of a smiling person in a dark jacket holding a dessert in each hand on white paper."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/004-before.webp",
+        "width": 402,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/004-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/004-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "005",
+      "title": {
+        "zh": "披萨大口吃",
+        "en": "Pizza, Full Volume"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿格纹外套的人闭着眼睛张嘴吃披萨，头发与衣服由粗线条概括。",
+        "en": "Marker doodle of a person in a plaid jacket biting into a slice of pizza with eyes closed."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/005-before.webp",
+        "width": 339,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/005-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/005-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "006",
+      "title": {
+        "zh": "章鱼帽出游记",
+        "en": "The Octopus Hat Adventure"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：戴红色章鱼帽的人双手拉住帽子两侧，穿着蓝色上衣，背景为白纸。",
+        "en": "Marker doodle of a person in a red octopus hat holding both sides of the hat above a blue top."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/006-before.webp",
+        "width": 631,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/006-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/006-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "007",
+      "title": {
+        "zh": "和狗狗一起吐舌头",
+        "en": "Tongues Out Together"
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：人和黄色狗狗并排吐舌头，人物戴着项链，粗线条绘在白纸上。",
+        "en": "Marker doodle of a person wearing a necklace and a yellow dog sticking out their tongues side by side."
+      },
+      "before": {
+        "src": "/cases/bold-marker-doodle/007-before.webp",
+        "width": 503,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/bold-marker-doodle/007-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/bold-marker-doodle/007-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "marker",
+        "doodle",
+        "chibi",
+        "hand-drawn",
+        "portrait",
+        "pet",
+        "person-and-pet"
+      ],
+      "provenance": "collected-reference"
+    }
+  ]
+}

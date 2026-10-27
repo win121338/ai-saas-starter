@@ -38,6 +38,7 @@ yarn-error.log*
 # locally generated images (dev fallback for Vercel Blob)
 /.generated/
 /.artora-private/
+/.creative-media/
 
 # vercel
 .vercel

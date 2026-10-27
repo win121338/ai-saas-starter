@@ -15,6 +15,7 @@ import {
 
 import { ArtworkPair } from "@/components/marketing/artwork-pair";
 import { CaseMasonry } from "@/components/marketing/case-masonry";
+import { TemplateCreateLink } from "@/components/marketing/template-create-link";
 import {
   Dialog,
   DialogClose,
@@ -307,6 +308,10 @@ export function CaseGallery({
                     <ArrowRight className="size-4" aria-hidden />
                   </button>
                 </div>
+                <TemplateCreateLink
+                  slug={selected.generationStyleSlug}
+                  locale={locale}
+                />
                 <Link
                   href={localizedHref(artworkHref(selected), locale)}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-primary"

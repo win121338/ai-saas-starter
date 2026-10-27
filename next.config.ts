@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     "/*": [
       "./content/case-templates/catalog.json",
       "./content/case-templates/*/template.json",
+      "./content/case-templates/*/creative-template.json",
     ],
   },
 };

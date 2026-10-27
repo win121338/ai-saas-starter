@@ -43,12 +43,19 @@ export function ArtworkPair({
         ) : null}
         <div className="border-t border-border pt-4">
           <p className="text-xs font-semibold text-primary">
-            {t(locale, "Reference collection")}
+            {t(
+              locale,
+              artwork.provenance === "studio-result"
+                ? "Studio result"
+                : "Reference collection",
+            )}
           </p>
           <p className="mt-2 text-xs leading-6 text-muted-foreground">
             {t(
               locale,
-              "Collected photo-to-art references. Studio results will be added after testing.",
+              artwork.provenance === "studio-result"
+                ? "An artwork created with this studio template."
+                : "Collected photo-to-art references. Studio results will be added after testing.",
             )}
           </p>
         </div>

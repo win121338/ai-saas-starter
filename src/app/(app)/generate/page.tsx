@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
-
-import { CollectionCard } from "@/components/marketing/collection-card";
-import { getCaseCatalog } from "@/lib/cases/catalog";
+import { notFound } from "next/navigation";
+import { z } from "zod";
+import { CreativeStudio } from "@/components/generate/creative-studio";
 import { requireSession } from "@/lib/auth/session";
-import { env } from "@/lib/env";
+import { requireAdmin } from "@/lib/admin/auth";
+import {
+  getCreativeVersion,
+  listCreativeTemplates,
+} from "@/lib/creative/catalog";
+import { artModelAvailable, FAL_MODEL } from "@/lib/art/provider";
 import { artModels } from "@/config/image-model-catalog";
-import { listConfiguredArtStyles } from "@/lib/art/templates";
 import { getSiteAnnouncement, listModelSettings } from "@/lib/admin/settings";
-import { t } from "@/lib/i18n-copy";
+import { env } from "@/lib/env";
 import { getLocale } from "@/lib/i18n-server";
+import { t } from "@/lib/i18n-copy";
+import { adaptableCanvasText } from "@/lib/creative/schema";
+import { artAspectRatioSchema } from "@/config/art-aspect-ratios";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: t(await getLocale(), "Studio"), robots: { index: false } };
@@ -17,125 +24,114 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function GeneratePage({
   searchParams,
 }: {
-  searchParams: Promise<{ style?: string }>;
+  searchParams: Promise<{
+    style?: string;
+    previewVersion?: string;
+    ratio?: string;
+    model?: string;
+  }>;
 }) {
   await requireSession();
   const locale = await getLocale();
-  const { style } = await searchParams;
-  const catalog = await getCaseCatalog();
-  const connectedSlugs = catalog.templates.flatMap((item) =>
-    item.generationStyleSlug ? [item.generationStyleSlug] : [],
-  );
-  if (connectedSlugs.length === 0) {
-    return (
-      <div className="mx-auto w-full max-w-[1200px]">
-        <p className="case-eyebrow">
-          {t(locale, "Studio template in preparation")}
-        </p>
-        <h1 className="mt-3 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
-          {t(locale, "A new chapter for your photos.")}
-        </h1>
-        <p className="mt-4 max-w-[650px] text-sm leading-7 text-muted-foreground">
-          {t(
-            locale,
-            "The previous styles have been paused. Explore the three new collections while their studio templates are being prepared.",
-          )}
-        </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {catalog.templates.map((template, index) => (
-            <CollectionCard
-              key={template.id}
-              template={template}
-              index={index}
-              locale={locale}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-  const [{ StudioPreview }, { artModelAvailable, FAL_MODEL }] =
-    await Promise.all([
-      import("@/components/generate/studio-preview"),
-      import("@/lib/art/provider"),
-    ]);
-  const [allStyles, modelSettings, announcement] = await Promise.all([
-    listConfiguredArtStyles(),
+  const params = await searchParams;
+  const initialRatio = artAspectRatioSchema.safeParse(params.ratio);
+  const initialModel = z
+    .string()
+    .trim()
+    .min(1)
+    .max(100)
+    .safeParse(params.model);
+  const preview = params.previewVersion !== undefined;
+  if (preview) await requireAdmin();
+  const [rows, settings, announcement] = await Promise.all([
+    listCreativeTemplates(),
     listModelSettings(),
     getSiteAnnouncement(),
   ]);
-  const availableStyles = allStyles.filter(
-    (item) => item.enabled && connectedSlugs.includes(item.slug),
-  );
-  const initialStyle =
-    availableStyles.find((item) => item.slug === style)?.slug ??
-    availableStyles[0]?.slug ??
-    "";
-
+  const previewVersion = z.coerce
+    .number()
+    .int()
+    .positive()
+    .safeParse(params.previewVersion);
+  const previewDefinition =
+    preview && params.style && previewVersion.success
+      ? await getCreativeVersion(params.style, previewVersion.data)
+      : null;
+  if (preview && !previewDefinition) notFound();
+  const availableModels =
+    env.ART_PROVIDER === "fal"
+      ? [{ id: FAL_MODEL, label: "FLUX.1 Kontext Pro" }]
+      : artModels.filter(
+          (model) => artModelAvailable(model.id) && settings[model.id],
+        );
+  const active = previewDefinition
+    ? [
+        {
+          definition: previewDefinition,
+          version: previewVersion.success ? previewVersion.data : 0,
+        },
+      ]
+    : rows
+        .filter(
+          (row) => row.creationEnabled && row.published && row.activeVersion,
+        )
+        .map((row) => ({
+          definition: row.published!,
+          version: row.activeVersion!,
+        }));
+  // Never serialize the server recipe or private manuscripts.
+  const templates = active.map(({ definition: item, version }) => ({
+    id: item.id,
+    name: item.name,
+    summary: item.summary,
+    suitability: {
+      en: adaptableCanvasText(item.suitability.en),
+      zh: adaptableCanvasText(item.suitability.zh),
+    },
+    version,
+    cover: item.cases.find((art) => art.id === item.coverCaseId)!.after,
+    samples: item.cases
+      .slice(0, 3)
+      .map((art) => ({ image: art.thumbnail, title: art.title })),
+    fields: item.recipe.fields,
+    aspectRatio: item.recipe.aspectRatio,
+    tested: item.recipe.tested,
+    defaultModel: item.recipe.defaultModel,
+    models: availableModels
+      .filter((model) => item.recipe.modelIds.includes(model.id))
+      .map(({ id, label }) => ({ id, label })),
+  }));
   return (
-    <div className="mx-auto w-full max-w-[1320px] space-y-7">
+    <div className="mx-auto w-full max-w-[1200px] space-y-7">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-          {t(locale, "Your creative workspace")}
-        </p>
-        <h1 className="mt-2 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
-          {t(locale, "Create something personal.")}
+        <p className="case-eyebrow">{t(locale, "Your creative workspace")}</p>
+        <h1 className="mt-3 font-heading text-3xl font-extrabold sm:text-4xl">
+          {t(locale, "Make it your own.")}
         </h1>
-        <p className="mt-3 max-w-[750px] text-sm leading-7 text-muted-foreground">
+        <p className="mt-3 text-sm leading-7 text-muted-foreground">
           {t(
             locale,
-            "Upload a photo, choose a style, and create a private artwork.",
-          )}{" "}
-          {env.ART_PROVIDER === "mock"
-            ? t(
-                locale,
-                "The local demo result is clearly labeled until an image API is connected.",
-              )
-            : t(
-                locale,
-                "Your artwork is generated by the connected image provider.",
-              )}
+            "Choose a template, upload your photo, and create your version.",
+          )}
         </p>
       </div>
       {announcement ? (
-        <p className="artora-surface border-primary/30 p-4 text-sm text-primary">
-          {announcement}
-        </p>
+        <p className="artora-surface p-4 text-sm">{announcement}</p>
       ) : null}
-      <StudioPreview
-        initialStyle={initialStyle}
-        isDemo={env.ART_PROVIDER === "mock"}
-        styles={availableStyles.map(({ slug, name, category }) => ({
-          slug,
-          name,
-          category,
-        }))}
-        promptPresets={Object.fromEntries(
-          availableStyles.map((item) => [item.slug, item.preset]),
-        )}
-        styleRules={Object.fromEntries(
-          availableStyles.map((item) => [item.slug, item.rule]),
-        )}
-        promptVersions={Object.fromEntries(
-          availableStyles.map((item) => [item.slug, item.version]),
-        )}
-        models={
-          env.ART_PROVIDER === "fal"
-            ? [
-                {
-                  id: FAL_MODEL,
-                  provider: "fal",
-                  label: "FLUX.1 Kontext Pro",
-                  description: "Image editing via fal",
-                  available: true,
-                },
-              ]
-            : artModels.map((model) => ({
-                ...model,
-                available:
-                  artModelAvailable(model.id) && modelSettings[model.id],
-              }))
+      <CreativeStudio
+        templates={templates}
+        initialId={params.style ?? ""}
+        initialRatio={initialRatio.success ? initialRatio.data : undefined}
+        initialModel={
+          params.model === undefined
+            ? undefined
+            : initialModel.success
+              ? initialModel.data
+              : ""
         }
+        locale={locale}
+        preview={preview}
+        isDemo={env.ART_PROVIDER === "mock"}
       />
     </div>
   );

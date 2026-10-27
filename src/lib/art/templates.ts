@@ -7,6 +7,9 @@ import { ART_PROMPT_VERSION } from "@/config/art-prompts";
 import { db } from "@/db";
 import { artStyleSettings, artStyleTemplateVersions } from "@/db/schema";
 import { artPrompt, artPromptPreset, artStyleRule } from "./prompts";
+import { getCreativeVersion } from "@/lib/creative/catalog";
+import { creativeInstruction, creativeSubmission } from "@/lib/creative/schema";
+import { getArtStyle } from "@/config/art-styles";
 
 export type ConfiguredArtStyle = ArtStyle & {
   enabled: boolean;
@@ -51,6 +54,14 @@ export async function resolveJobPrompt(
   version: number,
   override?: string | null,
 ): Promise<string> {
+  if (!getArtStyle(slug)) {
+    const definition = await getCreativeVersion(slug, version);
+    if (!definition) throw new Error("Creative template version not found");
+    const submission = creativeSubmission(override);
+    return submission
+      ? creativeInstruction(definition, submission.options, submission.canvas)
+      : creativeInstruction(definition, override ? JSON.parse(override) : {});
+  }
   if (version <= ART_PROMPT_VERSION) return artPrompt(slug, version, override);
   const [template] = await db
     .select({

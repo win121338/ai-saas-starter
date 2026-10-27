@@ -18,6 +18,8 @@ export type CaseArtwork = {
   after: CaseImage;
   thumbnail: CaseImage;
   tags: string[];
+  provenance?: "collected-reference" | "studio-result";
+  generationStyleSlug?: string | null;
 };
 
 export type CaseTemplate = {

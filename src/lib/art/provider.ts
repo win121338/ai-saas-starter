@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { env } from "@/lib/env";
 import { getArtModel } from "@/config/image-model-catalog";
+import type { ArtCanvas } from "@/config/art-aspect-ratios";
 
 export const FAL_MODEL = "fal-ai/flux-pro/kontext";
 export class DefiniteArtFailure extends Error {}
@@ -55,12 +56,14 @@ function client() {
 export async function submitFal(
   input: Buffer,
   prompt: string,
+  canvas?: ArtCanvas,
 ): Promise<string> {
   try {
     const result = await client().queue.submit(FAL_MODEL, {
       input: {
         prompt,
         image_url: `data:image/webp;base64,${input.toString("base64")}`,
+        ...(canvas ? { aspect_ratio: falCanvasRatio(canvas) } : {}),
       },
     });
     return result.request_id;
@@ -69,6 +72,33 @@ export async function submitFal(
       throw new DefiniteArtFailure("Provider rejected the image or prompt");
     throw error;
   }
+}
+
+// Kontext exposes a fixed native list. Other common ratios are normalized
+// to the saved user choice when persisting the result.
+function falCanvasRatio(canvas: ArtCanvas) {
+  const choices = [
+    "21:9",
+    "16:9",
+    "4:3",
+    "3:2",
+    "1:1",
+    "2:3",
+    "3:4",
+    "9:16",
+    "9:21",
+  ] as const;
+  const ratio = canvas.width / canvas.height;
+  return choices.reduce((best, next) => {
+    const number = (value: string) => {
+      const [w, h] = value.split(":").map(Number);
+      return w / h;
+    };
+    return Math.abs(Math.log(number(next) / ratio)) <
+      Math.abs(Math.log(number(best) / ratio))
+      ? next
+      : best;
+  });
 }
 
 export async function pollFal(

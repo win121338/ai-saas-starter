@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { and, eq, isNull } from "drizzle-orm";
 import { notFound } from "next/navigation";
@@ -11,6 +10,8 @@ import { getArtStyle } from "@/config/art-styles";
 import { getArtModel } from "@/config/image-model-catalog";
 import { artJobFailureMessage } from "@/lib/art/job-feedback";
 import { resolveJobPrompt } from "@/lib/art/templates";
+import { getCreativeVersion } from "@/lib/creative/catalog";
+import { creativeSubmission } from "@/lib/creative/schema";
 import { requireSession } from "@/lib/auth/session";
 import { env } from "@/lib/env";
 import { deleteArtJobAction } from "./actions";
@@ -18,6 +19,10 @@ import { StatusRefresher } from "./status-refresher";
 import { localizedHref } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
 import { getLocale } from "@/lib/i18n-server";
+import {
+  CreationImageViewer,
+  type CreationViewerImage,
+} from "@/components/creations/creation-image-viewer";
 
 export async function generateMetadata(): Promise<Metadata> {
   return { title: t(await getLocale(), "Artwork"), robots: { index: false } };
@@ -44,6 +49,11 @@ export default async function CreationPage({
     )
     .limit(1);
   if (!job) notFound();
+  const creative = getArtStyle(job.styleSlug)
+    ? null
+    : await getCreativeVersion(job.styleSlug, job.styleVersion);
+  const canvasChoice = creative ? creativeSubmission(job.promptOverride) : null;
+  const nextStudioHref = `/generate?${new URLSearchParams({ style: job.styleSlug, ...(canvasChoice ? { ratio: canvasChoice.aspectRatio } : {}), model: job.model }).toString()}`;
   const [input] = await db
     .select()
     .from(artAssets)
@@ -69,6 +79,26 @@ export default async function CreationPage({
   const showInput = input && !input.deletedAt && input.expiresAt > new Date();
   const showOutput =
     output && !output.deletedAt && output.expiresAt > new Date();
+  const viewerImages: CreationViewerImage[] = [];
+  if (showInput)
+    viewerImages.push({
+      id: "original",
+      src: `/api/art-assets/${input.id}`,
+      width: input.width,
+      height: input.height,
+      title: t(locale, "Original photo"),
+    });
+  if (showOutput)
+    viewerImages.push({
+      id: "result",
+      src: `/api/art-assets/${output.id}`,
+      width: output.width,
+      height: output.height,
+      title: t(
+        locale,
+        job.provider === "mock" ? "Demo result" : "Finished artwork",
+      ),
+    });
   return (
     <div className="mx-auto max-w-[1100px] space-y-7">
       <Link
@@ -83,7 +113,8 @@ export default async function CreationPage({
             {t(locale, job.provider === "mock" ? "Local demo" : "Artwork")}
           </p>
           <h1 className="mt-2 font-heading text-3xl font-extrabold">
-            {t(locale, getArtStyle(job.styleSlug)?.name ?? job.styleSlug)}
+            {creative?.name[locale] ??
+              t(locale, getArtStyle(job.styleSlug)?.name ?? job.styleSlug)}
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             {t(locale, "Status:")} {t(locale, job.status.replaceAll("_", " "))}{" "}
@@ -144,10 +175,7 @@ export default async function CreationPage({
               {t(locale, artJobFailureMessage(job.failureCode))}
             </p>
             <Link
-              href={localizedHref(
-                `/generate?style=${encodeURIComponent(job.styleSlug)}`,
-                locale,
-              )}
+              href={localizedHref(nextStudioHref, locale)}
               className="mt-3 inline-flex font-semibold text-primary hover:underline"
             >
               {t(locale, "Try another edit")}
@@ -172,7 +200,24 @@ export default async function CreationPage({
           locale={locale}
         />
       ) : null}
-      {job.provider !== "mock" ? (
+      {creative ? (
+        <div className="artora-surface flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
+          <span>
+            {t(locale, "Template version")} · v{job.styleVersion}
+            {canvasChoice
+              ? ` · ${t(locale, "Output ratio")}: ${canvasChoice.aspectRatio === "original" ? t(locale, "Original ratio") : canvasChoice.aspectRatio}`
+              : ""}
+            {job.isTest ? ` · ${t(locale, "Administrator test")}` : ""}
+          </span>
+          <Link
+            href={localizedHref(nextStudioHref, locale)}
+            className="text-primary"
+          >
+            {t(locale, "Create again")} →
+          </Link>
+        </div>
+      ) : null}
+      {job.provider !== "mock" && !creative ? (
         <details className="artora-surface p-5 text-sm">
           <summary className="cursor-pointer font-semibold text-foreground">
             {t(locale, "Prompt used")}
@@ -193,12 +238,10 @@ export default async function CreationPage({
           </div>
           <div className="relative aspect-[4/3] bg-secondary/40">
             {showInput ? (
-              <Image
-                src={`/api/art-assets/${input.id}`}
-                alt={t(locale, "Original photo")}
-                fill
-                unoptimized
-                className="object-contain"
+              <CreationImageViewer
+                images={viewerImages}
+                initialId="original"
+                locale={locale}
               />
             ) : (
               <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
@@ -224,15 +267,13 @@ export default async function CreationPage({
           >
             {showOutput ? (
               <>
-                <Image
-                  src={`/api/art-assets/${output.id}`}
-                  alt={t(locale, "Finished artwork")}
-                  fill
-                  unoptimized
-                  className="object-contain"
+                <CreationImageViewer
+                  images={viewerImages}
+                  initialId="result"
+                  locale={locale}
                 />
                 {job.provider !== "mock" ? (
-                  <div aria-hidden="true">
+                  <div aria-hidden="true" className="pointer-events-none">
                     <span className="artora-finished-star">✦</span>
                     <span className="artora-finished-star">✧</span>
                     <span className="artora-finished-star">✦</span>

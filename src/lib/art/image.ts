@@ -13,7 +13,7 @@ export class InvalidArtImageError extends Error {}
 export async function normalizeArtImage(
   file: File | Buffer,
   maxBytes = MAX_INPUT,
-  aspectRatio: ArtAspectRatio = "original",
+  aspectRatio: ArtAspectRatio | number = "original",
 ) {
   const bytes = Buffer.isBuffer(file)
     ? file
@@ -41,7 +41,12 @@ export async function normalizeArtImage(
     );
   }
   try {
-    const ratio = aspectRatioValue(aspectRatio);
+    const ratio =
+      typeof aspectRatio === "number"
+        ? aspectRatio
+        : aspectRatioValue(aspectRatio);
+    if (ratio !== undefined && (!Number.isFinite(ratio) || ratio <= 0))
+      throw new InvalidArtImageError("Choose a valid photo ratio.");
     const rotatedWidth = metadata.autoOrient?.width ?? metadata.width;
     const rotatedHeight = metadata.autoOrient?.height ?? metadata.height;
     const cropWidth = ratio

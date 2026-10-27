@@ -93,7 +93,7 @@ async function setupJob(
 describe("durable art jobs", () => {
   it("completes a private mock job once and preserves the spend on retries", async () => {
     const job = await setupJob(true);
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [done] = await db
       .select()
       .from(artJobs)
@@ -106,7 +106,7 @@ describe("durable art jobs", () => {
       .where(eq(artAssets.id, done.outputAssetId!));
     expect((await readArtAsset(output.storageKey)).length).toBeGreaterThan(0);
     expect(await getBalance(job.userId)).toBe(1);
-    expect(await processOneArtJob()).toBe(false);
+    expect(await processOneArtJob(job.jobId)).toBe(false);
     expect(await getBalance(job.userId)).toBe(1);
     await deleteArtAssetsForUser(job.userId);
     await expect(readArtAsset(output.storageKey)).rejects.toThrow();
@@ -116,7 +116,7 @@ describe("durable art jobs", () => {
 
   it("refunds one credit when the local processor has a definite failure", async () => {
     const job = await setupJob(false);
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [failed] = await db
       .select()
       .from(artJobs)
@@ -162,7 +162,7 @@ describe("durable art jobs", () => {
         ),
       ),
     );
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [done] = await db
       .select()
       .from(artJobs)
@@ -181,7 +181,7 @@ describe("durable art jobs", () => {
       "fetch",
       vi.fn().mockResolvedValue(new Response("bad request", { status: 400 })),
     );
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [failed] = await db
       .select()
       .from(artJobs)
@@ -204,8 +204,43 @@ describe("durable art jobs", () => {
       .from(artJobs)
       .where(eq(artJobs.id, job.jobId));
     expect(failed.status).toBe("failed");
-    expect(failed.failureCode).toBe("provider_unavailable");
+    expect(failed.model).toBe("doubao-seedream-5-0-flash-260915");
+    expect(failed.provider).toBe("seedream");
+    expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1);
+    expect(failed.failureCode).toBe("provider_access_denied");
     expect(await getBalance(job.userId)).toBe(2);
+    await deleteArtAssetsForUser(job.userId);
+    await db.delete(users).where(eq(users.id, job.userId));
+  });
+
+  it("records ModelNotOpen, refunds once and never replaces the requested Seedream model", async () => {
+    const job = await setupJob(true, "seedream");
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: {
+              code: "ModelNotOpen",
+              message: "Account has not activated this model",
+            },
+          }),
+          { status: 404 },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
+    const [failed] = await db
+      .select()
+      .from(artJobs)
+      .where(eq(artJobs.id, job.jobId));
+    expect(failed.status).toBe("failed");
+    expect(failed.failureCode).toBe("provider_model_not_open");
+    expect(failed.model).toBe("doubao-seedream-5-0-flash-260915");
+    expect(await getBalance(job.userId)).toBe(2);
+    expect(await processOneArtJob(job.jobId)).toBe(false);
+    expect(await getBalance(job.userId)).toBe(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     await deleteArtAssetsForUser(job.userId);
     await db.delete(users).where(eq(users.id, job.userId));
   });
@@ -225,14 +260,14 @@ describe("durable art jobs", () => {
         }),
       );
     vi.stubGlobal("fetch", fetchMock);
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [submitted] = await db
       .select()
       .from(artJobs)
       .where(eq(artJobs.id, job.jobId));
     expect(submitted.status).toBe("processing");
     expect(submitted.providerRequestId).toBe("task-1");
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [held] = await db
       .select()
       .from(artJobs)
@@ -370,7 +405,7 @@ describe("durable art jobs", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    expect(await processOneArtJob()).toBe(true);
+    expect(await processOneArtJob(job.jobId)).toBe(true);
     const [queued] = await db
       .select()
       .from(artJobs)
@@ -379,7 +414,7 @@ describe("durable art jobs", () => {
     expect(queued.failureCode).toBe("provider_rate_limited");
     expect(queued.leaseUntil?.getTime()).toBeGreaterThan(Date.now());
     expect(await getBalance(job.userId)).toBe(1);
-    expect(await processOneArtJob()).toBe(false);
+    expect(await processOneArtJob(job.jobId)).toBe(false);
 
     await db
       .update(artJobs)

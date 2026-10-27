@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowDown } from "lucide-react";
 
 import { ArtworkPair } from "@/components/marketing/artwork-pair";
 import { CaseGallery } from "@/components/marketing/case-gallery";
+import { TemplateCreateLink } from "@/components/marketing/template-create-link";
 import { getCaseCatalog } from "@/lib/cases/catalog";
 import { templateCover } from "@/lib/cases/types";
 import { localizedHref } from "@/lib/i18n";
@@ -84,9 +85,10 @@ export default async function StyleDetailPage({ params }: PageProps) {
             <h2 className="font-heading text-2xl font-bold">
               {t(locale, "More moments, same character.")}
             </h2>
-            <span className="rounded-full border border-primary/25 bg-primary/10 px-3 py-2 text-xs text-primary">
-              {t(locale, "Studio template in preparation")}
-            </span>
+            <TemplateCreateLink
+              slug={template.generationStyleSlug}
+              locale={locale}
+            />
           </div>
           <CaseGallery items={template.cases} locale={locale} />
         </section>

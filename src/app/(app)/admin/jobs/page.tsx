@@ -96,7 +96,20 @@ export default async function AdminJobsPage({
                 <td className="px-3 py-3">{job.styleSlug}</td>
                 <td className="px-3 py-3">{job.model}</td>
                 <td className="px-3 py-3">{job.status}</td>
-                <td className="px-3 py-3">{job.failureCode ?? "—"}</td>
+                <td className="px-3 py-3">
+                  {job.failureCode ? (
+                    <>
+                      <span>{t(locale, job.failureCode)}</span>
+                      {t(locale, job.failureCode) !== job.failureCode ? (
+                        <span className="mt-1 block font-mono text-[11px] text-muted-foreground">
+                          {job.failureCode}
+                        </span>
+                      ) : null}
+                    </>
+                  ) : (
+                    "—"
+                  )}
+                </td>
                 <td className="px-3 py-3">{job.costCredits}</td>
                 <td className="px-3 py-3">
                   {job.createdAt.toLocaleString(

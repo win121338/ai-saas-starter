@@ -5,12 +5,30 @@ import { z } from "zod";
 import { DEFAULT_ART_MODEL, getArtModel } from "@/config/image-model-catalog";
 import { env } from "@/lib/env";
 import { DefiniteArtFailure } from "./provider";
+import {
+  artCanvasSizeString,
+  type ArtCanvas,
+} from "@/config/art-aspect-ratios";
 
 const MAX_OUTPUT_BYTES = 20 * 1024 * 1024;
 const LEGACY_WANX_MODEL = "wanx2.1-imageedit";
 export class UnknownArtTask extends Error {}
 export class ArtProviderRateLimitError extends Error {}
-export class ArtProviderUnavailableError extends DefiniteArtFailure {}
+export type ArtProviderAccessFailure =
+  | "provider_unavailable"
+  | "provider_model_not_open"
+  | "provider_authentication_failed"
+  | "provider_access_denied"
+  | "provider_model_not_found"
+  | "provider_account_unavailable";
+export class ArtProviderUnavailableError extends DefiniteArtFailure {
+  constructor(
+    message: string,
+    readonly failureCode: ArtProviderAccessFailure = "provider_unavailable",
+  ) {
+    super(message);
+  }
+}
 const QWEN_BASE = env.DASHSCOPE_WORKSPACE_ID
   ? `https://${env.DASHSCOPE_WORKSPACE_ID}.cn-beijing.maas.aliyuncs.com/api/v1`
   : "https://dashscope.aliyuncs.com/api/v1";
@@ -64,10 +82,48 @@ function arkKey() {
   return env.ARK_API_KEY;
 }
 
+/** Inspect only the structured code. Provider messages can echo private input. */
+async function seedreamFailure(response: Response): Promise<never> {
+  if ([401, 403, 404].includes(response.status)) {
+    const payload: unknown =
+      Number(response.headers.get("content-length") ?? 0) <= 65536
+        ? await response.json().catch(() => null)
+        : null;
+    const error = z
+      .object({
+        error: z.object({ code: z.string().max(160) }).optional(),
+        code: z.string().max(160).optional(),
+      })
+      .safeParse(payload);
+    const code = error.success
+      ? (error.data.error?.code ?? error.data.code)
+      : undefined;
+    let reason: ArtProviderAccessFailure;
+    if (code === "ModelNotOpen") reason = "provider_model_not_open";
+    else if (code === "AccountOverdueError" || code === "InvalidAccountStatus")
+      reason = "provider_account_unavailable";
+    else if (response.status === 401) reason = "provider_authentication_failed";
+    else if (
+      response.status === 403 ||
+      code === "InvalidEndpointOrModel.ModelIDAccessDisabled"
+    )
+      reason = "provider_access_denied";
+    else if (code === "InvalidEndpointOrModel.NotFound")
+      reason = "provider_model_not_found";
+    else reason = "provider_unavailable";
+    throw new ArtProviderUnavailableError(
+      "Seedream model access failed",
+      reason,
+    );
+  }
+  providerFailure(response);
+}
+
 export async function submitQwen(
   input: Buffer,
   prompt: string,
   model: string = DEFAULT_ART_MODEL,
+  canvas?: ArtCanvas,
 ) {
   if (getArtModel(model)?.provider !== "qwen")
     throw new DefiniteArtFailure("Unsupported Qwen image model");
@@ -98,6 +154,11 @@ export async function submitQwen(
           ...(model === "qwen-image-3.0-pro" ? { enable_thinking: false } : {}),
           n: 1,
           watermark: false,
+          ...(canvas
+            ? {
+                size: artCanvasSizeString(canvas, 2048 ** 2, "*"),
+              }
+            : {}),
         },
       }),
       signal: AbortSignal.timeout(30_000),
@@ -163,6 +224,7 @@ export async function submitWanx(
   input: Buffer,
   prompt: string,
   model: string,
+  canvas?: ArtCanvas,
 ): Promise<string> {
   const legacy = model === LEGACY_WANX_MODEL;
   if (!legacy && getArtModel(model)?.provider !== "wanx")
@@ -202,7 +264,13 @@ export async function submitWanx(
                   },
                 ],
               },
-              parameters: { size: "2K", n: 1, watermark: false },
+              parameters: {
+                size: canvas
+                  ? artCanvasSizeString(canvas, 2048 ** 2, "*")
+                  : "2K",
+                n: 1,
+                watermark: false,
+              },
             },
       ),
       signal: AbortSignal.timeout(30_000),
@@ -273,6 +341,7 @@ export async function generateSeedream(
   input: Buffer,
   prompt: string,
   model: string,
+  canvas?: ArtCanvas,
 ): Promise<Buffer> {
   if (getArtModel(model)?.provider !== "seedream")
     throw new DefiniteArtFailure("Unsupported Seedream image model");
@@ -288,14 +357,14 @@ export async function generateSeedream(
         model,
         prompt,
         image: `data:image/webp;base64,${input.toString("base64")}`,
-        size: "1.5K",
+        size: canvas ? artCanvasSizeString(canvas, 1536 ** 2, "x") : "1.5K",
         response_format: "b64_json",
         watermark: false,
       }),
       signal: AbortSignal.timeout(95_000),
     },
   );
-  if (!response.ok) providerFailure(response);
+  if (!response.ok) await seedreamFailure(response);
   if (
     Number(response.headers.get("content-length") ?? 0) >
     MAX_OUTPUT_BYTES * 1.4

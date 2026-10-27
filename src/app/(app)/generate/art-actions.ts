@@ -13,8 +13,15 @@ import { artAssets, artJobs } from "@/db/schema";
 import { requireSession } from "@/lib/auth/session";
 import { InsufficientCreditsError, spendCredits } from "@/lib/credits";
 import { artProviderConfig } from "@/lib/art/provider";
-import { parseArtPromptInput } from "@/lib/art/prompts";
-import { getConfiguredArtStyle } from "@/lib/art/templates";
+import {
+  getCreativeVersion,
+  listCreativeTemplates,
+} from "@/lib/creative/catalog";
+import {
+  creativeOptions,
+  creativeSubmissionSchema,
+} from "@/lib/creative/schema";
+import { isAdminUser } from "@/lib/admin/auth";
 import { getModelEnabled } from "@/lib/admin/settings";
 import { InvalidArtImageError, normalizeArtImage } from "@/lib/art/image";
 import { processOneArtJob } from "@/lib/art/jobs";
@@ -30,6 +37,17 @@ export async function createArtJobAction(
 ): Promise<ArtActionState> {
   const user = (await requireSession()).user;
   const requestKey = z.uuid().safeParse(formData.get("requestKey"));
+  if (!requestKey.success)
+    return { ok: false, error: "Choose a valid style and try again." };
+  // A retry returns the owner's accepted job even if availability changed since submission.
+  const [accepted] = await db
+    .select({ id: artJobs.id })
+    .from(artJobs)
+    .where(
+      and(eq(artJobs.userId, user.id), eq(artJobs.requestKey, requestKey.data)),
+    )
+    .limit(1);
+  if (accepted) return { ok: true, jobId: accepted.id };
   const style = z.string().safeParse(formData.get("style"));
   const model = z.string().safeParse(formData.get("model"));
   const aspectRatio = artAspectRatioSchema.safeParse(
@@ -42,34 +60,45 @@ export async function createArtJobAction(
     .int()
     .positive()
     .safeParse(formData.get("promptVersion"));
+  const preview = formData.get("preview") === "true";
+  if (preview && !(await isAdminUser(user.id)))
+    return {
+      ok: false,
+      error: "This template preview is restricted to administrators.",
+    };
   const configuredStyle = style.success
-    ? await getConfiguredArtStyle(style.data)
+    ? (await listCreativeTemplates()).find((item) => item.id === style.data)
     : null;
-  if (!requestKey.success || !configuredStyle?.enabled)
+  if (
+    !requestKey.success ||
+    !configuredStyle ||
+    (!preview && !configuredStyle.creationEnabled)
+  )
     return { ok: false, error: "Choose a valid style and try again." };
-  if (!version.success || version.data !== configuredStyle.version)
+  if (
+    !version.success ||
+    (!preview && version.data !== configuredStyle.activeVersion)
+  )
     return {
       ok: false,
       error: "The style template changed. Refresh the studio and try again.",
     };
-  const promptInput = parseArtPromptInput(
-    configuredStyle.slug,
-    formData.get("prompt"),
-    configuredStyle.preset,
-  );
-  if (!promptInput)
-    return {
-      ok: false,
-      error: "Write a prompt between 3 and 2,000 characters.",
-    };
-  const [existing] = await db
-    .select({ id: artJobs.id })
-    .from(artJobs)
-    .where(
-      and(eq(artJobs.userId, user.id), eq(artJobs.requestKey, requestKey.data)),
-    )
-    .limit(1);
-  if (existing) return { ok: true, jobId: existing.id };
+  const definition = preview
+    ? await getCreativeVersion(configuredStyle.id, version.data)
+    : configuredStyle.published;
+  if (!definition)
+    return { ok: false, error: "Choose a valid style and try again." };
+  let options: Record<string, string>;
+  try {
+    options = creativeOptions(
+      definition,
+      JSON.parse(String(formData.get("options") ?? "{}")),
+    );
+  } catch {
+    return { ok: false, error: "Check the template options and try again." };
+  }
+  if (!model.success || !definition.recipe.modelIds.includes(model.data))
+    return { ok: false, error: "Choose a compatible image model." };
   const provider =
     model.success &&
     (env.ART_PROVIDER === "fal" || (await getModelEnabled(model.data)))
@@ -88,7 +117,8 @@ export async function createArtJobAction(
     return { ok: false, error: "Please wait a minute before trying again." };
   let image;
   try {
-    image = await normalizeArtImage(file, undefined, aspectRatio.data);
+    // Preserve the entire source photo; the selected ratio controls only the output canvas.
+    image = await normalizeArtImage(file);
   } catch (error) {
     return {
       ok: false,
@@ -103,6 +133,18 @@ export async function createArtJobAction(
       ok: false,
       error: "Wan needs a photo at least 240 × 240 pixels.",
     };
+  if (image.width / image.height < 1 / 8 || image.width / image.height > 8)
+    return { ok: false, error: "Choose a photo ratio between 1:8 and 8:1." };
+  const [canvasWidth, canvasHeight] =
+    aspectRatio.data === "original"
+      ? [image.width, image.height]
+      : aspectRatio.data.split(":").map(Number);
+  const submission = creativeSubmissionSchema.parse({
+    formatVersion: 1,
+    options,
+    aspectRatio: aspectRatio.data,
+    canvas: { width: canvasWidth, height: canvasHeight },
+  });
   const assetId = randomUUID();
   const jobId = randomUUID();
   const key = `art/${assetId}/input.webp`;
@@ -128,9 +170,10 @@ export async function createArtJobAction(
           userId: user.id,
           requestKey: requestKey.data,
           inputAssetId: assetId,
-          styleSlug: configuredStyle.slug,
-          styleVersion: configuredStyle.version,
-          promptOverride: promptInput.promptOverride,
+          styleSlug: configuredStyle.id,
+          styleVersion: version.data,
+          promptOverride: JSON.stringify(submission),
+          isTest: preview,
           provider: provider.provider,
           model: provider.model,
           costCredits: GENERATION_COST_CREDITS,
@@ -193,7 +236,7 @@ export async function createArtJobAction(
     .set({ status: "queued" })
     .where(eq(artJobs.id, jobId));
   after(async () => {
-    await processOneArtJob();
+    await processOneArtJob(jobId);
     if (
       env.NODE_ENV !== "development" ||
       (provider.provider !== "qwen" && provider.provider !== "wanx")
@@ -208,7 +251,7 @@ export async function createArtJobAction(
         .limit(1);
       if (current?.status !== "processing" && current?.status !== "queued")
         break;
-      await processOneArtJob();
+      await processOneArtJob(jobId);
     }
   });
   revalidatePath("/creations");
