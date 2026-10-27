@@ -1,0 +1,613 @@
+{
+  "id": "bold-marker-doodle",
+  "name": {
+    "zh": "今天有点小脾气",
+    "en": "A Little Attitude"
+  },
+  "summary": {
+    "zh": "粗马克笔、夸张小表情，把人物和宠物画成随手涂鸦。",
+    "en": "Chunky marker lines and playful expressions turn people and pets into loose doodles."
+  },
+  "tags": [
+    "marker",
+    "doodle",
+    "chibi",
+    "hand-drawn"
+  ],
+  "subjectTags": [
+    "portrait",
+    "pet",
+    "daily-life"
+  ],
+  "promotion": "featured",
+  "coverCaseId": "006",
+  "comparisonCaseId": "006",
+  "featuredCaseIds": [
+    "006",
+    "007",
+    "001"
+  ],
+  "coverAlternatives": [
+    {
+      "caseId": "007",
+      "reason": "人与狗同时吐舌头，原照与成品的情绪对应直观，适合宠物入口。"
+    },
+    {
+      "caseId": "001",
+      "reason": "白衬衫、领带和饮料动作简洁，适合表现日常照片转换。"
+    }
+  ],
+  "coverReason": "红色章鱼帽、双手动作与蓝色上衣辨识度高，可与另外两组的漫画风格拉开距离。",
+  "suitability": {
+    "observed": "参考包括人物半身、吃喝、耳机、帽子以及人与狗同框；尚未由本站模型验证。",
+    "limitations": [
+      "马克笔风格参考图未提供，无法确认完整复现条件。",
+      "样图含个人署名，项目版提示词不要求复制该署名。",
+      "部分样图超过严格四色或改变表情，参考作品与提示词并非逐项一致。",
+      "复杂多人和纯宠物照片待验证。"
+    ]
+  },
+  "evaluation": {
+    "visualAppeal": 5,
+    "useMotivation": 4,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null,
+    "basis": "基于收集图片的视觉初评；未验证原提示词的四色限制及模型稳定性。"
+  },
+  "schemaVersion": 1,
+  "status": "ready",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null,
+    "visibleSignature": "wibi"
+  },
+  "displayPermission": "confirmed",
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": true,
+    "referenceFiles": []
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null
+  },
+  "processingDate": "2026-10-26",
+  "cases": [
+    {
+      "id": "001",
+      "title": "上班也要喝一口",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "cb491b242eaed5029dc982cd561bd7cf6f13cd5e3a553831f8bbc7b895288e6f",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/001-before.webp",
+        "after": "/cases/bold-marker-doodle/001-after.webp",
+        "compare": "/cases/bold-marker-doodle/001-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿白衬衫、系深色领带的人举着饮料杯，粗线条与大色块绘在白纸上。",
+        "en": "Marker doodle of a person in a white shirt and dark tie holding a drink on white paper."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；饮料杯、领带与已有签名保留。"
+      ],
+      "processingKey": "21b84cfa025888359c70f0a01e4939adbb06fc0504e655c094fa864fcb8a1827",
+      "assetSha256": {
+        "before": "32b53913a884769b6427c77fea3721a0dd947a64c77d30d1ac328842287520aa",
+        "after": "406734ec136454c17ab9d45e84a7384aa4f4d6b1b6fbed4648bc4f9affe76953",
+        "compare": "b0661de428d5ab4503cb21259e4b63aeb68ceafb886620dc3cb34bb1a2904981",
+        "thumb": "587f51429ab8a82741575f2c94b7b537de6e93bf5717ae6c50cf2ff35b06ee79"
+      },
+      "titleEn": "A Sip Before Work"
+    },
+    {
+      "id": "002",
+      "title": "戴上耳机开饭",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "b00cdfdbf714e9cab94044ba385710b03720f19c29614f77a54149b8cb652369",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          350,
+          383,
+          506,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/002-before.webp",
+        "after": "/cases/bold-marker-doodle/002-after.webp",
+        "compare": "/cases/bold-marker-doodle/002-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          506,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：戴浅色大耳机的人穿灰色上衣，坐在碗旁伸出一只手。",
+        "en": "Marker doodle of a person wearing large light-colored headphones and a gray top beside a bowl."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "834d9ba996cfe889268336a279a806c0d62ce8b395fded5373b9022ece02dbd5",
+      "assetSha256": {
+        "before": "9b705fdcc1e5f160ea8805cc198bfafdd71bafa014ab4522885faa490f8f0c99",
+        "after": "3221ea2bb8769296071b7926bcb246b55b386b658f20dea17fb2013962ae6281",
+        "compare": "7d7e1162154fa2edb7740b4c0bc1680f0d89234a559885a8d3d190f07a2e0bbf",
+        "thumb": "32980a9b540e35c5be7b1c6b918fad1aadd4e9118ff5347728463e67adbdcead"
+      },
+      "titleEn": "Headphones On, Dinner Ready"
+    },
+    {
+      "id": "003",
+      "title": "先吃这一口",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "ab0dace29d8dffe84f62b443b859bcd02d0f650351eeaf5830ea27969b065385",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/003-before.webp",
+        "after": "/cases/bold-marker-doodle/003-after.webp",
+        "compare": "/cases/bold-marker-doodle/003-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿黑色背心的人拿筷子吃东西，面前是一碗食物和一条桌沿。",
+        "en": "Marker doodle of a person in a black sleeveless top eating with chopsticks above a bowl and a simple table edge."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "原照含背景食客，现有成品只画前景主体；这是源作品与提示词人数规则的差异，并非本次裁剪造成。"
+      ],
+      "processingKey": "1d6692bae14df11aa9c704e03c86718f251113c087d554b52c50b84d96dc9b9f",
+      "assetSha256": {
+        "before": "820f586a9ac54d58d99708753c1d7e4401edb5b4e1eaa6583c3f7db95d59bdb8",
+        "after": "894acf2deca9fc0e6c111e5ff28b21e21290b06a23b8ee4da0ff5e35ab5d17eb",
+        "compare": "73b42ac614932dbfa2ad25b79eca12bcb7a49a3d15bfdfce0c4aa65b3fd5d750",
+        "thumb": "f9cf59ab5ce60d40e9432da6c9e470de4cbcaeddad303f89299f698053d17a16"
+      },
+      "titleEn": "Just One More Bite"
+    },
+    {
+      "id": "004",
+      "title": "双份甜也要开心",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "bd6dd473cd498aaf9b225acb7e8d68efe4edb1af1a30bd32988f9025a472e5b2",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/004-before.webp",
+        "after": "/cases/bold-marker-doodle/004-after.webp",
+        "compare": "/cases/bold-marker-doodle/004-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿深色外套的人笑着举起两份甜品，白纸背景保留手绘色块。",
+        "en": "Marker doodle of a smiling person in a dark jacket holding a dessert in each hand on white paper."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "ce1b4107f7da3aaa7c979104d494dde39add15fc519a36f34bedb2fecfa6ba69",
+      "assetSha256": {
+        "before": "fea961f79af03e438cb85c41030a2c69279ab69fd5827e4f8e0ba207cebeac22",
+        "after": "ecd32d4ceb3e03d1d2a9ef81d9b586c878e7d6ad00a101b78b1b4ce06ddf069f",
+        "compare": "679166ca3319455249d99f4bdc41946b9e97c7a9901fe18e2dafe6dcaf90f8b7",
+        "thumb": "10f1d999a0ae59c4ffc4bc0182ec17ce08a1966a6dfba8609f684fd2c1afc62d"
+      },
+      "titleEn": "Double the Sweetness"
+    },
+    {
+      "id": "005",
+      "title": "披萨大口吃",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "ddc6cb4475859c78e2a3c66ab7cbaa14422cb3dc2b92e84de7a66195a3daa8a7",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          450,
+          383,
+          339,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/005-before.webp",
+        "after": "/cases/bold-marker-doodle/005-after.webp",
+        "compare": "/cases/bold-marker-doodle/005-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          339,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：穿格纹外套的人闭着眼睛张嘴吃披萨，头发与衣服由粗线条概括。",
+        "en": "Marker doodle of a person in a plaid jacket biting into a slice of pizza with eyes closed."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "125f1931ee1720235bc7986431fa8129d3b0e76244fed3b3cdeb4f2afd429f2f",
+      "assetSha256": {
+        "before": "34f64cf96d5a5fc4fe4f3fc595a7057f111d849744dce026654089d25244e3bc",
+        "after": "49f35eba4cac2b142e230b41d043dbb026b0e9120870c797ed564ed40384de82",
+        "compare": "7d3ae438293bd055535b480deb3816e002a4bec8dfca5ce3e5ce82672085144f",
+        "thumb": "797069b57f44a2d9b8a675444af447f3fca3997b70ee5fd427be0fbd6f5ba842"
+      },
+      "titleEn": "Pizza, Full Volume"
+    },
+    {
+      "id": "006",
+      "title": "章鱼帽出游记",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/6.png",
+      "sourceSha256": "2a188df4e30d0d926eb87327b788c2e211c6e2d186af3eca133fbeaa13c43614",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          288,
+          383,
+          631,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/006-before.webp",
+        "after": "/cases/bold-marker-doodle/006-after.webp",
+        "compare": "/cases/bold-marker-doodle/006-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/006-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          631,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：戴红色章鱼帽的人双手拉住帽子两侧，穿着蓝色上衣，背景为白纸。",
+        "en": "Marker doodle of a person in a red octopus hat holding both sides of the hat above a blue top."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面首选；红色章鱼帽与双手动作完整保留。"
+      ],
+      "processingKey": "a4ea1ad9dd894d565f015660e8c481a0a219cbe284a135812f01e1e7e39b02f4",
+      "assetSha256": {
+        "before": "4f7e7541fe106cf75ec88344faad6909fcec67e1b51b2c5b78f47c10e9fd43d0",
+        "after": "36bad146cedbd3e3e68d87b786519ed4dc1c5fdaed8ca694f562cd30d9a55c0f",
+        "compare": "a5eedd7bcdf62cbe01a40dad458a7f9429181c0550e617180db7fee0a73effb7",
+        "thumb": "a2a2706bce41830f1458474a4a86db13e01c529c98470e3ca2f0df2127daebb9"
+      },
+      "titleEn": "The Octopus Hat Adventure"
+    },
+    {
+      "id": "007",
+      "title": "和狗狗一起吐舌头",
+      "subjectTags": [
+        "portrait",
+        "pet",
+        "person-and-pet"
+      ],
+      "sourceFile": "originals/7.png",
+      "sourceSha256": "83ad94dd85a532264c47a6cb3f8d70c2b31ee7857919d125fe978d6c3a36615f",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          326,
+          383,
+          503,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/bold-marker-doodle/007-before.webp",
+        "after": "/cases/bold-marker-doodle/007-after.webp",
+        "compare": "/cases/bold-marker-doodle/007-compare.webp",
+        "thumb": "/cases/bold-marker-doodle/007-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          503,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "马克笔涂鸦：人和黄色狗狗并排吐舌头，人物戴着项链，粗线条绘在白纸上。",
+        "en": "Marker doodle of a person wearing a necklace and a yellow dog sticking out their tongues side by side."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；人和狗均完整保留，已有签名未擦除。"
+      ],
+      "processingKey": "1aae73041cd2180abddb92907d79d73b10b50cdda4b39551041db0d497ab418c",
+      "assetSha256": {
+        "before": "06f3aa77b58d23832e56682b89dc5fed017c410b645eae25d02e5dbc14a0660e",
+        "after": "a2e2e530a868dba9e5e54d5dcb11c169dab947974cde3d8ab7f0087a40ccc14b",
+        "compare": "8360527b6a52fa3b095fafdbf6cfa24da9336f18dafc3020346127673abbfb6a",
+        "thumb": "82a740c21517067f1806d2b1b2b93c533a69f71aebd21185ffb9bd268a1cdcf9"
+      },
+      "titleEn": "Tongues Out Together"
+    }
+  ],
+  "processingVersion": "pixel-crop-v1",
+  "generationReady": false,
+  "displayApprovalNote": "2026-10-26: the owner explicitly requested these collected reference cases be displayed on the website homepage and case wall; this records display instruction, not authorship or model validation."
+}

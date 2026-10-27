@@ -365,7 +365,9 @@ describe("durable art jobs", () => {
           { status: 200 },
         ),
       )
-      .mockResolvedValueOnce(new Response(job.bytes, { status: 200 }));
+      .mockResolvedValueOnce(
+        new Response(new Uint8Array(job.bytes), { status: 200 }),
+      );
     vi.stubGlobal("fetch", fetchMock);
 
     expect(await processOneArtJob()).toBe(true);

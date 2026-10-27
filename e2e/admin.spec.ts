@@ -49,17 +49,18 @@ test("admin console is restricted and publishes a versioned style template", asy
   await page.getByRole("button", { name: "Publish new version" }).click();
   await expect(page.getByText("Changes saved.")).toBeVisible();
 
-  await page.goto("/generate?style=clay-portrait");
-  await page
-    .locator("summary")
-    .filter({ hasText: "Generation prompt" })
-    .click();
+  await page.reload();
   await expect(
-    page.getByRole("textbox", { name: "Generation prompt" }),
+    page.getByRole("textbox", { name: "Default editable prompt" }),
   ).toHaveValue("Make a miniature clay artwork from this photo.");
   await expect(
-    page.getByText(
-      "Keep every subject and object as matte hand-sculpted clay.",
-    ),
+    page.getByRole("textbox", { name: "Fixed style rule" }),
+  ).toHaveValue("Keep every subject and object as matte hand-sculpted clay.");
+  await page.goto("/generate?style=clay-portrait");
+  await expect(
+    page.getByText("Studio template in preparation", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByRole("button", { name: /Clay portrait/ })).toHaveCount(
+    0,
+  );
 });

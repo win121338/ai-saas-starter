@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-26",
+  "reviewer": "Codex",
+  "scope": "Original screenshots and all four exports per case, checked visually using source and output contact sheets; exact crop pixels verified separately.",
+  "groups": {
+    "blue-paper-comic": {
+      "sourceSheets": ["case1-sources.jpg"],
+      "outputSheets": ["case1-outputs-1.jpg", "case1-outputs-2.jpg"],
+      "passedCaseIds": ["001", "002", "003", "004", "005", "006", "007", "008", "009", "010"],
+      "notesByCase": {
+        "001": ["封面首选；SLOW SIP 标题、蓝纸留白与喝水动作完整保留。"],
+        "002": ["原照仅 256×402 像素，适合小图；原照自行车本身已被拍摄边界截断，未补画。"],
+        "007": ["封面备选；斜光与相机完整保留。"],
+        "009": ["封面备选；双手甜品与人物笑脸完整保留。"]
+      }
+    },
+    "color-block-manga": {
+      "sourceSheets": ["case2-sources.jpg"],
+      "outputSheets": ["case2-outputs-1.jpg", "case2-outputs-2.jpg"],
+      "passedCaseIds": ["001", "002", "003", "004", "005", "006", "007", "008"],
+      "notesByCase": {
+        "001": ["封面备选；网格背景与手机边界完整保留。"],
+        "002": ["封面首选；红色棕榈背景和手持书本均来自原截图，未重绘或移入其他图片。"],
+        "008": ["封面备选；长发与山景留在原方图画幅内。"]
+      }
+    },
+    "bold-marker-doodle": {
+      "sourceSheets": ["case3-sources.jpg"],
+      "outputSheets": ["case3-outputs-1.jpg", "case3-outputs-2.jpg"],
+      "passedCaseIds": ["001", "002", "003", "004", "005", "006", "007"],
+      "notesByCase": {
+        "001": ["封面备选；饮料杯、领带与已有签名保留。"],
+        "003": ["原照含背景食客，现有成品只画前景主体；这是源作品与提示词人数规则的差异，并非本次裁剪造成。"],
+        "006": ["封面首选；红色章鱼帽与双手动作完整保留。"],
+        "007": ["封面备选；人和狗均完整保留，已有签名未擦除。"]
+      }
+    }
+  }
+}

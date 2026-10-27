@@ -12,7 +12,7 @@ import { getLocale } from "@/lib/i18n-server";
 import { MobileMenu } from "./nav-mobile";
 
 const links = [
-  { href: "/styles", label: "Styles" },
+  { href: "/styles", label: "Case wall" },
   { href: "/#how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
 ] as const;

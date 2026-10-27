@@ -41,7 +41,7 @@ export async function MarketingFooter() {
             href={localizedHref("/styles", locale)}
             className="text-muted-foreground hover:text-foreground"
           >
-            {t(locale, "Styles")}
+            {t(locale, "Case wall")}
           </Link>
           <Link
             href={localizedHref("/pricing", locale)}

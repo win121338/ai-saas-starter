@@ -1,0 +1,339 @@
+[
+  {
+    "folder": "case1",
+    "id": "blue-paper-comic",
+    "name": {
+      "zh": "把日常印成封面",
+      "en": "Everyday Cover"
+    },
+    "summary": {
+      "zh": "旧蓝纸、漫画线条与大字标题，把日常瞬间排成一张封面。",
+      "en": "Everyday moments meet blue paper, expressive ink and oversized type."
+    },
+    "tags": [
+      "comic",
+      "poster",
+      "blue-paper",
+      "typography"
+    ],
+    "subjectTags": [
+      "portrait",
+      "daily-life"
+    ],
+    "promotion": "candidate",
+    "coverCaseId": "001",
+    "comparisonCaseId": "001",
+    "featuredCaseIds": [
+      "001",
+      "007",
+      "009"
+    ],
+    "coverAlternatives": [
+      {
+        "caseId": "007",
+        "reason": "斜光、相机与人物轮廓有层次，适合补充摄影题材。"
+      },
+      {
+        "caseId": "009",
+        "reason": "双手持甜品与笑脸带来轻松情绪，适合精选区。"
+      }
+    ],
+    "coverReason": "喝水动作清楚，人物与 SLOW SIP 大字形成穿插，蓝纸风格在小图中仍容易识别。",
+    "suitability": {
+      "observed": "现有参考覆盖单人半身、坐姿、全身和手持物场景；尚未由本站模型验证。",
+      "limitations": [
+        "原照均为截图提取，不能当高清原片使用。",
+        "多人物、宠物与极暗场景的适用性待验证。",
+        "部分参考作品的顶部留白少于原提示词的约三分之一要求。"
+      ]
+    },
+    "evaluation": {
+      "visualAppeal": 5,
+      "useMotivation": 4,
+      "stability": null,
+      "subjectCoverage": null,
+      "costAndEffort": null,
+      "totalScore": null,
+      "basis": "基于收集图片的视觉初评；非生成实测或转化验证。"
+    },
+    "caseIntake": [
+      {
+        "title": "SLOW SIP · 慢慢喝",
+        "altZh": "蓝纸漫画海报：穿蓝色格衬衫的人坐在桌边举杯喝水，左下方是 SLOW SIP 大字。",
+        "altEn": "Blue-paper comic poster of a person in a plaid shirt drinking from a glass, with large SLOW SIP lettering.",
+        "titleEn": "SLOW SIP"
+      },
+      {
+        "title": "RIDE READY · 出发准备",
+        "altZh": "蓝纸漫画海报：戴蓝色墨镜的人站在自行车旁，画面下方排有 RIDE READY 大字。",
+        "altEn": "Blue-paper comic poster of a person wearing blue sunglasses beside a bicycle, with RIDE READY lettering.",
+        "titleEn": "RIDE READY"
+      },
+      {
+        "title": "SLOW DAY · 慢一天",
+        "altZh": "蓝纸漫画海报：戴灰色针织帽的人坐在长椅上，人物与 SLOW DAY 标题组合。",
+        "altEn": "Blue-paper comic poster of a person in a gray beanie sitting on a bench above SLOW DAY lettering.",
+        "titleEn": "SLOW DAY"
+      },
+      {
+        "title": "QUIET STEP · 安静一阶",
+        "altZh": "蓝纸漫画海报：穿黑色衣服的人蹲坐在楼梯中间，两侧扶手包围 QUIET STEP 标题。",
+        "altEn": "Blue-paper comic poster of a person in black seated on steps between railings, with QUIET STEP lettering.",
+        "titleEn": "QUIET STEP"
+      },
+      {
+        "title": "STREET BITE · 街头一口",
+        "altZh": "蓝纸漫画海报：戴耳机、穿棕色外套的人双手拿着食物，前方是 STREET BITE 大字。",
+        "altEn": "Blue-paper comic poster of a person wearing headphones and a brown jacket holding food, with STREET BITE lettering.",
+        "titleEn": "STREET BITE"
+      },
+      {
+        "title": "WAIT MORE · 再坐一会",
+        "altZh": "蓝纸漫画海报：穿红色上衣与牛仔裤的人蜷坐在绿色座椅上，左下方是 WAIT MORE 标题。",
+        "altEn": "Blue-paper comic poster of a person in a red shirt and jeans seated on a green chair, with WAIT MORE lettering.",
+        "titleEn": "WAIT MORE"
+      },
+      {
+        "title": "FRAME PAUSE · 镜头暂停",
+        "altZh": "蓝纸漫画海报：穿条纹上衣的人手持相机，背景有斜向光带，下方是 FRAME PAUSE 大字。",
+        "altEn": "Blue-paper comic poster of a person holding a camera against diagonal light, with FRAME PAUSE lettering.",
+        "titleEn": "FRAME PAUSE"
+      },
+      {
+        "title": "SWEET BITE · 西瓜一口",
+        "altZh": "蓝纸漫画海报：扎起头发的人低头吃西瓜，西瓜与 SWEET BITE 大字前后穿插。",
+        "altEn": "Blue-paper comic poster of a person eating a slice of watermelon among large SWEET BITE lettering.",
+        "titleEn": "SWEET BITE"
+      },
+      {
+        "title": "SWEET DUO · 双份甜",
+        "altZh": "蓝纸漫画海报：短发的人笑着双手各举一份甜品，前方是 SWEET DUO 标题。",
+        "altEn": "Blue-paper comic poster of a smiling person holding a dessert in each hand, with SWEET DUO lettering.",
+        "titleEn": "SWEET DUO"
+      },
+      {
+        "title": "PHONE PAUSE · 手机暂停",
+        "altZh": "蓝纸漫画海报：穿白色上衣的人趴在桌边拿着手机，双臂压在 PHONE PAUSE 大字上方。",
+        "altEn": "Blue-paper comic poster of a person in a white shirt leaning over a phone above PHONE PAUSE lettering.",
+        "titleEn": "PHONE PAUSE"
+      }
+    ]
+  },
+  {
+    "folder": "case2",
+    "id": "color-block-manga",
+    "name": {
+      "zh": "闯进漫画这一格",
+      "en": "Into the Manga Frame"
+    },
+    "summary": {
+      "zh": "细致的黑白漫画人物，遇上从照片提炼的彩色背景。",
+      "en": "Detailed monochrome characters meet bold backgrounds drawn from the photo."
+    },
+    "tags": [
+      "comic",
+      "monochrome-character",
+      "color-block"
+    ],
+    "subjectTags": [
+      "portrait",
+      "daily-life",
+      "travel"
+    ],
+    "promotion": "featured",
+    "coverCaseId": "002",
+    "comparisonCaseId": "002",
+    "featuredCaseIds": [
+      "002",
+      "001",
+      "008"
+    ],
+    "coverAlternatives": [
+      {
+        "caseId": "001",
+        "reason": "蓝底粉色网格与黑白自拍形成强反差，人物表情突出。"
+      },
+      {
+        "caseId": "008",
+        "reason": "蓝天与绿色山景明快，展示旅行照片的转换方向。"
+      }
+    ],
+    "coverReason": "珊瑚红背景与深绿棕榈叶在缩略图中醒目，黑白人物、帽子与书本关系清楚。",
+    "suitability": {
+      "observed": "参考覆盖镜面自拍、旅行、室内、坐姿和手持物；尚未由本站模型验证。",
+      "limitations": [
+        "主风格参考图未提供，无法确认完整复现条件。",
+        "部分参考背景存在纹理或层次，与提示词的纯平色约束不完全一致。",
+        "多人、宠物以及复杂遮挡场景待验证。"
+      ]
+    },
+    "evaluation": {
+      "visualAppeal": 5,
+      "useMotivation": 4,
+      "stability": null,
+      "subjectCoverage": null,
+      "costAndEffort": null,
+      "totalScore": null,
+      "basis": "基于收集图片的视觉初评；参考图缺失，非本站模型实测。"
+    },
+    "caseIntake": [
+      {
+        "title": "网格里的自拍",
+        "altZh": "限色漫画：卷发的人手持手机自拍，黑白人物置于蓝底粉色网格背景前。",
+        "altEn": "Monochrome manga character taking a mirror selfie against blue tiles and a pink grid.",
+        "titleEn": "A Selfie in the Grid"
+      },
+      {
+        "title": "棕榈与红色假日",
+        "altZh": "限色漫画：戴浅色帽子的人举起书本遮住部分面部，背景是珊瑚红色与深绿棕榈叶。",
+        "altEn": "Monochrome manga character in a light hat holding a book against coral red and dark green palms.",
+        "titleEn": "Palms and a Coral Holiday"
+      },
+      {
+        "title": "回头这一格",
+        "altZh": "限色漫画：背着包的人侧身举起双手，细致黑白线条与深青色背景形成对比。",
+        "altEn": "Monochrome manga character turning with hands raised against a dark teal background.",
+        "titleEn": "A Moment to Turn"
+      },
+      {
+        "title": "窗边的小表情",
+        "altZh": "限色漫画：穿衬衫的人用手在脸旁比出动作，背景保留蓝色瓷砖和植物剪影。",
+        "altEn": "Monochrome manga character gesturing beside the face against blue tiles and plant silhouettes.",
+        "titleEn": "A Little Window-Side Attitude"
+      },
+      {
+        "title": "绿椅上的停顿",
+        "altZh": "限色漫画：穿宽松上衣和牛仔裤的人蜷坐在绿色座椅上，侧头望向画面外。",
+        "altEn": "Monochrome manga character in loose clothes and jeans seated on green chairs, looking to the side.",
+        "titleEn": "Pause on a Green Seat"
+      },
+      {
+        "title": "午后长椅",
+        "altZh": "限色漫画：穿背心与浅色长裤的人坐在木椅上，背景以深绿色和棕色色块概括。",
+        "altEn": "Monochrome manga character in a sleeveless top and light trousers seated before green and brown shapes.",
+        "titleEn": "An Afternoon on the Bench"
+      },
+      {
+        "title": "晴空台阶",
+        "altZh": "限色漫画：穿黑色衣服的人在台阶上盘腿坐着，双手举到头顶，背景有蓝天和楼梯扶手。",
+        "altEn": "Monochrome manga character seated cross-legged on steps with hands raised overhead beneath a blue sky.",
+        "titleEn": "Steps into the Blue"
+      },
+      {
+        "title": "山风回眸",
+        "altZh": "限色漫画：长发的人穿条纹衬衫回头，背景以蓝天、绿色山林和石墙组成。",
+        "altEn": "Monochrome manga character with long hair looking back against blue sky, green hills and a stone wall.",
+        "titleEn": "A Breeze in the Hills"
+      }
+    ]
+  },
+  {
+    "folder": "case3",
+    "id": "bold-marker-doodle",
+    "name": {
+      "zh": "今天有点小脾气",
+      "en": "A Little Attitude"
+    },
+    "summary": {
+      "zh": "粗马克笔、夸张小表情，把人物和宠物画成随手涂鸦。",
+      "en": "Chunky marker lines and playful expressions turn people and pets into loose doodles."
+    },
+    "tags": [
+      "marker",
+      "doodle",
+      "chibi",
+      "hand-drawn"
+    ],
+    "subjectTags": [
+      "portrait",
+      "pet",
+      "daily-life"
+    ],
+    "promotion": "featured",
+    "coverCaseId": "006",
+    "comparisonCaseId": "006",
+    "featuredCaseIds": [
+      "006",
+      "007",
+      "001"
+    ],
+    "coverAlternatives": [
+      {
+        "caseId": "007",
+        "reason": "人与狗同时吐舌头，原照与成品的情绪对应直观，适合宠物入口。"
+      },
+      {
+        "caseId": "001",
+        "reason": "白衬衫、领带和饮料动作简洁，适合表现日常照片转换。"
+      }
+    ],
+    "coverReason": "红色章鱼帽、双手动作与蓝色上衣辨识度高，可与另外两组的漫画风格拉开距离。",
+    "suitability": {
+      "observed": "参考包括人物半身、吃喝、耳机、帽子以及人与狗同框；尚未由本站模型验证。",
+      "limitations": [
+        "马克笔风格参考图未提供，无法确认完整复现条件。",
+        "样图含个人署名，项目版提示词不要求复制该署名。",
+        "部分样图超过严格四色或改变表情，参考作品与提示词并非逐项一致。",
+        "复杂多人和纯宠物照片待验证。"
+      ]
+    },
+    "evaluation": {
+      "visualAppeal": 5,
+      "useMotivation": 4,
+      "stability": null,
+      "subjectCoverage": null,
+      "costAndEffort": null,
+      "totalScore": null,
+      "basis": "基于收集图片的视觉初评；未验证原提示词的四色限制及模型稳定性。"
+    },
+    "caseIntake": [
+      {
+        "title": "上班也要喝一口",
+        "altZh": "马克笔涂鸦：穿白衬衫、系深色领带的人举着饮料杯，粗线条与大色块绘在白纸上。",
+        "altEn": "Marker doodle of a person in a white shirt and dark tie holding a drink on white paper.",
+        "titleEn": "A Sip Before Work"
+      },
+      {
+        "title": "戴上耳机开饭",
+        "altZh": "马克笔涂鸦：戴浅色大耳机的人穿灰色上衣，坐在碗旁伸出一只手。",
+        "altEn": "Marker doodle of a person wearing large light-colored headphones and a gray top beside a bowl.",
+        "titleEn": "Headphones On, Dinner Ready"
+      },
+      {
+        "title": "先吃这一口",
+        "altZh": "马克笔涂鸦：穿黑色背心的人拿筷子吃东西，面前是一碗食物和一条桌沿。",
+        "altEn": "Marker doodle of a person in a black sleeveless top eating with chopsticks above a bowl and a simple table edge.",
+        "titleEn": "Just One More Bite"
+      },
+      {
+        "title": "双份甜也要开心",
+        "altZh": "马克笔涂鸦：穿深色外套的人笑着举起两份甜品，白纸背景保留手绘色块。",
+        "altEn": "Marker doodle of a smiling person in a dark jacket holding a dessert in each hand on white paper.",
+        "titleEn": "Double the Sweetness"
+      },
+      {
+        "title": "披萨大口吃",
+        "altZh": "马克笔涂鸦：穿格纹外套的人闭着眼睛张嘴吃披萨，头发与衣服由粗线条概括。",
+        "altEn": "Marker doodle of a person in a plaid jacket biting into a slice of pizza with eyes closed.",
+        "titleEn": "Pizza, Full Volume"
+      },
+      {
+        "title": "章鱼帽出游记",
+        "altZh": "马克笔涂鸦：戴红色章鱼帽的人双手拉住帽子两侧，穿着蓝色上衣，背景为白纸。",
+        "altEn": "Marker doodle of a person in a red octopus hat holding both sides of the hat above a blue top.",
+        "titleEn": "The Octopus Hat Adventure"
+      },
+      {
+        "title": "和狗狗一起吐舌头",
+        "subjectTags": [
+          "portrait",
+          "pet",
+          "person-and-pet"
+        ],
+        "altZh": "马克笔涂鸦：人和黄色狗狗并排吐舌头，人物戴着项链，粗线条绘在白纸上。",
+        "altEn": "Marker doodle of a person wearing a necklace and a yellow dog sticking out their tongues side by side.",
+        "titleEn": "Tongues Out Together"
+      }
+    ]
+  }
+]

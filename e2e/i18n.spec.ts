@@ -23,16 +23,23 @@ test("English remains the default and Chinese pages have equivalent links", asyn
 test("language switch keeps the matching style page and URL state", async ({
   page,
 }) => {
-  await page.goto("/zh/styles/watercolor?source=gallery#top");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("水彩");
+  await page.goto("/zh/styles/blue-paper-comic?source=gallery#top");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "把日常印成封面",
+  );
   await expect(
-    page.getByRole("link", { name: /试试这个风格/ }),
-  ).toHaveAttribute("href", "/zh/generate?style=watercolor");
+    page.getByRole("link", {
+      name: "打开作品: SLOW SIP · 慢慢喝",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "/zh/styles/blue-paper-comic/001");
 
   await page.getByRole("button", { name: "切换到英语" }).click();
-  await expect(page).toHaveURL(/\/styles\/watercolor\?source=gallery#top$/);
+  await expect(page).toHaveURL(
+    /\/styles\/blue-paper-comic\?source=gallery#top$/,
+  );
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Watercolor",
+    "Everyday Cover",
   );
 });
 

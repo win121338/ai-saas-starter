@@ -1,76 +1,84 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
-import { StyleCard } from "@/components/marketing/style-card";
-import { listConfiguredArtStyles } from "@/lib/art/templates";
-import { localizedHref } from "@/lib/i18n";
+import { CaseGallery } from "@/components/marketing/case-gallery";
+import { CollectionCard } from "@/components/marketing/collection-card";
+import { getCaseCatalog } from "@/lib/cases/catalog";
 import { t } from "@/lib/i18n-copy";
 import { getLocale } from "@/lib/i18n-server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   return {
-    title: locale === "zh" ? "艺术风格" : "Art styles",
-    description:
-      locale === "zh"
-        ? "探索艺术风格，把照片变成专属于你的艺术作品。"
-        : "Explore directions for turning your photos into personal artwork.",
+    title: t(locale, "The case wall"),
+    description: t(
+      locale,
+      "Explore comic posters, color-block manga and playful marker doodles. Open each artwork to compare it with the original photo.",
+    ),
   };
 }
 
 export const dynamic = "force-dynamic";
 
 export default async function StylesPage() {
-  const locale = await getLocale();
-  const artStyles = (await listConfiguredArtStyles()).filter(
-    (style) => style.enabled,
-  );
+  const [locale, catalog] = await Promise.all([getLocale(), getCaseCatalog()]);
+  const items = catalog.templates.flatMap((item) => item.cases);
   return (
     <div className="artora-shell">
-      <div className="mx-auto max-w-[1200px] px-5 pb-24 pt-20 md:px-6 md:pt-24">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-          {t(locale, "The style library")}
-        </p>
-        <h1 className="mt-4 max-w-[790px] font-heading text-[clamp(3rem,5vw,4.5rem)] font-extrabold tracking-[-0.045em]">
-          {t(locale, "Every photo has more than one story.")}
-        </h1>
-        <p className="mt-5 max-w-[650px] text-lg leading-8 text-muted-foreground">
-          {t(
-            locale,
-            "Explore the creative directions we are preparing. Final examples will come from carefully tuned, real studio results.",
-          )}
-        </p>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {artStyles.map((style, index) => (
-            <StyleCard
-              key={style.slug}
-              style={style}
-              index={index}
-              locale={locale}
-            />
-          ))}
-        </div>
-        <div className="artora-surface mt-12 flex flex-wrap items-center justify-between gap-6 p-7">
+      <div className="mx-auto max-w-[1200px] px-5 pb-20 pt-12 md:px-6 md:pt-20">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <h2 className="font-heading text-2xl font-bold">
-              {t(locale, "Already have a photo in mind?")}
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            <p className="case-eyebrow">{t(locale, "THE CASE WALL")}</p>
+            <h1 className="mt-4 max-w-[800px] font-heading text-[clamp(2.8rem,6vw,4.75rem)] font-extrabold leading-[1.08] tracking-[-0.045em]">
+              {t(locale, "A moment. Many possibilities.")}
+            </h1>
+            <p className="mt-5 max-w-[600px] text-base leading-8 text-muted-foreground">
               {t(
                 locale,
-                "Bring it into the studio and compare available image models.",
+                "Explore comic posters, color-block manga and playful marker doodles. Open each artwork to compare it with the original photo.",
               )}
             </p>
           </div>
-          <Link
-            href={localizedHref("/generate", locale)}
-            className="artora-action"
-          >
-            {t(locale, "Open studio")}{" "}
-            <ArrowRight className="size-4" aria-hidden />
-          </Link>
+          <p className="shrink-0 font-mono text-xs text-muted-foreground">
+            {String(catalog.templates.length).padStart(2, "0")}{" "}
+            {t(locale, "collections")} / {items.length} {t(locale, "artworks")}
+          </p>
         </div>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {catalog.templates.map((template, index) => (
+            <CollectionCard
+              key={template.id}
+              template={template}
+              locale={locale}
+              index={index}
+            />
+          ))}
+        </div>
+        <section
+          id="case-wall"
+          className="mt-16 scroll-mt-24 border-t border-border pt-10"
+        >
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <h2 className="font-heading text-2xl font-bold tracking-tight">
+              {t(locale, "All the little moments.")}
+            </h2>
+            <p className="max-w-[520px] text-xs leading-6 text-muted-foreground">
+              {t(
+                locale,
+                "Collected photo-to-art references. Studio results will be added after testing.",
+              )}
+            </p>
+          </div>
+          <CaseGallery
+            items={items}
+            filters={catalog.templates.map((item) => ({
+              id: item.id,
+              name: item.name,
+              count: item.cases.length,
+            }))}
+            locale={locale}
+            controls
+          />
+        </section>
       </div>
     </div>
   );

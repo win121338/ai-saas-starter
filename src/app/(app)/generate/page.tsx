@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
-import { StudioPreview } from "@/components/generate/studio-preview";
+import { CollectionCard } from "@/components/marketing/collection-card";
+import { getCaseCatalog } from "@/lib/cases/catalog";
 import { requireSession } from "@/lib/auth/session";
 import { env } from "@/lib/env";
 import { artModels } from "@/config/image-model-catalog";
-import { artModelAvailable, FAL_MODEL } from "@/lib/art/provider";
 import { listConfiguredArtStyles } from "@/lib/art/templates";
 import { getSiteAnnouncement, listModelSettings } from "@/lib/admin/settings";
 import { t } from "@/lib/i18n-copy";
@@ -22,12 +22,51 @@ export default async function GeneratePage({
   await requireSession();
   const locale = await getLocale();
   const { style } = await searchParams;
+  const catalog = await getCaseCatalog();
+  const connectedSlugs = catalog.templates.flatMap((item) =>
+    item.generationStyleSlug ? [item.generationStyleSlug] : [],
+  );
+  if (connectedSlugs.length === 0) {
+    return (
+      <div className="mx-auto w-full max-w-[1200px]">
+        <p className="case-eyebrow">
+          {t(locale, "Studio template in preparation")}
+        </p>
+        <h1 className="mt-3 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
+          {t(locale, "A new chapter for your photos.")}
+        </h1>
+        <p className="mt-4 max-w-[650px] text-sm leading-7 text-muted-foreground">
+          {t(
+            locale,
+            "The previous styles have been paused. Explore the three new collections while their studio templates are being prepared.",
+          )}
+        </p>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {catalog.templates.map((template, index) => (
+            <CollectionCard
+              key={template.id}
+              template={template}
+              index={index}
+              locale={locale}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+  const [{ StudioPreview }, { artModelAvailable, FAL_MODEL }] =
+    await Promise.all([
+      import("@/components/generate/studio-preview"),
+      import("@/lib/art/provider"),
+    ]);
   const [allStyles, modelSettings, announcement] = await Promise.all([
     listConfiguredArtStyles(),
     listModelSettings(),
     getSiteAnnouncement(),
   ]);
-  const availableStyles = allStyles.filter((item) => item.enabled);
+  const availableStyles = allStyles.filter(
+    (item) => item.enabled && connectedSlugs.includes(item.slug),
+  );
   const initialStyle =
     availableStyles.find((item) => item.slug === style)?.slug ??
     availableStyles[0]?.slug ??

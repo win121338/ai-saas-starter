@@ -753,6 +753,83 @@
     var(--background);
 }
 
+.case-eyebrow {
+  align-items: center;
+  color: var(--primary);
+  display: flex;
+  font-size: 10px;
+  font-weight: 600;
+  gap: 9px;
+  letter-spacing: 0.14em;
+  line-height: 1.8;
+}
+
+.case-icon-button {
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}
+
+.case-icon-button:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.case-icon-button:focus-visible,
+.case-collection:focus-visible,
+.case-artwork:focus-visible,
+.case-filter:focus-visible,
+.case-hero-choice:focus-visible,
+.case-hero-art:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+}
+
+.case-collection,
+.case-artwork {
+  display: block;
+  min-width: 0;
+}
+
+.case-collection:hover h3,
+.case-artwork:hover p:first-child {
+  color: var(--primary);
+}
+
+.case-wall {
+  --case-columns: 2;
+  --case-gap: 16px;
+  align-items: start;
+  display: grid;
+  gap: var(--case-gap);
+  grid-template-columns: repeat(var(--case-columns), minmax(0, 1fr));
+  min-width: 0;
+  position: relative;
+}
+
+.case-masonry-item {
+  min-width: 0;
+}
+
+.case-wall[data-masonry="true"] > .case-masonry-item {
+  position: absolute;
+  width: calc(
+    (100% - (var(--case-columns) - 1) * var(--case-gap)) / var(--case-columns)
+  );
+}
+
+@media (min-width: 48rem) {
+  .case-wall {
+    --case-columns: 3;
+    --case-gap: 20px;
+  }
+}
+
 .artora-grid {
   background-image:
     linear-gradient(rgb(255 255 255 / 0.025) 1px, transparent 1px),

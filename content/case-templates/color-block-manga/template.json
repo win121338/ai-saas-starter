@@ -1,0 +1,682 @@
+{
+  "id": "color-block-manga",
+  "name": {
+    "zh": "闯进漫画这一格",
+    "en": "Into the Manga Frame"
+  },
+  "summary": {
+    "zh": "细致的黑白漫画人物，遇上从照片提炼的彩色背景。",
+    "en": "Detailed monochrome characters meet bold backgrounds drawn from the photo."
+  },
+  "tags": [
+    "comic",
+    "monochrome-character",
+    "color-block"
+  ],
+  "subjectTags": [
+    "portrait",
+    "daily-life",
+    "travel"
+  ],
+  "promotion": "featured",
+  "coverCaseId": "002",
+  "comparisonCaseId": "002",
+  "featuredCaseIds": [
+    "002",
+    "001",
+    "008"
+  ],
+  "coverAlternatives": [
+    {
+      "caseId": "001",
+      "reason": "蓝底粉色网格与黑白自拍形成强反差，人物表情突出。"
+    },
+    {
+      "caseId": "008",
+      "reason": "蓝天与绿色山景明快，展示旅行照片的转换方向。"
+    }
+  ],
+  "coverReason": "珊瑚红背景与深绿棕榈叶在缩略图中醒目，黑白人物、帽子与书本关系清楚。",
+  "suitability": {
+    "observed": "参考覆盖镜面自拍、旅行、室内、坐姿和手持物；尚未由本站模型验证。",
+    "limitations": [
+      "主风格参考图未提供，无法确认完整复现条件。",
+      "部分参考背景存在纹理或层次，与提示词的纯平色约束不完全一致。",
+      "多人、宠物以及复杂遮挡场景待验证。"
+    ]
+  },
+  "evaluation": {
+    "visualAppeal": 5,
+    "useMotivation": 4,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null,
+    "basis": "基于收集图片的视觉初评；参考图缺失，非本站模型实测。"
+  },
+  "schemaVersion": 1,
+  "status": "ready",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null,
+    "visibleSignature": null
+  },
+  "displayPermission": "confirmed",
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": true,
+    "referenceFiles": []
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null
+  },
+  "processingDate": "2026-10-26",
+  "cases": [
+    {
+      "id": "001",
+      "title": "网格里的自拍",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "2fe051f744673c4d73fdaeeef70e1f50a76d22b5096bbcadb77769a637ff7009",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/001-before.webp",
+        "after": "/cases/color-block-manga/001-after.webp",
+        "compare": "/cases/color-block-manga/001-compare.webp",
+        "thumb": "/cases/color-block-manga/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：卷发的人手持手机自拍，黑白人物置于蓝底粉色网格背景前。",
+        "en": "Monochrome manga character taking a mirror selfie against blue tiles and a pink grid."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；网格背景与手机边界完整保留。"
+      ],
+      "processingKey": "bfba27f878bee0d6d57fc5ed5725939830078d298c603d68fb68cfe80822fb8b",
+      "assetSha256": {
+        "before": "97d7bef04240ff29533f10d727965a63d10cf4af262fada215f97052496c1e34",
+        "after": "2f912593480de11c5c4683ddd3de039fd4384a15c3d43db258b2fd1c03f488e7",
+        "compare": "afc857c01dc954ba68819adaafa58d38f3faaf08b78efdd3733d82941fb083b8",
+        "thumb": "337231fbe10a0dfa342188180ea71a5c0126a7c73eca0a915db891c7229dc3c3"
+      },
+      "titleEn": "A Selfie in the Grid"
+    },
+    {
+      "id": "002",
+      "title": "棕榈与红色假日",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "9602dd07e0cef874bc2868c92d69aec0e1620f3d9231015803f0b810c54e3f2c",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/002-before.webp",
+        "after": "/cases/color-block-manga/002-after.webp",
+        "compare": "/cases/color-block-manga/002-compare.webp",
+        "thumb": "/cases/color-block-manga/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：戴浅色帽子的人举起书本遮住部分面部，背景是珊瑚红色与深绿棕榈叶。",
+        "en": "Monochrome manga character in a light hat holding a book against coral red and dark green palms."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面首选；红色棕榈背景和手持书本均来自原截图，未重绘或移入其他图片。"
+      ],
+      "processingKey": "9f743fd1977984aaa3eb295b8874c153682946edf85f4a2c7f3b5408778071b5",
+      "assetSha256": {
+        "before": "de5a9b03887ea85345dfc84151e3f3f923d9beff1acc50dcd458ce6d992d7158",
+        "after": "95a8a675e9b140007b2f0b7ef27d6b21db019fec2f3245145523b6b2ce3ba129",
+        "compare": "038f453b9e36fec93bf0ac0e6677310f1072a4372a6e0f2b554cca8d6c83be3a",
+        "thumb": "28e45c7f9283aae68791b7dec89a08bc1d0005c8b6cdc778e235f61875a244a7"
+      },
+      "titleEn": "Palms and a Coral Holiday"
+    },
+    {
+      "id": "003",
+      "title": "回头这一格",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "84e454b17123dff69eb7ccbaebc8f1e0228c07cb26412caa49b67e4d0fe8b22a",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          420,
+          383,
+          381,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/003-before.webp",
+        "after": "/cases/color-block-manga/003-after.webp",
+        "compare": "/cases/color-block-manga/003-compare.webp",
+        "thumb": "/cases/color-block-manga/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          381,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：背着包的人侧身举起双手，细致黑白线条与深青色背景形成对比。",
+        "en": "Monochrome manga character turning with hands raised against a dark teal background."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "d0a07a3816e9ab4c6ab369e74a16d6c4b6480979f7b04172d07f6c1e515c9154",
+      "assetSha256": {
+        "before": "6d9f66bb4c77a3e3a0de4eadad00f0b1f3e17f11f7367de20ad0927a3e1c6f3f",
+        "after": "fc86276a8611521742b8bc3817e2203aa5e5ebcb5f7176bd4730878f643ef50a",
+        "compare": "eafc1637041b640c1fee68d9a8508df3b6adc287e9194297706ace18d7ed340a",
+        "thumb": "633ff695dda6e1139785100b4bf1c1cd79d3084bc87f9cdb97b1abf0b896caaf"
+      },
+      "titleEn": "A Moment to Turn"
+    },
+    {
+      "id": "004",
+      "title": "窗边的小表情",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "95511984d0b5ffaab0e4a20a2a395c9ba322d75a54c50c892dbe96fcd9ea7011",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          406,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/004-before.webp",
+        "after": "/cases/color-block-manga/004-after.webp",
+        "compare": "/cases/color-block-manga/004-compare.webp",
+        "thumb": "/cases/color-block-manga/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：穿衬衫的人用手在脸旁比出动作，背景保留蓝色瓷砖和植物剪影。",
+        "en": "Monochrome manga character gesturing beside the face against blue tiles and plant silhouettes."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "99ba1e923a44b223c818457d07460b0c8a37ff5a960c4502fbd32e8c59916a41",
+      "assetSha256": {
+        "before": "1f3386a671263d0b535275f00930c8d334c1ed555f5560b57c1e324a7aa8992c",
+        "after": "3746286b48cb93be15dc10e9c079bb43b63e259a87816be18d3bd7654e0f081d",
+        "compare": "72804dc6514e5fa585b546536e25b9266f36e99cb69ffef76bbb27e12cc3a451",
+        "thumb": "385d45a93b64ded0743c3c201b2fde8f2fbdbc75f1aee864a0dfcae061352a41"
+      },
+      "titleEn": "A Little Window-Side Attitude"
+    },
+    {
+      "id": "005",
+      "title": "绿椅上的停顿",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "233790210e0606b469cbb8287aec29ddbd923d50f3a36dc13317e132e8877c84",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          392,
+          383,
+          405,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/005-before.webp",
+        "after": "/cases/color-block-manga/005-after.webp",
+        "compare": "/cases/color-block-manga/005-compare.webp",
+        "thumb": "/cases/color-block-manga/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          405,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：穿宽松上衣和牛仔裤的人蜷坐在绿色座椅上，侧头望向画面外。",
+        "en": "Monochrome manga character in loose clothes and jeans seated on green chairs, looking to the side."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "03559d26c65907b4896fc1ed8c3a809c062e36689f696fea00d2300434862f28",
+      "assetSha256": {
+        "before": "1c6ed0d140ce2f0dda80c9cae36b5633838d04781ee632972cacc8e0433f7867",
+        "after": "d576a3ae90e1437ce3ef20b6a0e890572577c3762fed69e2441cf8df208222a5",
+        "compare": "ef52379da6ffd9904a129468004665aa1803093723656d8702843c1cc44fea0e",
+        "thumb": "b4c5a72c5fcccb13faa3b1bfd5fd2b6581be27ce2642818168192ae60d725805"
+      },
+      "titleEn": "Pause on a Green Seat"
+    },
+    {
+      "id": "006",
+      "title": "午后长椅",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/6.png",
+      "sourceSha256": "b3a3bfde0e0f5ee9e49a4f0050bad1f2177aa9829153a8303d6844cdaa9cc2f8",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          410,
+          383,
+          385,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/006-before.webp",
+        "after": "/cases/color-block-manga/006-after.webp",
+        "compare": "/cases/color-block-manga/006-compare.webp",
+        "thumb": "/cases/color-block-manga/006-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          385,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：穿背心与浅色长裤的人坐在木椅上，背景以深绿色和棕色色块概括。",
+        "en": "Monochrome manga character in a sleeveless top and light trousers seated before green and brown shapes."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "c850ed23aa15210f919ff83dc2917a7de5232c79bca198f7ca21b69b1802c2a0",
+      "assetSha256": {
+        "before": "74071f464aa40518f5636f690e23a138c7f0a6aece544c8951df036fed7db843",
+        "after": "92a752cb4ddf2e77464c5f36870aa05905649198d5a0d718927453a7e520014d",
+        "compare": "f9c17b6bdd079687acea67ce2c9d74d7fb48b3219b00f20020041929398f46e9",
+        "thumb": "cb692ee4b682583b65e3b5f7ff4ee67895103ae1a8eeba9ed588968360d18c15"
+      },
+      "titleEn": "An Afternoon on the Bench"
+    },
+    {
+      "id": "007",
+      "title": "晴空台阶",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/7.png",
+      "sourceSha256": "2acc6ff4762c4f4d2de534726d64fd9ae0425417c8ae263f7107d758a446c287",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          436,
+          383,
+          334,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/007-before.webp",
+        "after": "/cases/color-block-manga/007-after.webp",
+        "compare": "/cases/color-block-manga/007-compare.webp",
+        "thumb": "/cases/color-block-manga/007-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          334,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：穿黑色衣服的人在台阶上盘腿坐着，双手举到头顶，背景有蓝天和楼梯扶手。",
+        "en": "Monochrome manga character seated cross-legged on steps with hands raised overhead beneath a blue sky."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "63be74b30c0dff356d94227e5dba024378d13212b5f0154ff13e5544f1dc92ab",
+      "assetSha256": {
+        "before": "b68c198287c3719104124d1e9ce0d34cd150325ac913fc1f5dc6fcac21b89ae5",
+        "after": "5a4894b7277efa130f0a271d8109fc187d0e2e8c779c54ee33984aa6660426cb",
+        "compare": "d9f4bcdc55634e14aba287e41659e40a703f0be7e26f25dcdfb587173c370c15",
+        "thumb": "eb5c87dcacd9bfb782cdacf9f52545fbe206e553808dff336e3f4913194bd84f"
+      },
+      "titleEn": "Steps into the Blue"
+    },
+    {
+      "id": "008",
+      "title": "山风回眸",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/8.png",
+      "sourceSha256": "f02c0a4d7208160290ee8db778faa1dc8efebc504e5b2d00f3641d4b67095ff8",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          389,
+          383,
+          404,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/color-block-manga/008-before.webp",
+        "after": "/cases/color-block-manga/008-after.webp",
+        "compare": "/cases/color-block-manga/008-compare.webp",
+        "thumb": "/cases/color-block-manga/008-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          404,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "限色漫画：长发的人穿条纹衬衫回头，背景以蓝天、绿色山林和石墙组成。",
+        "en": "Monochrome manga character with long hair looking back against blue sky, green hills and a stone wall."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；长发与山景留在原方图画幅内。"
+      ],
+      "processingKey": "db6bfe1ad82846e72000031b58b3af292c268d926636be094a37d5479b0fe2b6",
+      "assetSha256": {
+        "before": "72f9b96a7f1aa84413ed4605b918fb81fe15715de98fb3cb5f451fae315151cf",
+        "after": "283482a8f59fd884e1da89e7fdcc210592bbd34773f6d2314ea94105ee19598f",
+        "compare": "3e56907d7e8a12b04815b4bcc0384a1ff2c3620901634d503f1b9edd28dd74aa",
+        "thumb": "5e19364f5b9215d0f46e81b6e223165c7ad5fecacdc2aacd5016b530b5cbfb52"
+      },
+      "titleEn": "A Breeze in the Hills"
+    }
+  ],
+  "processingVersion": "pixel-crop-v1",
+  "generationReady": false,
+  "displayApprovalNote": "2026-10-26: the owner explicitly requested these collected reference cases be displayed on the website homepage and case wall; this records display instruction, not authorship or model validation."
+}

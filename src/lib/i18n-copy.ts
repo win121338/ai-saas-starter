@@ -1,6 +1,77 @@
 import type { Locale } from "@/lib/i18n";
 
 const zh: Record<string, string> = {
+  "Case wall": "案例墙",
+  "The case wall": "案例墙",
+  "THE CASE WALL": "灵感案例墙",
+  "EVERYDAY PHOTOS, UNEXPECTED ART": "日常照片，也有不一样的表达",
+  "A little more you.": "画出你的个性。",
+  "A quiet sip. A silly hat. A moment with your dog. Find a new way to see the everyday.":
+    "喝水的一刻，有趣的帽子，和狗狗的合影。让熟悉的日常，多一种表达。",
+  "Explore the case wall": "探索案例墙",
+  "Enter the case wall": "打开完整案例墙",
+  "Find your collection": "找到喜欢的风格",
+  collections: "个系列",
+  artworks: "张作品",
+  "different moments": "个日常瞬间",
+  "More to come.": "灵感持续更新",
+  "THE ORIGINAL": "原来的瞬间",
+  "THE REIMAGINED": "换一种画风",
+  "One photo. A whole new character.": "同一个瞬间，换一种个性。",
+  "Explore collection": "查看这个系列",
+  "Featured collections": "切换首页系列",
+  "THE COLLECTIONS": "不同画风，不同个性",
+  "Find your kind of different.": "找到让你心动的那一种。",
+  "Big type, bold ink, a little attitude. Each collection has a character of its own.":
+    "大字海报、黑白漫画、随手涂鸦。每个系列，都有自己的脾气。",
+  "A FEW FAVORITES": "精选瞬间",
+  "Ordinary moments. Extra personality.": "普通的一刻，也很有个性。",
+  "Open any artwork to see the photo behind it.":
+    "点开作品，看看它来自怎样的一张照片。",
+  "See all cases": "查看全部案例",
+  "Reference collection": "风格参考案例",
+  "Collected photo-to-art references. Studio results will be added after testing.":
+    "这里展示收集整理的风格参考案例，工作台实测作品将在测试后加入。",
+  "FROM PHOTO TO POSSIBILITY": "从照片开始，发现更多可能",
+  "Start with a little curiosity.": "带着一点好奇，慢慢看。",
+  "Find a feeling": "先找喜欢的感觉",
+  "Explore the collections and save a direction that feels like you.":
+    "浏览不同系列，找到适合自己照片的表达。",
+  "Look a little closer": "再看一眼细节",
+  "Compare the original photo with the artwork. Notice the lines, colors and little details.":
+    "点开原照与成品，看看线条、色彩和小细节如何变化。",
+  "Make room for your moment": "为你的瞬间留个位置",
+  "The new studio templates are being prepared. For now, find your inspiration here.":
+    "新系列的创作模板正在调试中，先在这里收集喜欢的灵感。",
+  "YOUR NEXT FAVORITE STARTS HERE": "下一个喜欢的画面，可能就在这里",
+  "Which one feels like you?": "哪一种，最像你的个性？",
+  "A moment. Many possibilities.": "一个瞬间，不止一种表达。",
+  "Explore comic posters, color-block manga and playful marker doodles. Open each artwork to compare it with the original photo.":
+    "看看蓝纸海报、限色漫画和马克笔涂鸦。点开每张作品，都能对照它原来的样子。",
+  "All the little moments.": "所有值得画下来的小瞬间。",
+  "Filter by collection": "按系列筛选",
+  "Search cases": "搜索案例",
+  "Search a style or a moment…": "搜索风格或场景…",
+  "Open an image to see the original.": "点开图片，查看原照对比。",
+  "Open artwork": "打开作品",
+  "No matching moments yet.": "暂时没有找到这样的瞬间。",
+  "Try another word or explore all collections.":
+    "换个词试试，或者看看全部系列。",
+  "Show all work": "显示全部作品",
+  "Load more artwork": "加载更多作品",
+  "Close artwork": "关闭作品",
+  "Previous artwork": "上一张作品",
+  "Next artwork": "下一张作品",
+  "View case details": "打开案例详情",
+  "Back to the case wall": "返回案例墙",
+  "THE COLLECTION": "风格系列",
+  "More moments, same character.": "同一种画风，更多日常瞬间。",
+  "Studio template in preparation": "创作模板调试中",
+  "THE MOMENT": "这一刻",
+  "Artwork navigation": "切换案例作品",
+  "A new chapter for your photos.": "新的画风，正在准备。",
+  "The previous styles have been paused. Explore the three new collections while their studio templates are being prepared.":
+    "原有风格已暂时下架。新的创作模板正在调试，你可以先浏览三个系列的案例。",
   "Request received. If this address has an account, check your inbox and spam folder for a reset link. If no email arrives, try again or contact the site administrator.":
     "请求已受理。如该邮箱已注册，请检查收件箱和垃圾邮件中的重设链接。未收到邮件时，可重试或联系管理员。",
   "Could not reset your password. Please try again.":

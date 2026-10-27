@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "templateIds": ["blue-paper-comic", "color-block-manga", "bold-marker-doodle"],
+  "featuredTemplateId": "blue-paper-comic",
+  "featuredCases": [
+    { "templateId": "blue-paper-comic", "caseId": "001" },
+    { "templateId": "color-block-manga", "caseId": "002" },
+    { "templateId": "bold-marker-doodle", "caseId": "006" },
+    { "templateId": "blue-paper-comic", "caseId": "007" },
+    { "templateId": "bold-marker-doodle", "caseId": "007" },
+    { "templateId": "color-block-manga", "caseId": "008" },
+    { "templateId": "blue-paper-comic", "caseId": "009" },
+    { "templateId": "color-block-manga", "caseId": "001" },
+    { "templateId": "bold-marker-doodle", "caseId": "001" }
+  ]
+}

@@ -1,0 +1,831 @@
+{
+  "id": "blue-paper-comic",
+  "name": {
+    "zh": "把日常印成封面",
+    "en": "Everyday Cover"
+  },
+  "summary": {
+    "zh": "旧蓝纸、漫画线条与大字标题，把日常瞬间排成一张封面。",
+    "en": "Everyday moments meet blue paper, expressive ink and oversized type."
+  },
+  "tags": [
+    "comic",
+    "poster",
+    "blue-paper",
+    "typography"
+  ],
+  "subjectTags": [
+    "portrait",
+    "daily-life"
+  ],
+  "promotion": "candidate",
+  "coverCaseId": "001",
+  "comparisonCaseId": "001",
+  "featuredCaseIds": [
+    "001",
+    "007",
+    "009"
+  ],
+  "coverAlternatives": [
+    {
+      "caseId": "007",
+      "reason": "斜光、相机与人物轮廓有层次，适合补充摄影题材。"
+    },
+    {
+      "caseId": "009",
+      "reason": "双手持甜品与笑脸带来轻松情绪，适合精选区。"
+    }
+  ],
+  "coverReason": "喝水动作清楚，人物与 SLOW SIP 大字形成穿插，蓝纸风格在小图中仍容易识别。",
+  "suitability": {
+    "observed": "现有参考覆盖单人半身、坐姿、全身和手持物场景；尚未由本站模型验证。",
+    "limitations": [
+      "原照均为截图提取，不能当高清原片使用。",
+      "多人物、宠物与极暗场景的适用性待验证。",
+      "部分参考作品的顶部留白少于原提示词的约三分之一要求。"
+    ]
+  },
+  "evaluation": {
+    "visualAppeal": 5,
+    "useMotivation": 4,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null,
+    "basis": "基于收集图片的视觉初评；非生成实测或转化验证。"
+  },
+  "schemaVersion": 1,
+  "status": "ready",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null,
+    "visibleSignature": "wibi"
+  },
+  "displayPermission": "confirmed",
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": false,
+    "referenceFiles": []
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null
+  },
+  "processingDate": "2026-10-26",
+  "cases": [
+    {
+      "id": "001",
+      "title": "SLOW SIP · 慢慢喝",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "6becdf58a54dd32561ff69592c1edc55ff1297aca754130e24f3a237d7f103c4",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          428,
+          383,
+          351,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/001-before.webp",
+        "after": "/cases/blue-paper-comic/001-after.webp",
+        "compare": "/cases/blue-paper-comic/001-compare.webp",
+        "thumb": "/cases/blue-paper-comic/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          351,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：穿蓝色格衬衫的人坐在桌边举杯喝水，左下方是 SLOW SIP 大字。",
+        "en": "Blue-paper comic poster of a person in a plaid shirt drinking from a glass, with large SLOW SIP lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面首选；SLOW SIP 标题、蓝纸留白与喝水动作完整保留。"
+      ],
+      "processingKey": "da9c85f7ea6bf83d1402b21403cfd103126de68f5ca51562c96c27a2f77e2395",
+      "assetSha256": {
+        "before": "11a701a1fd6f8a6a907a48e5f557911a292c42ff970940a3e48697a3bb6be96f",
+        "after": "1d90f8d9f085b717ee0c05ac2e6a4030de2fe81a6de544e2a8bd259811196b31",
+        "compare": "6de1c9380937319d7b1fa71dee5ce547631dcb0152b6e095ed29b72929ce11ea",
+        "thumb": "23deb4df721c8bd583d72f52dbd26b6d970a216883ee2358c0f2fbc2b2948dd0"
+      },
+      "titleEn": "SLOW SIP"
+    },
+    {
+      "id": "002",
+      "title": "RIDE READY · 出发准备",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "04a1f9de39f7a74edde781d7c3f2b64ab67d79de6660ef74568dd07e8f83c567",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          475,
+          383,
+          256,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/002-before.webp",
+        "after": "/cases/blue-paper-comic/002-after.webp",
+        "compare": "/cases/blue-paper-comic/002-compare.webp",
+        "thumb": "/cases/blue-paper-comic/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          256,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：戴蓝色墨镜的人站在自行车旁，画面下方排有 RIDE READY 大字。",
+        "en": "Blue-paper comic poster of a person wearing blue sunglasses beside a bicycle, with RIDE READY lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "原照仅 256×402 像素，适合小图；原照自行车本身已被拍摄边界截断，未补画。"
+      ],
+      "processingKey": "07641c29be3e8e9a1c80c1990143f1ff59a0265d380d44072ac8eb2bf162fb89",
+      "assetSha256": {
+        "before": "1e8846adf518aa7f29298b4ebab538e2741d196f64fbc35b841c6520167bd5de",
+        "after": "56d51a9cd6870f58e99d3c0114aa387f3e1ad5cc83a21cf8e634f3c953f7c641",
+        "compare": "3014182fa898ed5ce55d4e1e7b2ee281db91f695d443b5fcca65d1783b95ee9d",
+        "thumb": "057d3e0920891a9b389b95992fa1a243d441b4a59021e931f53800179d8afc3a"
+      },
+      "titleEn": "RIDE READY"
+    },
+    {
+      "id": "003",
+      "title": "SLOW DAY · 慢一天",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "f071af5d7391fa9356954a694e80ebcff4e569275279725640481438b4c07c0b",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          426,
+          383,
+          355,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/003-before.webp",
+        "after": "/cases/blue-paper-comic/003-after.webp",
+        "compare": "/cases/blue-paper-comic/003-compare.webp",
+        "thumb": "/cases/blue-paper-comic/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          355,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：戴灰色针织帽的人坐在长椅上，人物与 SLOW DAY 标题组合。",
+        "en": "Blue-paper comic poster of a person in a gray beanie sitting on a bench above SLOW DAY lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "4270449de561560c5dfbd73db2962a4d87c34f3053a751ff2f249722befa995f",
+      "assetSha256": {
+        "before": "b5de59931963ec1d18752555ce31397e41ab3b909e22909a0c4bd8d836603dc1",
+        "after": "cf658a3081b601f38cac32bc5f8dc370c2691da4fae7364a67b1b53a919d3276",
+        "compare": "9f3e552d97b6dc6af8b4e71c75b4b56d8ec6d0362d0cf42cb8ffb784f0d6778a",
+        "thumb": "51e55eae445964750f83fca4a22ff5d09a1573d1dc4986a528aa5702d0ec95bd"
+      },
+      "titleEn": "SLOW DAY"
+    },
+    {
+      "id": "004",
+      "title": "QUIET STEP · 安静一阶",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "92abbd20e12b8dcc2b5b16bc7a67fd13a361482d7243215bf6190a3f6afd5b65",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          425,
+          383,
+          357,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/004-before.webp",
+        "after": "/cases/blue-paper-comic/004-after.webp",
+        "compare": "/cases/blue-paper-comic/004-compare.webp",
+        "thumb": "/cases/blue-paper-comic/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          357,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：穿黑色衣服的人蹲坐在楼梯中间，两侧扶手包围 QUIET STEP 标题。",
+        "en": "Blue-paper comic poster of a person in black seated on steps between railings, with QUIET STEP lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "d64f688abb54b9c91a010651ac3ac638877cd9bb66983ff8a7c71d3385311ed7",
+      "assetSha256": {
+        "before": "b3b9ad0d93ba35fd49ada1918b4b7bf3f27d5df8c32182e2c7460ecaa83f7a51",
+        "after": "97040cc3f9538ebe29d92b0dc9effb1fe9fb4a20de96a24fc2ef8f2729e40319",
+        "compare": "9b15664141de010789ad86fb4d8326117daba35d4d76432b3b9e287f128f7671",
+        "thumb": "9fd49ca0383b6ddaa8a501cd370bb2d1b94bb597c708624c78182e9fd926a150"
+      },
+      "titleEn": "QUIET STEP"
+    },
+    {
+      "id": "005",
+      "title": "STREET BITE · 街头一口",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "b81a778ea7953155087c29049002c75ca51e8cf36985888ed83984da6c75c728",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          423,
+          383,
+          360,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/005-before.webp",
+        "after": "/cases/blue-paper-comic/005-after.webp",
+        "compare": "/cases/blue-paper-comic/005-compare.webp",
+        "thumb": "/cases/blue-paper-comic/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          360,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：戴耳机、穿棕色外套的人双手拿着食物，前方是 STREET BITE 大字。",
+        "en": "Blue-paper comic poster of a person wearing headphones and a brown jacket holding food, with STREET BITE lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "6f50f7f98569fbf0539de34e561e94754a293d7186cb315193802041ac634305",
+      "assetSha256": {
+        "before": "fb0626cc3f5db26a1f9a0f364ff967bd2afec078f3c5500b0a6c9924235a1616",
+        "after": "34f4a8130be00eb1e72d500a7cbc0636f1c79d61df59a7848946edeef1660ec6",
+        "compare": "43e3e2553874ced28033ec1ec9d8c2208287c3f0230b9dcbe7d3632014662026",
+        "thumb": "8b4ed148802135c259a79bdb1eea26f6b4ff16e6ead068b05d5fd5cac014e114"
+      },
+      "titleEn": "STREET BITE"
+    },
+    {
+      "id": "006",
+      "title": "WAIT MORE · 再坐一会",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/6.png",
+      "sourceSha256": "12072c01bec8dd0f6606caa77fb944d1ef74312fb66ae57948fdfe69d48c939a",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          425,
+          383,
+          356,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/006-before.webp",
+        "after": "/cases/blue-paper-comic/006-after.webp",
+        "compare": "/cases/blue-paper-comic/006-compare.webp",
+        "thumb": "/cases/blue-paper-comic/006-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          356,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：穿红色上衣与牛仔裤的人蜷坐在绿色座椅上，左下方是 WAIT MORE 标题。",
+        "en": "Blue-paper comic poster of a person in a red shirt and jeans seated on a green chair, with WAIT MORE lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "a7b2f983b24aa50507bdad34ec1fa41ddebf38e97929370b2190edb67f22499e",
+      "assetSha256": {
+        "before": "97fb87a208e3282033d07a16f1a039f7b0cff4df31a098e3bef13281e4914a10",
+        "after": "4b9326a078ad849eb2652bf1a40319524ffb39d0034149a406e6e43e14e33b2d",
+        "compare": "ba5cd6658d03f6e99764f7036ff25e7ec940374a0bb09820e3529a2362d482d4",
+        "thumb": "25e43bdd8d90cde0fab119e2e57fec8ca4b6cdc0b749dca08d77d7e15890cb7d"
+      },
+      "titleEn": "WAIT MORE"
+    },
+    {
+      "id": "007",
+      "title": "FRAME PAUSE · 镜头暂停",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/7.png",
+      "sourceSha256": "c6297bc87ab8eb4e98e2c14fa643c2c47148f13a1f3a4d3d575be6379c5fcebd",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          426,
+          383,
+          354,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/007-before.webp",
+        "after": "/cases/blue-paper-comic/007-after.webp",
+        "compare": "/cases/blue-paper-comic/007-compare.webp",
+        "thumb": "/cases/blue-paper-comic/007-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          354,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：穿条纹上衣的人手持相机，背景有斜向光带，下方是 FRAME PAUSE 大字。",
+        "en": "Blue-paper comic poster of a person holding a camera against diagonal light, with FRAME PAUSE lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；斜光与相机完整保留。"
+      ],
+      "processingKey": "7901043749b89932f375ed9ce227605c13a713958ee80092e62158978da513af",
+      "assetSha256": {
+        "before": "6373fee138092369fdb40f9f82a524365ce1c0c0738cfe215ceb8aa2f0476b77",
+        "after": "b281942f968f5421ae5deed515bd8fd343543016249029770995823ca9783feb",
+        "compare": "16d32b201e9e9bb68d5d055f50051aef75f1a44c4e3f5e763e56635f58d612b0",
+        "thumb": "2ba21d541a8aa5d4b2adf6500c91c659b13c219d145c6fe13daf462a4ddca0dd"
+      },
+      "titleEn": "FRAME PAUSE"
+    },
+    {
+      "id": "008",
+      "title": "SWEET BITE · 西瓜一口",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/8.png",
+      "sourceSha256": "6bd5e9d884b8e275d49a32abb6020e5a548c05a8abf909cf9a2fd778c899cc1f",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          440,
+          383,
+          326,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/008-before.webp",
+        "after": "/cases/blue-paper-comic/008-after.webp",
+        "compare": "/cases/blue-paper-comic/008-compare.webp",
+        "thumb": "/cases/blue-paper-comic/008-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          326,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：扎起头发的人低头吃西瓜，西瓜与 SWEET BITE 大字前后穿插。",
+        "en": "Blue-paper comic poster of a person eating a slice of watermelon among large SWEET BITE lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "da567cabe99aadad753e3c33b816ee95652471767eee5a81e722d5f79989ec69",
+      "assetSha256": {
+        "before": "052470e70c154a4b08d004bbb81c2bdac99e5d53752dc483b4f59ad30c953aad",
+        "after": "0669a22abac9cf3d099d6857fc574548d6206471c38563405420eca016ab29fd",
+        "compare": "9637d5da5b41c24a2030da30b8c27169312c8c8c06c693efaddc4411c050cfe6",
+        "thumb": "9097bd78e15c2d3217054f73010aaac2155ebbf7632e3242c3fba7dd0c4855db"
+      },
+      "titleEn": "SWEET BITE"
+    },
+    {
+      "id": "009",
+      "title": "SWEET DUO · 双份甜",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/9.png",
+      "sourceSha256": "1a950c68c7965a309a258d9fa4351d03befbeb79f25a92883ba295e24cd6a66c",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          426,
+          383,
+          354,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/009-before.webp",
+        "after": "/cases/blue-paper-comic/009-after.webp",
+        "compare": "/cases/blue-paper-comic/009-compare.webp",
+        "thumb": "/cases/blue-paper-comic/009-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          354,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：短发的人笑着双手各举一份甜品，前方是 SWEET DUO 标题。",
+        "en": "Blue-paper comic poster of a smiling person holding a dessert in each hand, with SWEET DUO lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。",
+        "封面备选；双手甜品与人物笑脸完整保留。"
+      ],
+      "processingKey": "7c08262b766d3c4b5f7c47976cd57683cb5378e288f5791fa990673885b395b9",
+      "assetSha256": {
+        "before": "3a5744cc432694ad89e22e421216d7ec01b0f93d4f8ea90fcb537b20f052913c",
+        "after": "da3be825a60c0cdc8b9363439746e35483dd5a6c192f7fa1a06ecfd7f76e892c",
+        "compare": "180d4db2fdc22799e796c254cc1cc1b2bd6f1ce339f52e8742efc493e7906439",
+        "thumb": "3d9c20121a9ec10a6a0534cc094c78909d99edf623e3d60e02113eda69233569"
+      },
+      "titleEn": "SWEET DUO"
+    },
+    {
+      "id": "010",
+      "title": "PHONE PAUSE · 手机暂停",
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/10.png",
+      "sourceSha256": "44c0c800f74d58303de56cae2a56e17af180c6c500e960f3a8c2514f5b806498",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          436,
+          383,
+          335,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/blue-paper-comic/010-before.webp",
+        "after": "/cases/blue-paper-comic/010-after.webp",
+        "compare": "/cases/blue-paper-comic/010-compare.webp",
+        "thumb": "/cases/blue-paper-comic/010-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          335,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "alt": {
+        "zh": "蓝纸漫画海报：穿白色上衣的人趴在桌边拿着手机，双臂压在 PHONE PAUSE 大字上方。",
+        "en": "Blue-paper comic poster of a person in a white shirt leaning over a phone above PHONE PAUSE lettering."
+      },
+      "review": "passed",
+      "notes": [
+        "仅通过素材配对与裁剪导出检查；不是本站生成质量验证。",
+        "原照来自截图提取，未放大、补画或生成修复。"
+      ],
+      "processingKey": "5cea0f20c5d372045ce6bdc0e1bc69334c4086a284efb286634ffc61b7ab393f",
+      "assetSha256": {
+        "before": "9a45d9414bc95a2ee6e7439aa3d8a632e8eb2d5abf66c586a7728288d2a7ba71",
+        "after": "d3a93ff1781b5b84e7bb7b0de983ac1a89c9aa40f66a81c1a4bae63e28803720",
+        "compare": "9789ba9372515fabdd1795653a11b6a624dcd8d580241c8b2089db9f757ef9af",
+        "thumb": "7df5ebc12d677e60217ad4c370e79f39cc448b9b13c9a6f9444ec99723909539"
+      },
+      "titleEn": "PHONE PAUSE"
+    }
+  ],
+  "processingVersion": "pixel-crop-v1",
+  "generationReady": false,
+  "displayApprovalNote": "2026-10-26: the owner explicitly requested these collected reference cases be displayed on the website homepage and case wall; this records display instruction, not authorship or model validation."
+}

@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import sharp from "sharp";
 import { PASSWORD, signUp, uniqueEmail } from "./helpers";
 import { BASE_URL } from "../playwright.config";
 
@@ -54,27 +53,14 @@ test("deletion rejects a wrong password and removes the account with the correct
 }) => {
   const email = uniqueEmail("delete");
   await signUp(page, email);
-  await page.goto("/generate");
-  const style = page.getByRole("button", { name: /Watercolor/ });
-  await style.click();
-  await expect(style).toBeHidden();
-  const png = await sharp({
-    create: { width: 320, height: 240, channels: 3, background: "#6699aa" },
-  })
-    .png()
-    .toBuffer();
-  await page.locator("#studio-photo").setInputFiles({
-    name: "delete-test.png",
-    mimeType: "image/png",
-    buffer: png,
-  });
-  await page.getByRole("button", { name: "Create for 1 credit" }).click();
-  await expect(page.getByAltText("Finished artwork")).toBeVisible({
+  await page.goto("/generate/text-demo");
+  await page.getByLabel("Prompt").fill("Account deletion image fixture");
+  await page.getByRole("button", { name: /^Generate/ }).click();
+  const generated = page.locator('section img[src^="/api/images/"]').first();
+  await expect(generated).toBeVisible({
     timeout: 30_000,
   });
-  const imageUrl = await page
-    .getByAltText("Finished artwork")
-    .getAttribute("src");
+  const imageUrl = await generated.getAttribute("src");
   await page.goto("/settings");
   await page
     .getByRole("button", { name: "Delete account", exact: true })
