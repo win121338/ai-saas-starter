@@ -99,16 +99,16 @@ def export():
             assets['thumb']=f'/cases/{group["id"]}/{output.name}'; sizes['thumb']=list(thumb.size); hashes['thumb']=digest(output); overview.append((f'{number}-thumb',output))
             title=group['titles'][index-1]
             cases.append({'id':number,'title':title[0],'titleEn':title[1],'alt':{'zh':group['name'][0]+'：'+title[0],'en':group['name'][1]+': '+title[1]},'subjectTags':['portrait'],'sourceFile':f'originals/{name}','sourceSha256':digest(source/name),'sourceSize':list(image.size),'cropRects':rects,'assets':assets,'assetSizes':sizes,'assetSha256':hashes,'review':'pending','notes':'来源截图，非本站生成；原照为截图提取。'})
-        recipe={'inputMode':'photo-with-reference','referenceImage':ref,'prompt':(directory/'p.md').read_text(encoding='utf8').strip(),'rule':'图一只提供风格，图二只提供用户人物身份、原有表情、姿态和场景锚点。仅生成最终作品，不拼接对比、不添加手机界面。禁止复制参考图的人物、香烟、文字、商标、水印、署名或无关道具。保持用户照片主体数量，不凭空增加人物和肢体。','aspectRatio':'1:1','modelIds':['qwen-image-2.1-turbo','qwen-image-3.0-pro','wan2.7-image-pro','wan2.7-image','doubao-seedream-5-0-flash-260915'],'defaultModel':'qwen-image-2.1-turbo','fields':[],'tested':False,'testReport':''}
-        # Original manuscripts are preserved; image roles are made explicit in the prepared recipe.
-        if group['folder']=='case1': recipe['prompt']=recipe['prompt'].replace('参考图漫画人物图的气质','参考图一漫画人物图的气质')
-        if group['folder']=='case3': recipe['prompt']=recipe['prompt'].replace('风格参考','图一风格参考').replace('真实照片','图二真实照片')
-        write_json(directory/'generation-v1.json',recipe)
+        # Retain reviewed recipe upgrades when regenerating deterministic image crops.
+        recipe_version = 2
+        recipe = json.loads((directory/'generation-v2.json').read_text(encoding='utf8'))
+        assert recipe['referenceImage'] == ref
+        assert recipe['referenceInputOrder'] == 'subject-first'
         manifest={'schemaVersion':1,'id':group['id'],'name':dict(zip(['zh','en'],group['name'])),'summary':dict(zip(['zh','en'],group['summary'])),'tags':group['tags'],'subjectTags':['portrait'],'status':'prepared','generationReady':False,'promotion':'candidate','provenance':'collected-reference','source':{'platform':'douyin','url':None,'author':None},'displayPermission':'pending','processingDate':'2026-10-27','intakeBatch':'2026-10-27-references','sourceFolder':group['folder'],'coverCaseId':group['cover'],'comparisonCaseId':group['cover'],'featuredCaseIds':['001','002','003'],'coverReason':group['reason'],'coverAlternatives':[{'caseId':'002','reason':'补充人物与神态场景。'},{'caseId':'003','reason':'补充服装与姿态变化。'}],'prompt':{'original':'p.md','prepared':'prompt-v1.md','version':1,'referenceRequired':True,'referenceFiles':['references/refer.png',f'references/{reference_sha}.webp']},'reference':{'sourceSha256':digest(source/'refer.png'),'sourceSize':[1206,2622],'cropRect':group['ref'],'image':ref,'sha256':reference_sha},'generation':{'tested':False,'model':None,'publishedStyleSlug':None,'publishedPromptVersion':None,'testReport':None},'evaluation':{'visualAppeal':None,'useMotivation':None,'stability':None,'subjectCoverage':None,'costAndEffort':None,'totalScore':None},'cases':cases}
+        manifest['prompt'].update(prepared=f'prompt-v{recipe_version}.md', version=recipe_version)
         write_json(directory/'template.json',manifest)
         package={'schemaVersion':1,'id':group['id'],'name':manifest['name'],'summary':manifest['summary'],'suitability':dict(zip(['zh','en'],group['suitability'])),'tags':group['tags'],'coverCaseId':group['cover'],'featuredCaseIds':manifest['featuredCaseIds'],'recipe':recipe,'cases':[{'id':c['id'],'title':{'zh':c['title'],'en':c['titleEn']},'alt':c['alt'],'before':{'src':c['assets']['before'],'width':c['assetSizes']['before'][0],'height':c['assetSizes']['before'][1]},'after':{'src':c['assets']['after'],'width':1206,'height':1206},'thumbnail':{'src':c['assets']['thumb'],'width':640,'height':640},'tags':group['tags'],'provenance':'collected-reference'} for c in cases]}
         write_json(directory/'creative-template.json',package)
-        (directory/'prompt-v1.md').write_text('# 项目版配方 v1\n\n输入顺序：图一是风格参考图，图二是用户完整照片。\n\n'+recipe['prompt']+'\n\n'+recipe['rule']+'\n\n尚未运行真实模型质量实测。\n',encoding='utf8')
         contact(overview,REVIEW/f'{group["id"]}-exports.jpg')
         print(group['id']+f': {len(cases)} cases and one reference prepared')
 

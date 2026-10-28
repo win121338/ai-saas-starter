@@ -27,8 +27,10 @@ const zh: Record<string, string> = {
   "Style reference image": "风格参考图",
   "Upload style reference": "上传风格参考图",
   "Remove style reference": "移除风格参考图",
-  "With a reference: image 1 is the style, image 2 is the user's photo. Without a reference: only the user's photo is sent. Publish a new version after changing it.":
-    "有参考图时，图一提供风格、图二为用户照片；没有参考图时只发送用户照片。修改后需发布新版本。",
+  "Image 1 is the user's photo; image 2 is the style reference. Keep these numbers consistent in the prompt. Without a reference, only the user's photo is sent.":
+    "图一是用户原照片，图二仅提供画风；提示词中的图号必须与此一致。没有参考图时，只发送用户照片。",
+  "Image 1 is the style reference; image 2 is the user's photo (historical order). Keep these numbers consistent in the prompt. Without a reference, only the user's photo is sent.":
+    "此历史版本：图一是风格参考图，图二是用户照片；提示词中的图号必须与此一致。没有参考图时，只发送用户照片。",
   "The template style reference is included automatically. Your photo supplies the subject; the reference supplies the style.":
     "此模板会自动传入风格参考图：你的照片决定主体，参考图仅提供画风。",
   "This model does not support a style reference.":
@@ -177,8 +179,8 @@ const zh: Record<string, string> = {
   "Uploading…": "上传中…",
   "Image upload failed. Try again.": "图片上传失败，请重试。",
   "Generation recipe": "生成配方",
-  "Single-photo recipe. Fixed style references are not supported in this release.":
-    "当前为单图创作配方，本版暂不支持额外风格参考图。",
+  "The user's photo supplies the subject. An optional reference supplies only the visual style. Publish a new version after changing the recipe.":
+    "用户照片决定主体；可选参考图仅用于线条、配色与材质，不能替换用户人物。修改配方后需发布新版本。",
   "Internal prompt": "内部生成提示词",
   "Output ratio": "输出画幅",
   "Compatible models": "兼容模型",

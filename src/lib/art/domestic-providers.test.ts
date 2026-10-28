@@ -10,6 +10,7 @@ vi.mock("@/lib/env", () => ({
 }));
 
 import { DefiniteArtFailure } from "./provider";
+import type { ReferenceInputOrder } from "@/lib/creative/image-inputs";
 import {
   ArtProviderRateLimitError,
   ArtProviderUnavailableError,
@@ -27,51 +28,72 @@ beforeEach(() => {
 });
 
 describe("domestic image providers", () => {
-  it.each([
-    "qwen-image-2.1-turbo",
-    "qwen-image-3.0-pro",
-    "wan2.7-image",
-    "wan2.7-image-pro",
-    "doubao-seedream-5-0-flash-260915",
-  ])(
-    "sends style first and subject second to %s, and omits the reference when absent",
-    async (model) => {
-      const fetchMock = vi
-        .fn()
-        .mockImplementation(
-          async () =>
-            new Response(
-              JSON.stringify({
-                output: { task_id: "reference-task" },
-                data: [{ b64_json: Buffer.from("result").toString("base64") }],
-              }),
-              { status: 200 },
-            ),
-        );
+  it.each(
+    [
+      "qwen-image-2.1-turbo",
+      "qwen-image-3.0-pro",
+      "wan2.7-image",
+      "wan2.7-image-pro",
+      "doubao-seedream-5-0-flash-260915",
+    ].flatMap((model) =>
+      ([undefined, "subject-first", "reference-first"] as const).map(
+        (order) => [model, order] as const,
+      ),
+    ),
+  )(
+    "sends image roles consistently to %s with order %s, and omits the reference when absent",
+    async (model, order: ReferenceInputOrder | undefined) => {
+      const fetchMock = vi.fn().mockImplementation(
+        async () =>
+          new Response(
+            JSON.stringify({
+              output: { task_id: "reference-task" },
+              data: [{ b64_json: Buffer.from("result").toString("base64") }],
+            }),
+            { status: 200 },
+          ),
+      );
       vi.stubGlobal("fetch", fetchMock);
       const reference = Buffer.from("style-reference-not-the-user");
       const send = (ref?: Buffer) =>
         model.startsWith("qwen")
-          ? submitQwen(photo, "roles and instructions", model, undefined, ref)
+          ? submitQwen(
+              photo,
+              "roles and instructions",
+              model,
+              undefined,
+              ref,
+              order,
+            )
           : model.startsWith("wan")
-            ? submitWanx(photo, "roles and instructions", model, undefined, ref)
+            ? submitWanx(
+                photo,
+                "roles and instructions",
+                model,
+                undefined,
+                ref,
+                order,
+              )
             : generateSeedream(
                 photo,
                 "roles and instructions",
                 model,
                 undefined,
                 ref,
+                order,
               );
       const uri = (bytes: Buffer) =>
         `data:image/webp;base64,${bytes.toString("base64")}`;
       await send(reference);
       const first = JSON.parse(fetchMock.mock.calls[0][1].body);
-      if (model.startsWith("doubao"))
-        expect(first.image).toEqual([uri(reference), uri(photo)]);
+      const expected =
+        order === "subject-first"
+          ? [uri(photo), uri(reference)]
+          : [uri(reference), uri(photo)];
+      if (model.startsWith("doubao")) expect(first.image).toEqual(expected);
       else
         expect(first.input.messages[0].content).toEqual([
-          { image: uri(reference) },
-          { image: uri(photo) },
+          ...expected.map((image) => ({ image })),
           { text: "roles and instructions" },
         ]);
       await send();

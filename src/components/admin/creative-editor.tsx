@@ -399,7 +399,7 @@ export function CreativeEditor({
         <p className="text-xs text-muted-foreground">
           {t(
             locale,
-            "Single-photo recipe. Fixed style references are not supported in this release.",
+            "The user's photo supplies the subject. An optional reference supplies only the visual style. Publish a new version after changing the recipe.",
           )}
         </p>
         <label className="block text-sm font-semibold">
@@ -421,7 +421,9 @@ export function CreativeEditor({
           <p className="text-xs leading-6 text-muted-foreground">
             {t(
               locale,
-              "With a reference: image 1 is the style, image 2 is the user's photo. Without a reference: only the user's photo is sent. Publish a new version after changing it.",
+              draft.recipe.referenceInputOrder === "subject-first"
+                ? "Image 1 is the user's photo; image 2 is the style reference. Keep these numbers consistent in the prompt. Without a reference, only the user's photo is sent."
+                : "Image 1 is the style reference; image 2 is the user's photo (historical order). Keep these numbers consistent in the prompt. Without a reference, only the user's photo is sent.",
             )}
           </p>
           {draft.recipe.referenceImage ? (

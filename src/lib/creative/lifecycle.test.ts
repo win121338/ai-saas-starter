@@ -366,6 +366,7 @@ describe.sequential("creative template lifecycle and creation", () => {
       ),
     );
     second.recipe.referenceImage = other.recipe.referenceImage;
+    second.recipe.referenceInputOrder = "reference-first";
     await saveCreativeDraft(second, actor);
     await publishCreativeTemplate(referenceId, actor);
     expect(
@@ -393,9 +394,24 @@ describe.sequential("creative template lifecycle and creation", () => {
       const stored = readFileSync(
         `content/case-templates/indie-ink-portrait/references/${first.recipe.referenceImage!.src.split("/").at(-1)}`,
       );
-      expect(body.input.messages[0].content[0].image).toBe(
+      expect(body.input.messages[0].content[1].image).toBe(
         `data:image/webp;base64,${stored.toString("base64")}`,
       );
+      expect(body.input.messages[0].content[0].image).not.toBe(
+        body.input.messages[0].content[1].image,
+      );
+      expect(body.input.messages[0].content[2].text).toContain(
+        "Image 1 is the user's photo",
+      );
+      expect(body.input.messages[0].content[2].text).toContain(
+        "Image 2 is the style reference only",
+      );
+      expect(
+        (await getCreativeVersion(referenceId, 1))?.recipe.referenceInputOrder,
+      ).toBe("subject-first");
+      expect(
+        (await getCreativeVersion(referenceId, 2))?.recipe.referenceInputOrder,
+      ).toBe("reference-first");
       expect(body.input.messages[0].content).toHaveLength(3);
     } finally {
       vi.unstubAllGlobals();
@@ -409,14 +425,12 @@ describe.sequential("creative template lifecycle and creation", () => {
     await saveCreativeDraft(broken, actor);
     await expect(publishCreativeTemplate(referenceId, actor)).rejects.toThrow();
     // Simulate storage loss in an accepted snapshot without touching any existing version.
-    await db
-      .insert(creativeTemplateVersions)
-      .values({
-        templateId: referenceId,
-        version: 3,
-        definition: broken,
-        createdBy: actor,
-      });
+    await db.insert(creativeTemplateVersions).values({
+      templateId: referenceId,
+      version: 3,
+      definition: broken,
+      createdBy: actor,
+    });
     await activateCreativeVersion(referenceId, 3, actor);
     const balance = await getBalance(actor);
     const invalid = await form(3);

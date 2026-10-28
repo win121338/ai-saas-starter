@@ -40,10 +40,37 @@ describe("creative template import and options", () => {
         /\/creative-references\/.+\/[a-f0-9]{64}\.webp$/,
       );
       const instruction = creativeInstruction(definition, {});
-      expect(instruction).toContain("Image 1 is the style reference only");
-      expect(instruction).toContain("Image 2 is the user's photo");
+      expect(definition.recipe.referenceInputOrder).toBe("subject-first");
+      expect(instruction).toContain(
+        "Image 1 is the user's photo: edit THIS image",
+      );
+      expect(instruction).toContain("Image 2 is the style reference only");
+      expect(instruction).toContain("FINAL SUBJECT CHECK");
+      expect(definition.recipe.rule).toContain("图一是唯一要编辑的用户原照片");
+      expect(definition.recipe.prompt).not.toContain("风格参考决定脸部");
+      expect(definition.recipe.prompt).not.toContain("第一视觉约束");
       expect(definition.recipe.tested).toBe(false);
     }
+  });
+  it("keeps the image numbering of historical reference recipes", () => {
+    const item = fixture();
+    item.recipe = JSON.parse(
+      readFileSync(
+        "content/case-templates/cool-blue-glitch/generation-v1.json",
+        "utf8",
+      ),
+    );
+    expect(item.recipe.referenceInputOrder).toBeUndefined();
+    const instruction = creativeInstruction(item, {});
+    expect(instruction).toContain("Image 2 is the user's photo");
+    expect(instruction).toContain("Image 1 is the style reference only");
+    expect(instruction).toContain(item.recipe.prompt);
+    expect(
+      creativeDefinition.safeParse({
+        ...item,
+        recipe: { ...item.recipe, referenceInputOrder: "unexpected" },
+      }).success,
+    ).toBe(false);
   });
   it("rejects missing references, ambiguous modes and arbitrary reference paths", () => {
     const item = fixture();

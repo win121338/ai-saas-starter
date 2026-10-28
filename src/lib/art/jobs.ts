@@ -222,15 +222,30 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
             queued.model,
             canvas,
             reference,
+            definition?.recipe.referenceInputOrder,
           ),
         );
         return true;
       }
       const requestId =
         queued.provider === "qwen"
-          ? await submitQwen(input, prompt, queued.model, canvas, reference)
+          ? await submitQwen(
+              input,
+              prompt,
+              queued.model,
+              canvas,
+              reference,
+              definition?.recipe.referenceInputOrder,
+            )
           : queued.provider === "wanx"
-            ? await submitWanx(input, prompt, queued.model, canvas, reference)
+            ? await submitWanx(
+                input,
+                prompt,
+                queued.model,
+                canvas,
+                reference,
+                definition?.recipe.referenceInputOrder,
+              )
             : queued.provider === "fal"
               ? await submitFal(input, prompt, canvas)
               : null;

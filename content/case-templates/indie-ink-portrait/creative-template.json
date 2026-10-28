@@ -32,8 +32,8 @@
       "width": 1206,
       "height": 677
     },
-    "prompt": "参考图一漫画人物图的气质，将真实照片转化头形头像插画。\n核心气质:整体要粗线条、平、怪、冷、笨拙、有作者感，像独立漫画杂志里的人物头像。\n风格语言:alternative manga portrait, indie comiccharacter design, black-and-white zineillustration, raw ink drawing, underground comiclinework, graphic spot black, deadpan characterstudy, reductive caricature, broken contour line\n图二只作为身份底稿。抓住人物最影响识别度的2-3个锚点:脸型轮廓、发型外形、头部角度、眼神方向、嘴部状态、手部动作、特殊配饰或服装形态。不要机械复刻五官，选择1个最有记忆点的特征轻微夸张，让人物像被重新设计过的漫画角色。\n画面头肩构图，人物居中，浅白背景，大面积留白。线条少、粗、松、断，像粗墨笔或马克笔快速画出的漫画草稿;允许歪斜、不对称、比例轻微变形。无结构线，无排线，无写实体积。\n五官极简，眼睛可压成短线、小黑点或疲惫半闭眼;鼻子一笔带过;嘴部克制，保留原照片的嘴部状态。表情冷淡、呆滞、疏离，有deadpan、awkward、aloof的人物气质。\n服装压成大面积黑色墨块，形成graphic spot black，可保留少量白色刮痕和断墨边缘。整体黑白为主，只允许一种深墨绿色局部点缀质感像低成本黑白复印zine、独立漫画杂志、粗墨手稿扫描件。可有轻微纸张颗粒、墨迹不均、复印压黑感。\n排除:烟、工笔、精细线描、写实转绘、素描感、真实皮肤、完整五官、排线、柔和笔触、真实光影、3D、Q版、儿童画、矢量图标、复杂背景、品牌logo、文字、水印。",
-    "rule": "图一只提供风格，图二只提供用户人物身份、原有表情、姿态和场景锚点。仅生成最终作品，不拼接对比、不添加手机界面。禁止复制参考图的人物、香烟、文字、商标、水印、署名或无关道具。保持用户照片主体数量，不凭空增加人物和肢体。",
+    "prompt": "参考图二漫画人物图的气质，将真实照片转化头形头像插画。\n核心气质:整体要粗线条、平、怪、冷、笨拙、有作者感，像独立漫画杂志里的人物头像。\n风格语言:alternative manga portrait, indie comiccharacter design, black-and-white zineillustration, raw ink drawing, underground comiclinework, graphic spot black, deadpan characterstudy, reductive caricature, broken contour line\n图一只作为身份底稿。抓住人物最影响识别度的2-3个锚点:脸型轮廓、发型外形、头部角度、眼神方向、嘴部状态、手部动作、特殊配饰或服装形态。不要机械复刻五官，选择1个最有记忆点的特征轻微夸张，让人物像被重新设计过的漫画角色。\n画面头肩构图，人物居中，浅白背景，大面积留白。线条少、粗、松、断，像粗墨笔或马克笔快速画出的漫画草稿;允许歪斜、不对称、比例轻微变形。无结构线，无排线，无写实体积。\n五官极简，眼睛可压成短线、小黑点或疲惫半闭眼;鼻子一笔带过;嘴部克制，保留原照片的嘴部状态。表情冷淡、呆滞、疏离，有deadpan、awkward、aloof的人物气质。\n服装压成大面积黑色墨块，形成graphic spot black，可保留少量白色刮痕和断墨边缘。整体黑白为主，只允许一种深墨绿色局部点缀质感像低成本黑白复印zine、独立漫画杂志、粗墨手稿扫描件。可有轻微纸张颗粒、墨迹不均、复印压黑感。\n排除:烟、工笔、精细线描、写实转绘、素描感、真实皮肤、完整五官、排线、柔和笔触、真实光影、3D、Q版、儿童画、矢量图标、复杂背景、品牌logo、文字、水印。",
+    "rule": "图一是唯一要编辑的用户原照片，决定人物身份、人数、脸型与发型特征、表情、姿态、服装和主要场景。图二仅参考线条、配色与绘画材质，不能复制其人物、构图、眼镜、香烟、杯子、额外小人或其他图一没有的道具。风格化不能替换用户主体或改变其原有动作；身份保持优先于风格夸张。仅生成最终作品，不拼接对比、不添加手机界面，不复制文字、商标、水印或署名。",
     "aspectRatio": "1:1",
     "modelIds": [
       "qwen-image-2.1-turbo",
@@ -45,7 +45,8 @@
     "defaultModel": "qwen-image-2.1-turbo",
     "fields": [],
     "tested": false,
-    "testReport": ""
+    "testReport": "",
+    "referenceInputOrder": "subject-first"
   },
   "cases": [
     {

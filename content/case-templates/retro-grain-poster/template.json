@@ -51,8 +51,8 @@
   ],
   "prompt": {
     "original": "p.md",
-    "prepared": "prompt-v1.md",
-    "version": 1,
+    "prepared": "prompt-v2.md",
+    "version": 2,
     "referenceRequired": true,
     "referenceFiles": [
       "references/refer.png",

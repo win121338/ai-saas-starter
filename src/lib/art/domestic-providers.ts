@@ -4,6 +4,10 @@ import { z } from "zod";
 
 import { DEFAULT_ART_MODEL, getArtModel } from "@/config/image-model-catalog";
 import { env } from "@/lib/env";
+import {
+  orderedCreativeImages,
+  type ReferenceInputOrder,
+} from "@/lib/creative/image-inputs";
 import { DefiniteArtFailure } from "./provider";
 import {
   artCanvasSizeString,
@@ -125,6 +129,7 @@ export async function submitQwen(
   model: string = DEFAULT_ART_MODEL,
   canvas?: ArtCanvas,
   reference?: Buffer,
+  referenceInputOrder?: ReferenceInputOrder,
 ) {
   if (getArtModel(model)?.provider !== "qwen")
     throw new DefiniteArtFailure("Unsupported Qwen image model");
@@ -144,14 +149,13 @@ export async function submitQwen(
             {
               role: "user",
               content: [
-                ...(reference
-                  ? [
-                      {
-                        image: `data:image/webp;base64,${reference.toString("base64")}`,
-                      },
-                    ]
-                  : []),
-                { image: `data:image/webp;base64,${input.toString("base64")}` },
+                ...orderedCreativeImages(
+                  input,
+                  reference,
+                  referenceInputOrder,
+                ).map((image) => ({
+                  image: `data:image/webp;base64,${image.toString("base64")}`,
+                })),
                 { text: prompt },
               ],
             },
@@ -234,6 +238,7 @@ export async function submitWanx(
   model: string,
   canvas?: ArtCanvas,
   reference?: Buffer,
+  referenceInputOrder?: ReferenceInputOrder,
 ): Promise<string> {
   const legacy = model === LEGACY_WANX_MODEL;
   if (legacy && reference)
@@ -269,16 +274,13 @@ export async function submitWanx(
                   {
                     role: "user",
                     content: [
-                      ...(reference
-                        ? [
-                            {
-                              image: `data:image/webp;base64,${reference.toString("base64")}`,
-                            },
-                          ]
-                        : []),
-                      {
-                        image: `data:image/webp;base64,${input.toString("base64")}`,
-                      },
+                      ...orderedCreativeImages(
+                        input,
+                        reference,
+                        referenceInputOrder,
+                      ).map((image) => ({
+                        image: `data:image/webp;base64,${image.toString("base64")}`,
+                      })),
                       { text: prompt },
                     ],
                   },
@@ -363,6 +365,7 @@ export async function generateSeedream(
   model: string,
   canvas?: ArtCanvas,
   reference?: Buffer,
+  referenceInputOrder?: ReferenceInputOrder,
 ): Promise<Buffer> {
   if (getArtModel(model)?.provider !== "seedream")
     throw new DefiniteArtFailure("Unsupported Seedream image model");
@@ -378,7 +381,7 @@ export async function generateSeedream(
         model,
         prompt,
         image: reference
-          ? [reference, input].map(
+          ? orderedCreativeImages(input, reference, referenceInputOrder).map(
               (image) => `data:image/webp;base64,${image.toString("base64")}`,
             )
           : `data:image/webp;base64,${input.toString("base64")}`,

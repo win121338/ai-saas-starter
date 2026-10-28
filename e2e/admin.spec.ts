@@ -49,6 +49,18 @@ test("admin imports, publishes and manages a new creative template without code 
       exact: true,
     });
     await expect(referencePreview).toBeVisible();
+    await expect(
+      page.getByText(
+        "Image 1 is the user's photo; image 2 is the style reference. Keep these numbers consistent in the prompt. Without a reference, only the user's photo is sent.",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Single-photo recipe. Fixed style references are not supported in this release.",
+        { exact: true },
+      ),
+    ).toHaveCount(0);
     const originalReference = (await referencePreview.getAttribute("src"))!;
     const privateReference = await page.request.get(originalReference);
     expect(privateReference.status()).toBe(200);
@@ -140,13 +152,11 @@ test("admin imports, publishes and manages a new creative template without code 
     await expect(
       page.getByText(/The template style reference is included automatically/),
     ).toBeVisible();
-    await page
-      .locator("#studio-photo")
-      .setInputFiles({
-        name: "photo.webp",
-        mimeType: "image/webp",
-        buffer: readFileSync("public/cases/blue-paper-comic/001-before.webp"),
-      });
+    await page.locator("#studio-photo").setInputFiles({
+      name: "photo.webp",
+      mimeType: "image/webp",
+      buffer: readFileSync("public/cases/blue-paper-comic/001-before.webp"),
+    });
     await page.getByRole("button", { name: /Create artwork/ }).click();
     await expect(page).toHaveURL(/\/creations\/[0-9a-f-]+$/, {
       timeout: 30000,

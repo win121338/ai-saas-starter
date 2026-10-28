@@ -411,7 +411,7 @@ public/cases/<slug>/                # 仅网页可公开的衍生图片
 | case3      | `cool-blue-glitch`   | 掉进冷蓝漫画频道   | 6      | 有     |
 
 1. **有 `refer.png`**：将它视为用户明确提供的风格参考，先裁掉截图的手机 UI、播放器与外围空白，保留作品内部文字、署名和构图；不得自动擦除或重绘。原件复制到 `references/refer.png`，有效 WebP 保存在 `references/<SHA-256>.webp`。原始提示词仍按字节保留。
-2. 配方写 `inputMode="photo-with-reference"`，设置 `referenceImage={src,width,height}`，本地参考的 src 为 `/creative-references/<模板 ID>/<SHA-256>.webp`。**图一始终是风格参考，图二始终是用户完整照片**；整理提示词并由服务端补充一致的角色说明，避免图号颠倒。参考只提供画风，不复制其人物、文字、商标、水印、签名或额外道具。
+2. 新配方写 `inputMode="photo-with-reference"`、`referenceInputOrder="subject-first"`，设置 `referenceImage={src,width,height}`，本地参考的 src 为 `/creative-references/<模板 ID>/<SHA-256>.webp`。**新版图一是用户完整照片，图二仅提供画风**；API 数组、内部提示词和固定规则中的图号必须一致。用户照片决定人物身份、人数、发型、表情、动作、服装与主要场景；参考只提供线条、配色与材质。不得写“参考图决定脸型、身体比例、衣物、背景”或“用户照片只提供一个辨识特征”，否则容易复制参考人物。不得复制参考图的构图、人物、文字、商标、水印、签名或额外道具。缺少 `referenceInputOrder` 的历史版本保留“参考在前、用户照片在后”，不得直接改写已发布快照；修复须生成新的 `generation-vN.json`、`prompt-vN.md` 并发布新版本。
 3. **没有参考图**：使用 `inputMode="single-photo"`，省略 `referenceImage`，API 仅发送用户照片；不拿某张成品顶替参考图。若提示词强依赖参考而素材缺失，标注待补，不宣称双图已复现。输入模式与参考字段不一致会被校验拒绝。
 4. 外部 API 无法读取本机路径。工作进程按任务的已发布版本在服务端读取真实图片、验证 SHA-256/尺寸并生成 `data:image/webp;base64,...`。Qwen 与 Wan 在一个用户消息中按顺序传两个 image 对象和一个 text 对象；Seedream 的 image 字段使用按顺序的数组。五款当前模型支持这种双图输入；旧 Wan 单图接口和当前 FLUX Kontext 接口不作为双图兼容模型。
 5. 参考缺失、损坏或模型不兼容，在新任务扣分前拒绝；已排队任务按原版本读取，不能静默省略参考。修改参考必须发布新版本，不改写旧版本与旧文件。
