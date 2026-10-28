@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-10-27",
+  "method": "逐源图联系表、全部逐案例四类输出联系表及单独参考图联系表；无损输出另作逐像素核对",
+  "groups": [
+    {
+      "id": "indie-ink-portrait",
+      "cases": [
+        "001",
+        "002",
+        "003",
+        "004",
+        "005",
+        "006"
+      ],
+      "caseDerivativeCount": 24,
+      "referenceChecked": true,
+      "sourceAndExportContactSheet": "indie-ink-portrait-exports.jpg",
+      "notes": "参考图内含香烟、品牌标识和文字，原图保留这些内容，项目配方明确禁止复制。部分收集成品比原提示词更细致，并非模型复现证据。"
+    },
+    {
+      "id": "retro-grain-poster",
+      "cases": [
+        "001",
+        "002",
+        "003",
+        "004",
+        "005"
+      ],
+      "caseDerivativeCount": 20,
+      "referenceChecked": true,
+      "sourceAndExportContactSheet": "retro-grain-poster-exports.jpg",
+      "notes": "参考图包含 GRAIN PRINTED 等文字，项目要求无文字，不复制参考人物与白色动物。部分截图成品补出了原照小窗之外的下半身，因此使用分开展示，不把它作为严格像素对应的滑杆比较。"
+    },
+    {
+      "id": "cool-blue-glitch",
+      "cases": [
+        "001",
+        "002",
+        "003",
+        "004",
+        "005",
+        "006"
+      ],
+      "caseDerivativeCount": 24,
+      "referenceChecked": true,
+      "sourceAndExportContactSheet": "cool-blue-glitch-exports.jpg",
+      "notes": "参考图含巨大头像、杯子及小型人物等复合元素，配方只取色块、线条与错版语言，不复制这些人物和道具。原照为截图提取，部分背景含其他人物，主体识别与简化效果待实测。"
+    }
+  ]
+}

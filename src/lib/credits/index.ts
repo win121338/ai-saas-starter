@@ -62,19 +62,16 @@ type GrantCreditsInput = {
   idempotencyKey: string;
 };
 
-export async function grantCredits({
-  userId,
-  amount,
-  type,
-  ref,
-  idempotencyKey,
-}: GrantCreditsInput): Promise<void> {
+export async function grantCredits(
+  { userId, amount, type, ref, idempotencyKey }: GrantCreditsInput,
+  transaction?: Tx,
+): Promise<void> {
   if (!Number.isInteger(amount) || amount <= 0) {
     throw new Error(
       `grantCredits: amount must be a positive integer, got ${amount}`,
     );
   }
-  await db.transaction(async (tx) => {
+  const apply = async (tx: Tx) => {
     const inserted = await tx
       .insert(creditTransactions)
       .values({
@@ -99,7 +96,9 @@ export async function grantCredits({
       .update(users)
       .set({ creditBalance: sql`${users.creditBalance} + ${amount}` })
       .where(eq(users.id, userId));
-  });
+  };
+  if (transaction) await apply(transaction);
+  else await db.transaction(apply);
 }
 
 /** Signup grant. Idempotent on `welcome_{userId}` — safe against hook retries. */

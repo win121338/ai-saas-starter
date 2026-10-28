@@ -12,10 +12,14 @@ import { env } from "@/lib/env";
 
 const root = path.join(process.cwd(), ".creative-media");
 
-export async function uploadCreativeMedia(file: File, actorUserId: string) {
+export async function uploadCreativeMedia(
+  file: File,
+  actorUserId: string,
+  usage: "case" | "reference" = "case",
+) {
   const image = await normalizeArtImage(file);
   const id = randomUUID();
-  const key = `creative/${id}.webp`;
+  const key = `${usage === "reference" ? "creative-references" : "creative"}/${id}.webp`;
   let storageKey = key;
   if (env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(key, image.bytes, {
@@ -41,18 +45,25 @@ export async function uploadCreativeMedia(file: File, actorUserId: string) {
     createdBy: actorUserId,
   });
   return {
-    src: `/template-media/${id}.webp`,
+    src:
+      usage === "reference"
+        ? `/creative-references/uploads/${id}.webp`
+        : `/template-media/${id}.webp`,
     width: image.width,
     height: image.height,
   };
 }
 
-export async function readCreativeMedia(id: string) {
+export async function readCreativeMedia(id: string, publicOnly = false) {
   const [row] = await db
     .select()
     .from(creativeTemplateMedia)
     .where(eq(creativeTemplateMedia.id, id));
   if (!row) return null;
+  const storagePath = row.storageKey.startsWith("https://")
+    ? new URL(row.storageKey).pathname.slice(1)
+    : row.storageKey;
+  if (publicOnly && storagePath.startsWith("creative-references/")) return null;
   if (row.storageKey.startsWith("https://")) {
     const result = await get(row.storageKey, {
       access: "private",

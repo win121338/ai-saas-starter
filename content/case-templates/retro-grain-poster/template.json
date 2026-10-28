@@ -1,0 +1,455 @@
+{
+  "schemaVersion": 1,
+  "id": "retro-grain-poster",
+  "name": {
+    "zh": "把生活印成复古海报",
+    "en": "Retro Grain Poster"
+  },
+  "summary": {
+    "zh": "高饱和色面、纸张颗粒与套印偏移，让日常照片带上复古印刷质感。",
+    "en": "Rich color, paper grain and offset ink give everyday photos a vintage print finish."
+  },
+  "tags": [
+    "poster",
+    "portrait",
+    "retro",
+    "print"
+  ],
+  "subjectTags": [
+    "portrait"
+  ],
+  "status": "ready",
+  "generationReady": false,
+  "promotion": "candidate",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null
+  },
+  "displayPermission": "unknown",
+  "processingDate": "2026-10-27",
+  "intakeBatch": "2026-10-27-references",
+  "sourceFolder": "case2",
+  "coverCaseId": "001",
+  "comparisonCaseId": "001",
+  "featuredCaseIds": [
+    "001",
+    "002",
+    "003"
+  ],
+  "coverReason": "蓝粉背景与黑衣人物对比强，印刷颗粒和姿态在小图中容易识别。",
+  "coverAlternatives": [
+    {
+      "caseId": "002",
+      "reason": "补充人物与神态场景。"
+    },
+    {
+      "caseId": "003",
+      "reason": "补充服装与姿态变化。"
+    }
+  ],
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": true,
+    "referenceFiles": [
+      "references/refer.png",
+      "references/9d329598a4587515e6f151e0d43821194d94af87d6c1f185dc270f3629406c82.webp"
+    ]
+  },
+  "reference": {
+    "sourceSha256": "6071930fa712ecd9cc96da34a29811b38b9aba3639e3c745dcf7bd23a5dfa674",
+    "sourceSize": [
+      1206,
+      2622
+    ],
+    "cropRect": [
+      0,
+      785,
+      1206,
+      804
+    ],
+    "image": {
+      "src": "/creative-references/retro-grain-poster/9d329598a4587515e6f151e0d43821194d94af87d6c1f185dc270f3629406c82.webp",
+      "width": 1206,
+      "height": 804
+    },
+    "sha256": "9d329598a4587515e6f151e0d43821194d94af87d6c1f185dc270f3629406c82"
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null,
+    "draftImportedAt": "2026-10-27"
+  },
+  "evaluation": {
+    "visualAppeal": null,
+    "useMotivation": null,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null
+  },
+  "cases": [
+    {
+      "id": "001",
+      "title": "街角的蓝与粉",
+      "titleEn": "Blue and Pink Afternoon",
+      "alt": {
+        "zh": "把生活印成复古海报：街角的蓝与粉",
+        "en": "Retro Grain Poster: Blue and Pink Afternoon"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "774d2bca2420d4a2d728fcc67bf4ab69c28065c23fff4626b95b27ca98abc8df",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          280,
+          383,
+          617,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/retro-grain-poster/001-before.webp",
+        "after": "/cases/retro-grain-poster/001-after.webp",
+        "compare": "/cases/retro-grain-poster/001-compare.webp",
+        "thumb": "/cases/retro-grain-poster/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          617,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "90dbed82f48b97f686bdab1169b14b8d76d999f10c79e5c4c7e4c265da88393a",
+        "after": "8e2b6a733226660d45726d13c24b3778ff248526a87ebe0f0d445d4bbb41b7ec",
+        "compare": "213b81d7404a1c128a177d3dd84e9d3c8b911d912eeb0708fac9e5183c508fd6",
+        "thumb": "7e808ff044a805236b0349ac01a3085a502cc7bbdfbff0e9485a84de5ecbe5b7"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "002",
+      "title": "黄色上衣的午后",
+      "titleEn": "Yellow Shirt Afternoon",
+      "alt": {
+        "zh": "把生活印成复古海报：黄色上衣的午后",
+        "en": "Retro Grain Poster: Yellow Shirt Afternoon"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "fb25a040a88d11e329cc321d086239b559c53cdcc4284a8bdfe7da52c982c3fd",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          272,
+          383,
+          625,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/retro-grain-poster/002-before.webp",
+        "after": "/cases/retro-grain-poster/002-after.webp",
+        "compare": "/cases/retro-grain-poster/002-compare.webp",
+        "thumb": "/cases/retro-grain-poster/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          625,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "3a796d6bd64e615456d5cf4e73fb039b4ccbac8f76db2f3fced02aeaa2c67e9a",
+        "after": "9c91c17457d9f9e9dadfe7ef04e2de9a5824d1449e4b6b672f9dbd548230bc78",
+        "compare": "6b2f576c5cc9cbb73da166949e4f17acba6a67d796661a719b036843e615cf2b",
+        "thumb": "0c5737727ebef650946b66708fe906575758480fcf39017708e232afd6858713"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "003",
+      "title": "红黄棒球衫",
+      "titleEn": "Red and Yellow Jersey",
+      "alt": {
+        "zh": "把生活印成复古海报：红黄棒球衫",
+        "en": "Retro Grain Poster: Red and Yellow Jersey"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "1c9b8016e13e0551227dace7445a782334f5506a9a88b2ce24a929bb7b1a2ee0",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          196,
+          383,
+          819,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/retro-grain-poster/003-before.webp",
+        "after": "/cases/retro-grain-poster/003-after.webp",
+        "compare": "/cases/retro-grain-poster/003-compare.webp",
+        "thumb": "/cases/retro-grain-poster/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          819,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "3f9652c0ab85e37a45d6115b92bc041c3e396ff6d23e471cd17c61082d23804d",
+        "after": "0d4c91579d63e71953dfb3a00736560d78b9d80a4675dc967ee73f83880547fd",
+        "compare": "1dcc2e8dba7af6d3386c2a92cf644496fc1fd9302ee141773089b7182072cd81",
+        "thumb": "4b4a0a4583f082af52380d32ac15b522f5cdebcc5f50600b027c73e43795b0da"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "004",
+      "title": "咖啡馆里的托腮",
+      "titleEn": "Cafe Daydream",
+      "alt": {
+        "zh": "把生活印成复古海报：咖啡馆里的托腮",
+        "en": "Retro Grain Poster: Cafe Daydream"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "de63a31b109ec26b16fc061318498e261b64130044c9c7d94a9f48a18be56a31",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          272,
+          383,
+          625,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/retro-grain-poster/004-before.webp",
+        "after": "/cases/retro-grain-poster/004-after.webp",
+        "compare": "/cases/retro-grain-poster/004-compare.webp",
+        "thumb": "/cases/retro-grain-poster/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          625,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "b044302610b93e77a57b72bf8a1b89067078c93847ba454d27701a86abd7b362",
+        "after": "a568d669e21d9120738d4ad6cd00fe57e0507ade55ef83b3b9602d1042cc57af",
+        "compare": "0873aac662f7044aae659ef3e232e6181a399b6d31b44b684b0b459b120475d2",
+        "thumb": "533e2486362968d050bc497c0e79b8a37c501af56e6b7638eed023d633cc53c4"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "005",
+      "title": "慢饮一口",
+      "titleEn": "A Slow Sip",
+      "alt": {
+        "zh": "把生活印成复古海报：慢饮一口",
+        "en": "Retro Grain Poster: A Slow Sip"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "2010e6423663aca241b92402203a7aba507a269111e472a67bd270fb8528f4c6",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          309,
+          383,
+          588,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/retro-grain-poster/005-before.webp",
+        "after": "/cases/retro-grain-poster/005-after.webp",
+        "compare": "/cases/retro-grain-poster/005-compare.webp",
+        "thumb": "/cases/retro-grain-poster/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          588,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "8e174af7a47778bc4c5ade6302b6b739cab8ced17ab72817270cffc76581706f",
+        "after": "5017f01f41721745aef3c78f29c120fd503eed5a9ce989128772551a1f6e8ca1",
+        "compare": "c7ec405bdd446366b6804096b407959d19d4173c64d9284fa11e57c47ab5fa34",
+        "thumb": "e0d4f74213352dd45e3b029134a67dfca91623e84bf164cf03b47f1bdc16df37"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    }
+  ],
+  "visualReview": {
+    "checkedAt": "2026-10-27",
+    "scope": "全部源图、全部 4 类案例衍生图及风格参考图，逐项联系表检查",
+    "result": "passed",
+    "notes": "参考图包含 GRAIN PRINTED 等文字，项目要求无文字，不复制参考人物与白色动物。部分截图成品补出了原照小窗之外的下半身，因此使用分开展示，不把它作为严格像素对应的滑杆比较。"
+  }
+}

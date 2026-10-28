@@ -28,6 +28,8 @@ import { processOneArtJob } from "@/lib/art/jobs";
 import { deleteArtAsset, writeArtAsset } from "@/lib/art/storage";
 import { limitGeneration } from "@/lib/rate-limit";
 import { env } from "@/lib/env";
+import { supportsStyleReference } from "@/config/image-model-catalog";
+import { readRecipeReference } from "@/lib/creative/references";
 
 export type ArtActionState = { ok: boolean; error?: string; jobId?: string };
 
@@ -99,6 +101,22 @@ export async function createArtJobAction(
   }
   if (!model.success || !definition.recipe.modelIds.includes(model.data))
     return { ok: false, error: "Choose a compatible image model." };
+  if (definition.recipe.referenceImage) {
+    if (!supportsStyleReference(model.data))
+      return {
+        ok: false,
+        error: "This model does not support a style reference.",
+      };
+    try {
+      await readRecipeReference(definition);
+    } catch {
+      return {
+        ok: false,
+        error:
+          "The template style reference is unavailable. Contact the site operator.",
+      };
+    }
+  }
   const provider =
     model.success &&
     (env.ART_PROVIDER === "fal" || (await getModelEnabled(model.data)))

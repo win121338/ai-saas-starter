@@ -1,6 +1,15 @@
 {
   "version": 1,
-  "templateIds": ["blue-paper-comic", "color-block-manga", "bold-marker-doodle"],
+  "templateIds": [
+    "blue-paper-comic",
+    "color-block-manga",
+    "bold-marker-doodle"
+  ],
+  "draftTemplateIds": [
+    "indie-ink-portrait",
+    "retro-grain-poster",
+    "cool-blue-glitch"
+  ],
   "featuredTemplateId": "blue-paper-comic",
   "featuredCases": [
     { "templateId": "blue-paper-comic", "caseId": "001" },

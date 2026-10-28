@@ -36,3 +36,7 @@ export const DEFAULT_ART_MODEL = artModels[0].id;
 export function getArtModel(id: string) {
   return artModels.find((model) => model.id === id);
 }
+
+export function supportsStyleReference(id: string) {
+  return getArtModel(id) !== undefined;
+}

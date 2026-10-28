@@ -106,13 +106,19 @@ export async function creativeLocalImportAction() {
   try {
     const directory = path.join(process.cwd(), "content/case-templates");
     const registry = z
-      .object({ templateIds: z.array(creativeId).max(200) })
+      .object({
+        templateIds: z.array(creativeId).max(200),
+        draftTemplateIds: z.array(creativeId).max(200).default([]),
+      })
       .parse(
         JSON.parse(
           await readFile(path.join(directory, "catalog.json"), "utf8"),
         ),
       );
-    for (const item of registry.templateIds)
+    for (const item of new Set([
+      ...registry.templateIds,
+      ...registry.draftTemplateIds,
+    ]))
       id = await saveCreativeDraft(
         JSON.parse(
           await readFile(
@@ -178,9 +184,12 @@ export async function creativeUploadAction(form: FormData) {
   try {
     const file = form.get("image");
     if (!(file instanceof File)) throw new Error("Choose an image.");
+    const usage = z
+      .enum(["case", "reference"])
+      .parse(form.get("usage") ?? "case");
     return {
       ok: true as const,
-      image: await uploadCreativeMedia(file, session.user.id),
+      image: await uploadCreativeMedia(file, session.user.id, usage),
     };
   } catch (error) {
     return { ok: false as const, error: message(error) };

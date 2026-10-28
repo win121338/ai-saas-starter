@@ -22,6 +22,13 @@ export const creativeImage = z.object({
   width: z.number().int().positive().max(20000),
   height: z.number().int().positive().max(20000),
 });
+export const creativeReference = creativeImage.extend({
+  src: z
+    .string()
+    .regex(
+      /^\/creative-references\/(?:[a-z0-9-]+\/[a-f0-9]{64}\.webp|uploads\/[0-9a-f-]{36}\.webp)$/,
+    ),
+});
 export const creativeField = z.object({
   key: z
     .string()
@@ -60,7 +67,8 @@ export const creativeDefinition = z
       .min(1)
       .max(200),
     recipe: z.object({
-      inputMode: z.literal("single-photo"),
+      inputMode: z.enum(["single-photo", "photo-with-reference"]),
+      referenceImage: creativeReference.optional(),
       prompt: z.string().trim().min(20).max(12000),
       rule: z.string().trim().min(20).max(6000),
       aspectRatio: artAspectRatioSchema,
@@ -72,6 +80,16 @@ export const creativeDefinition = z
     }),
   })
   .superRefine((value, ctx) => {
+    if (
+      (value.recipe.inputMode === "photo-with-reference") !==
+      Boolean(value.recipe.referenceImage)
+    )
+      ctx.addIssue({
+        code: "custom",
+        path: ["recipe", "referenceImage"],
+        message:
+          "Reference input mode must match the configured reference image",
+      });
     const ids = value.cases.map((item) => item.id);
     if (new Set(ids).size !== ids.length)
       ctx.addIssue({ code: "custom", message: "Duplicate case IDs" });
@@ -160,6 +178,9 @@ export function creativeInstruction(
     ([, value]) => value.length > 0,
   );
   return [
+    definition.recipe.referenceImage
+      ? "INPUT IMAGE ROLES: Image 1 is the style reference only (linework, palette, texture and visual language). Image 2 is the user's photo and the only source of subject identity, subject count, pose and scene content. Apply the style of image 1 to image 2. Do not copy people, text, logos, signatures, watermarks or unrelated props from image 1. Output only the final artwork, never a collage of the input images."
+      : "",
     canvas
       ? adaptableCanvasText(definition.recipe.prompt)
       : definition.recipe.prompt,

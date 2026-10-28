@@ -4,3 +4,5 @@
 *.png binary
 *.jpg binary
 *.webp binary
+# Preserve received prompt manuscripts byte-for-byte for intake hash checks.
+content/case-templates/**/p.md -text whitespace=cr-at-eol

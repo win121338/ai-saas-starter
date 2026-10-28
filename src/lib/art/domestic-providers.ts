@@ -124,6 +124,7 @@ export async function submitQwen(
   prompt: string,
   model: string = DEFAULT_ART_MODEL,
   canvas?: ArtCanvas,
+  reference?: Buffer,
 ) {
   if (getArtModel(model)?.provider !== "qwen")
     throw new DefiniteArtFailure("Unsupported Qwen image model");
@@ -143,6 +144,13 @@ export async function submitQwen(
             {
               role: "user",
               content: [
+                ...(reference
+                  ? [
+                      {
+                        image: `data:image/webp;base64,${reference.toString("base64")}`,
+                      },
+                    ]
+                  : []),
                 { image: `data:image/webp;base64,${input.toString("base64")}` },
                 { text: prompt },
               ],
@@ -225,8 +233,13 @@ export async function submitWanx(
   prompt: string,
   model: string,
   canvas?: ArtCanvas,
+  reference?: Buffer,
 ): Promise<string> {
   const legacy = model === LEGACY_WANX_MODEL;
+  if (legacy && reference)
+    throw new DefiniteArtFailure(
+      "This model does not support a style reference.",
+    );
   if (!legacy && getArtModel(model)?.provider !== "wanx")
     throw new DefiniteArtFailure("Unsupported Wanx image model");
   const response = await fetch(
@@ -256,6 +269,13 @@ export async function submitWanx(
                   {
                     role: "user",
                     content: [
+                      ...(reference
+                        ? [
+                            {
+                              image: `data:image/webp;base64,${reference.toString("base64")}`,
+                            },
+                          ]
+                        : []),
                       {
                         image: `data:image/webp;base64,${input.toString("base64")}`,
                       },
@@ -342,6 +362,7 @@ export async function generateSeedream(
   prompt: string,
   model: string,
   canvas?: ArtCanvas,
+  reference?: Buffer,
 ): Promise<Buffer> {
   if (getArtModel(model)?.provider !== "seedream")
     throw new DefiniteArtFailure("Unsupported Seedream image model");
@@ -356,7 +377,11 @@ export async function generateSeedream(
       body: JSON.stringify({
         model,
         prompt,
-        image: `data:image/webp;base64,${input.toString("base64")}`,
+        image: reference
+          ? [reference, input].map(
+              (image) => `data:image/webp;base64,${image.toString("base64")}`,
+            )
+          : `data:image/webp;base64,${input.toString("base64")}`,
         size: canvas ? artCanvasSizeString(canvas, 1536 ** 2, "x") : "1.5K",
         response_format: "b64_json",
         watermark: false,

@@ -13,6 +13,8 @@ import { auditValues } from "@/lib/admin/audit";
 import { creativeDefinition } from "./schema";
 import { artModelAvailable } from "@/lib/art/provider";
 import { listModelSettings } from "@/lib/admin/settings";
+import { supportsStyleReference } from "@/config/image-model-catalog";
+import { readRecipeReference } from "./references";
 
 export async function saveCreativeDraft(
   input: unknown,
@@ -83,6 +85,11 @@ export async function publishCreativeTemplate(
       .where(eq(creativeTemplates.id, id));
     if (!row) throw new Error("Template not found.");
     const definition = creativeDefinition.parse(row.draft);
+    if (definition.recipe.referenceImage) {
+      if (definition.recipe.modelIds.some((id) => !supportsStyleReference(id)))
+        throw new Error("This model does not support a style reference.");
+      await readRecipeReference(definition);
+    }
     if (
       expectedDraft &&
       JSON.stringify(creativeDefinition.parse(expectedDraft)) !==

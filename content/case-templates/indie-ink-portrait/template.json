@@ -1,0 +1,525 @@
+{
+  "schemaVersion": 1,
+  "id": "indie-ink-portrait",
+  "name": {
+    "zh": "把自己画进独立漫画",
+    "en": "Indie Ink Portrait"
+  },
+  "summary": {
+    "zh": "粗墨线与黑白留白，把熟悉的神态重画成独立漫画角色。",
+    "en": "Bold ink and quiet white space turn familiar expressions into indie comic characters."
+  },
+  "tags": [
+    "comic",
+    "portrait",
+    "ink",
+    "black-and-white"
+  ],
+  "subjectTags": [
+    "portrait"
+  ],
+  "status": "ready",
+  "generationReady": false,
+  "promotion": "candidate",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null
+  },
+  "displayPermission": "unknown",
+  "processingDate": "2026-10-27",
+  "intakeBatch": "2026-10-27-references",
+  "sourceFolder": "case1",
+  "coverCaseId": "001",
+  "comparisonCaseId": "001",
+  "featuredCaseIds": [
+    "001",
+    "002",
+    "003"
+  ],
+  "coverReason": "耳机、发型与手势清楚，黑白墨块在缩略图中也有辨识度。",
+  "coverAlternatives": [
+    {
+      "caseId": "002",
+      "reason": "补充人物与神态场景。"
+    },
+    {
+      "caseId": "003",
+      "reason": "补充服装与姿态变化。"
+    }
+  ],
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": true,
+    "referenceFiles": [
+      "references/refer.png",
+      "references/9acc2729ef11b47a27a92a123d7880f69e0578b452421c94616e785f96cbbcae.webp"
+    ]
+  },
+  "reference": {
+    "sourceSha256": "7886cac75b740f42dcfa1d21969cc8fea3883596e4d156061bef95f2a13a02e5",
+    "sourceSize": [
+      1206,
+      2622
+    ],
+    "cropRect": [
+      0,
+      848,
+      1206,
+      677
+    ],
+    "image": {
+      "src": "/creative-references/indie-ink-portrait/9acc2729ef11b47a27a92a123d7880f69e0578b452421c94616e785f96cbbcae.webp",
+      "width": 1206,
+      "height": 677
+    },
+    "sha256": "9acc2729ef11b47a27a92a123d7880f69e0578b452421c94616e785f96cbbcae"
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null,
+    "draftImportedAt": "2026-10-27"
+  },
+  "evaluation": {
+    "visualAppeal": null,
+    "useMotivation": null,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null
+  },
+  "cases": [
+    {
+      "id": "001",
+      "title": "耳机里的片刻",
+      "titleEn": "Headphone Pause",
+      "alt": {
+        "zh": "把自己画进独立漫画：耳机里的片刻",
+        "en": "Indie Ink Portrait: Headphone Pause"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "21f860d933676f70e8e0d4aa59eadece06eeb94cf3a0d022d2d8579ac5a667f6",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          350,
+          383,
+          506,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/001-before.webp",
+        "after": "/cases/indie-ink-portrait/001-after.webp",
+        "compare": "/cases/indie-ink-portrait/001-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          506,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "206da0ee4976f2b091c8fd9b8e3c6e2df8c847a9b63adfb710d95f755fb8607f",
+        "after": "85973841843c0f9defa9399398670943249247c6296b0f3aad296639f79ab356",
+        "compare": "277a58275deb877b695f5950e3806b15b0e3a8e931de2f532348e3737b99ffea",
+        "thumb": "b6dbcfacff4837f4cad8d63c3ec114f87ecae09d4dbe1d410824f6dee9ac8542"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "002",
+      "title": "托腮放空",
+      "titleEn": "Quiet Thoughts",
+      "alt": {
+        "zh": "把自己画进独立漫画：托腮放空",
+        "en": "Indie Ink Portrait: Quiet Thoughts"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "bc226a5c2dae8579f74e8df653143eef41821324364a842cee099b87c2f87517",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          388,
+          383,
+          435,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/002-before.webp",
+        "after": "/cases/indie-ink-portrait/002-after.webp",
+        "compare": "/cases/indie-ink-portrait/002-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          435,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "759c155a8df90e3a4a48ba34134ee04b9275a99190ed2fd7fd9941d373c21286",
+        "after": "40372078022f4464e749c803c95fd33894dd56a1cc7125eabfbefc122bfe9455",
+        "compare": "3a02d47201776b3222cd53e4a10039c73357737769a3b1563b7158d505cbbc20",
+        "thumb": "87a37ca6f99d3b4887c6fa19d6e6d1db0c191e299a01968c0952f0dc11f45491"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "003",
+      "title": "运动服与墨线",
+      "titleEn": "Sportswear in Ink",
+      "alt": {
+        "zh": "把自己画进独立漫画：运动服与墨线",
+        "en": "Indie Ink Portrait: Sportswear in Ink"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "a5101bfb5d3576e91f7d9605c835fe28f939a23bf2ffbe92ded9af77e8d8700f",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          321,
+          383,
+          567,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/003-before.webp",
+        "after": "/cases/indie-ink-portrait/003-after.webp",
+        "compare": "/cases/indie-ink-portrait/003-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          567,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "4c851d6204f8918b3ddf20f051b762f8e568ad48556725397449aea07f7da21a",
+        "after": "3592f934485a600c7a9b65da7bb5c194c9b61f9cb7e9c3bd79b420a3db5f18b1",
+        "compare": "1874281d18d5ffbc5688fe92f77d3ef9525e5628bf41d133fe12eff0a593a87b",
+        "thumb": "43317664420db15115ee37624ebb8ee417db1ad1dbc50d27e9eb9de56161d9af"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "004",
+      "title": "抬手之间",
+      "titleEn": "An Upward Gesture",
+      "alt": {
+        "zh": "把自己画进独立漫画：抬手之间",
+        "en": "Indie Ink Portrait: An Upward Gesture"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "a9a44aa87809fff05c94991a4eb1c655d50e455ec3b52c5cec56cb56bcc439de",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          347,
+          383,
+          512,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/004-before.webp",
+        "after": "/cases/indie-ink-portrait/004-after.webp",
+        "compare": "/cases/indie-ink-portrait/004-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          512,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "65e59a4a6f52e962541e24664106aa773fb45fc2109c7f03600fb150c36284f1",
+        "after": "0ab1a84fc080768d88bb560b0429913774fd75533b65d7f2f3bcdd5533755587",
+        "compare": "e80e327d773e9a7a535e7261db4874ed5f3b0ec8f029e4af839471432f52ca99",
+        "thumb": "f7db83e4ab75750f9248c7a40671f33e7701bca476fa0714ac121eacfa3de49b"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "005",
+      "title": "狗狗帽小情绪",
+      "titleEn": "Dog Hat Mood",
+      "alt": {
+        "zh": "把自己画进独立漫画：狗狗帽小情绪",
+        "en": "Indie Ink Portrait: Dog Hat Mood"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "48b6125ebf0f19dc3e7964c7a99e5d3a984b60b3d6b5b9c729ccafa4c3089d53",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          341,
+          383,
+          523,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/005-before.webp",
+        "after": "/cases/indie-ink-portrait/005-after.webp",
+        "compare": "/cases/indie-ink-portrait/005-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          523,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "e8474f502b83850c30c0dbea73cba237494ecf78b12492343c41ad907dd7d5cd",
+        "after": "0af815c95bb8aa2574662aaf9768562b8d7ebf3658e69bc3cd27d36a00a1fc94",
+        "compare": "cfa8b9bb22f63f8a3dcc10407aa3d42cc1d104e51e4011c24a40f58f595ae4ed",
+        "thumb": "a141218efe7dec4a4cdf17f9d5acc712046055efd91d2fdeeb3c027341a79fce"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "006",
+      "title": "橙帽侧影",
+      "titleEn": "Orange Hat Portrait",
+      "alt": {
+        "zh": "把自己画进独立漫画：橙帽侧影",
+        "en": "Indie Ink Portrait: Orange Hat Portrait"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/6.png",
+      "sourceSha256": "bcf1d5c25400dd6237664d3d7d308fbf9099c20367a0da6c1491902da2735f07",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          388,
+          383,
+          434,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/indie-ink-portrait/006-before.webp",
+        "after": "/cases/indie-ink-portrait/006-after.webp",
+        "compare": "/cases/indie-ink-portrait/006-compare.webp",
+        "thumb": "/cases/indie-ink-portrait/006-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          434,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "36d8288edbe3dc286a6cc895d1488343701576543713bb34aa2dd31d9dad339d",
+        "after": "f8d75627ad0bf31cf5c0accf5cfb0d0de1a21234d0c81969ab43edd455c2584a",
+        "compare": "072ff7ebfc65853e9826e8c1bcb9c409893d854348f2acc9a2cf5b6c8b723908",
+        "thumb": "63df148a0609c8469f1a82c6734b3ff84b830c36e03fe18c2ebb60ec96d29522"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    }
+  ],
+  "visualReview": {
+    "checkedAt": "2026-10-27",
+    "scope": "全部源图、全部 4 类案例衍生图及风格参考图，逐项联系表检查",
+    "result": "passed",
+    "notes": "参考图内含香烟、品牌标识和文字，原图保留这些内容，项目配方明确禁止复制。部分收集成品比原提示词更细致，并非模型复现证据。"
+  }
+}

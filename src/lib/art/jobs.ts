@@ -28,6 +28,9 @@ import { resolveJobPrompt } from "./templates";
 import { creativeSubmission } from "@/lib/creative/schema";
 import { aspectRatioValue } from "@/config/art-aspect-ratios";
 import { getArtStyle } from "@/config/art-styles";
+import { getCreativeVersion } from "@/lib/creative/catalog";
+import { readRecipeReference } from "@/lib/creative/references";
+import { supportsStyleReference } from "@/config/image-model-catalog";
 
 const lease = () => new Date(Date.now() + 2 * 60_000);
 const days = (count: number) => new Date(Date.now() + count * 86_400_000);
@@ -149,6 +152,15 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
   if (queued) {
     if (queued.provider === "mock") {
       try {
+        if (!getArtStyle(queued.styleSlug)) {
+          const definition = await getCreativeVersion(
+            queued.styleSlug,
+            queued.styleVersion,
+          );
+          if (!definition)
+            throw new DefiniteArtFailure("Creative template version not found");
+          await readRecipeReference(definition);
+        }
         await complete(
           queued,
           await makeMockArt(
@@ -175,6 +187,24 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
         .where(eq(artAssets.id, queued.inputAssetId))
         .limit(1);
       const input = await readArtAsset(asset.key);
+      const definition = getArtStyle(queued.styleSlug)
+        ? null
+        : await getCreativeVersion(queued.styleSlug, queued.styleVersion);
+      let reference: Buffer | undefined;
+      try {
+        if (
+          definition?.recipe.referenceImage &&
+          !supportsStyleReference(queued.model)
+        )
+          throw new Error("Unsupported reference model");
+        reference = definition
+          ? await readRecipeReference(definition)
+          : undefined;
+      } catch {
+        throw new DefiniteArtFailure(
+          "The template style reference is unavailable or incompatible.",
+        );
+      }
       const prompt = await resolveJobPrompt(
         queued.styleSlug,
         queued.styleVersion,
@@ -186,15 +216,21 @@ export async function processOneArtJob(jobId?: string): Promise<boolean> {
       if (queued.provider === "seedream") {
         await complete(
           queued,
-          await generateSeedream(input, prompt, queued.model, canvas),
+          await generateSeedream(
+            input,
+            prompt,
+            queued.model,
+            canvas,
+            reference,
+          ),
         );
         return true;
       }
       const requestId =
         queued.provider === "qwen"
-          ? await submitQwen(input, prompt, queued.model, canvas)
+          ? await submitQwen(input, prompt, queued.model, canvas, reference)
           : queued.provider === "wanx"
-            ? await submitWanx(input, prompt, queued.model, canvas)
+            ? await submitWanx(input, prompt, queued.model, canvas, reference)
             : queued.provider === "fal"
               ? await submitFal(input, prompt, canvas)
               : null;

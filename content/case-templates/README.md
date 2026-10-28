@@ -1,16 +1,30 @@
 # 推广模板素材库
 
+## 2026-10-27 新增三组（第二批）
+
+用户重复使用 case1–3 目录名，本批采用新 ID，保留首批 25 张和已有发布版本。17 张案例截图和 3 张明确参考截图已裁剪为 68 张展示衍生图、3 张实际生成参考图，原件和三份提示词核验 SHA-256 后归档到 `_intake/2026-10-27-references/`。完整核对见 [_review/2026-10-27-references/visual-review.json](_review/2026-10-27-references/visual-review.json)。
+
+| 原目录 | 新模板                                             | 案例数 | 封面                   |
+| ------ | -------------------------------------------------- | ------ | ---------------------- |
+| case1  | [把自己画进独立漫画](indie-ink-portrait/README.md) | 6      | 001 · 耳机里的片刻     |
+| case2  | [把生活印成复古海报](retro-grain-poster/README.md) | 5      | 001 · 街角的蓝与粉     |
+| case3  | [掉进冷蓝漫画频道](cool-blue-glitch/README.md)     | 6      | 001 · 长椅上的冷蓝午后 |
+
+三组均有 `creative-template.json` 草稿包，列入 `catalog.json` 的 `draftTemplateIds`，并已在 2026-10-27 保存到本机数据库草稿。三组 activeVersion 均为空，展示与创作开关均关闭，可在后台直接查看和编辑；以后也可由“导入本地已整理资料包”重新导入草稿。未自动上架、未替换现有主推、未运行付费生成。公开展示许可、来源作者和模型质量仍待记录；项目版配方已设置图一风格参考、图二用户照片。详细规则见[执行规范第 13 节](../../docs/CASE-TEMPLATE-PLAYBOOK.zh-CN.md#13-新批次与可选-referpng-的执行规则)。
+
+本批验证：20 张源截图（17 张案例、3 张参考）及 71 张有效导出已逐项核对；68 张案例衍生图和 3 张参考图的原件哈希、尺寸、无损裁剪像素验证通过。类型检查、Lint、244 项单元/集成测试、6 项模拟生成浏览器测试通过。浏览器覆盖参考图导入、私有预览、上传与移除、旧版本保留、模拟创作以及桌面/手机原图完整展示。未执行真实模型质量测试。
+
 整理日期：2026-10-26。执行依据：[案例执行规范](../../docs/CASE-TEMPLATE-PLAYBOOK.zh-CN.md)。
 
 本批完成 case1–3，共 25 张来源截图、100 张网页衍生图；三组各有原始提示词、项目整理版提示词、模板资料、封面选择和逐图报告。原始截图在各组 `originals/` 中有字节一致的副本，用户提供的完整输入目录已在逐文件核验后迁入 `_intake/case1–3/`，原件未删除或修改。
 
 ## 三组模板
 
-| 原目录 | 主题与资料 | 数量 | 成品输出目录 | 首选封面 |
-| --- | --- | --- | --- | --- |
-| case1 | [把日常印成封面](blue-paper-comic/README.md) | 10 | [blue-paper-comic](../../public/cases/blue-paper-comic/) | [001 · SLOW SIP](../../public/cases/blue-paper-comic/001-after.webp) |
-| case2 | [闯进漫画这一格](color-block-manga/README.md) | 8 | [color-block-manga](../../public/cases/color-block-manga/) | [002 · 棕榈与红色假日](../../public/cases/color-block-manga/002-after.webp) |
-| case3 | [今天有点小脾气](bold-marker-doodle/README.md) | 7 | [bold-marker-doodle](../../public/cases/bold-marker-doodle/) | [006 · 章鱼帽出游记](../../public/cases/bold-marker-doodle/006-after.webp) |
+| 原目录 | 主题与资料                                     | 数量 | 成品输出目录                                                 | 首选封面                                                                    |
+| ------ | ---------------------------------------------- | ---- | ------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| case1  | [把日常印成封面](blue-paper-comic/README.md)   | 10   | [blue-paper-comic](../../public/cases/blue-paper-comic/)     | [001 · SLOW SIP](../../public/cases/blue-paper-comic/001-after.webp)        |
+| case2  | [闯进漫画这一格](color-block-manga/README.md)  | 8    | [color-block-manga](../../public/cases/color-block-manga/)   | [002 · 棕榈与红色假日](../../public/cases/color-block-manga/002-after.webp) |
+| case3  | [今天有点小脾气](bold-marker-doodle/README.md) | 7    | [bold-marker-doodle](../../public/cases/bold-marker-doodle/) | [006 · 章鱼帽出游记](../../public/cases/bold-marker-doodle/006-after.webp)  |
 
 ![三组首选封面，依次为 case1、case2、case3](_review/selected-covers.jpg)
 
@@ -18,12 +32,12 @@
 
 每个案例有稳定编号，编号对应原始文件，例如 `001` 对应 `1.png`。
 
-| 后缀 | 用途 | 规格 |
-| --- | --- | --- |
-| `-after.webp` | 首页封面、案例详情完整成品 | 1206×1206，无损 |
-| `-before.webp` | 网页对比中的小原照 | 按各自真实边界提取，高 402px，无损；不放大 |
-| `-compare.webp` | 保留原照与成品组合的推广图 | 1206×1608，无损，去掉手机界面及外围留边 |
-| `-thumb.webp` | 案例墙、列表预览 | 640×640，质量 90 |
+| 后缀            | 用途                       | 规格                                       |
+| --------------- | -------------------------- | ------------------------------------------ |
+| `-after.webp`   | 首页封面、案例详情完整成品 | 1206×1206，无损                            |
+| `-before.webp`  | 网页对比中的小原照         | 按各自真实边界提取，高 402px，无损；不放大 |
+| `-compare.webp` | 保留原照与成品组合的推广图 | 1206×1608，无损，去掉手机界面及外围留边    |
+| `-thumb.webp`   | 案例墙、列表预览           | 640×640，质量 90                           |
 
 原照宽度范围为 256–631px，只能作为截图提取图使用。所有成品保持原作品画幅，标题、纸张、留白和已有署名保留；未进行生成修复或重绘。
 

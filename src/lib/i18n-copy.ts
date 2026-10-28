@@ -1,6 +1,40 @@
 import type { Locale } from "@/lib/i18n";
 
 const zh: Record<string, string> = {
+  "Add credits": "添加积分",
+  "admin adjust": "管理员调整",
+  "Credits to add": "添加数量",
+  "Addition reason": "添加原因",
+  "Current balance": "当前积分",
+  "Credits added": "积分已添加",
+  "Confirm addition": "确认添加",
+  "Adding credits…": "正在添加…",
+  Done: "完成",
+  Actions: "操作",
+  "For example: testing credits or customer support compensation":
+    "例如：测试补充、客服补偿",
+  "The addition and its reason will be recorded in the credit ledger and administrator audit log.":
+    "本次积分变动和添加原因会记录到积分流水及管理员操作日志中。",
+  "Enter a whole number from 1 to 100,000 and a reason of up to 300 characters.":
+    "请填写 1–100000 的整数积分，以及不超过 300 字的添加原因。",
+  "This credit request was already used with different details.":
+    "这笔操作已提交过，内容与当前表单不同，请先核对会员余额和操作日志。",
+  "This member no longer exists.": "该会员已不存在，请刷新会员列表。",
+  "This addition would exceed the member's credit balance limit.":
+    "添加后将超出该会员的积分余额上限。",
+  "Could not confirm the credit addition. Retry this form to check the same request.":
+    "暂时无法确认添加结果，请保留当前表单重试，系统会核对同一笔操作。",
+  "Style reference image": "风格参考图",
+  "Upload style reference": "上传风格参考图",
+  "Remove style reference": "移除风格参考图",
+  "With a reference: image 1 is the style, image 2 is the user's photo. Without a reference: only the user's photo is sent. Publish a new version after changing it.":
+    "有参考图时，图一提供风格、图二为用户照片；没有参考图时只发送用户照片。修改后需发布新版本。",
+  "The template style reference is included automatically. Your photo supplies the subject; the reference supplies the style.":
+    "此模板会自动传入风格参考图：你的照片决定主体，参考图仅提供画风。",
+  "This model does not support a style reference.":
+    "所选模型不支持当前风格参考图，请选择兼容模型。",
+  "The template style reference is unavailable. Contact the site operator.":
+    "模板风格参考图暂不可用，请联系站点管理员。",
   provider_model_not_open: "服务账号未开通该模型",
   provider_authentication_failed: "服务密钥鉴权失败",
   provider_access_denied: "服务账号无模型访问权限",

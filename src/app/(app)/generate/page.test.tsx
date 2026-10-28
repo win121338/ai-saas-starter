@@ -53,6 +53,24 @@ beforeEach(() => {
 });
 
 describe("creative studio page", () => {
+  it("exposes only the reference-use flag, never the private reference descriptor or manuscript", async () => {
+    const published = JSON.parse(
+      readFileSync(
+        "content/case-templates/indie-ink-portrait/creative-template.json",
+        "utf8",
+      ),
+    );
+    fake.list.mockResolvedValue([
+      { id: published.id, published, activeVersion: 1, creationEnabled: true },
+    ]);
+    const html = renderToStaticMarkup(
+      await GeneratePage({ searchParams: Promise.resolve({}) }),
+    );
+    expect(html).toContain("usesReference&quot;:true");
+    expect(html).not.toContain("creative-references");
+    expect(html).not.toContain("referenceImage");
+    expect(html).not.toContain("alternative manga portrait");
+  });
   it("passes a requested Seedream model through without replacing it with the template default", async () => {
     const html = renderToStaticMarkup(
       await GeneratePage({

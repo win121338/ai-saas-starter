@@ -330,4 +330,113 @@ describe.sequential("creative template lifecycle and creation", () => {
         actor,
       );
   });
+  it("pins the published reference to the job version and rejects missing references before charging", async () => {
+    const referenceId = `reference-test-${randomUUID()}`;
+    const first = creativeDefinition.parse(
+      JSON.parse(
+        readFileSync(
+          "content/case-templates/indie-ink-portrait/creative-template.json",
+          "utf8",
+        ),
+      ),
+    );
+    first.id = referenceId;
+    await saveCreativeDraft(first, actor);
+    await publishCreativeTemplate(referenceId, actor);
+    await setCreativeAvailability(
+      {
+        id: referenceId,
+        displayEnabled: true,
+        creationEnabled: true,
+        featured: false,
+        sortOrder: 80,
+      },
+      actor,
+    );
+    const data = await form();
+    data.set("style", referenceId);
+    data.set("options", "{}");
+    const accepted = await create(data);
+    expect(accepted.ok).toBe(true);
+    const second = structuredClone(first);
+    const other = JSON.parse(
+      readFileSync(
+        "content/case-templates/retro-grain-poster/creative-template.json",
+        "utf8",
+      ),
+    );
+    second.recipe.referenceImage = other.recipe.referenceImage;
+    await saveCreativeDraft(second, actor);
+    await publishCreativeTemplate(referenceId, actor);
+    expect(
+      (await getCreativeVersion(referenceId, 1))?.recipe.referenceImage,
+    ).toEqual(first.recipe.referenceImage);
+    expect(
+      (await getCreativeVersion(referenceId, 2))?.recipe.referenceImage,
+    ).toEqual(second.recipe.referenceImage);
+    await db
+      .update(artJobs)
+      .set({ provider: "qwen" })
+      .where(eq(artJobs.id, accepted.jobId!));
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({ output: { task_id: "reference-pinned-task" } }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    try {
+      await processOneArtJob(accepted.jobId);
+      const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+      const stored = readFileSync(
+        `content/case-templates/indie-ink-portrait/references/${first.recipe.referenceImage!.src.split("/").at(-1)}`,
+      );
+      expect(body.input.messages[0].content[0].image).toBe(
+        `data:image/webp;base64,${stored.toString("base64")}`,
+      );
+      expect(body.input.messages[0].content).toHaveLength(3);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    const publicTemplate = (await getCreativeCatalog()).templates.find(
+      (item) => item.id === referenceId,
+    )!;
+    expect(JSON.stringify(publicTemplate)).not.toContain("creative-references");
+    const broken = structuredClone(second);
+    broken.recipe.referenceImage!.src = `/creative-references/missing-reference/${"0".repeat(64)}.webp`;
+    await saveCreativeDraft(broken, actor);
+    await expect(publishCreativeTemplate(referenceId, actor)).rejects.toThrow();
+    // Simulate storage loss in an accepted snapshot without touching any existing version.
+    await db
+      .insert(creativeTemplateVersions)
+      .values({
+        templateId: referenceId,
+        version: 3,
+        definition: broken,
+        createdBy: actor,
+      });
+    await activateCreativeVersion(referenceId, 3, actor);
+    const balance = await getBalance(actor);
+    const invalid = await form(3);
+    invalid.set("style", referenceId);
+    invalid.set("options", "{}");
+    expect(await create(invalid)).toMatchObject({
+      ok: false,
+      error:
+        "The template style reference is unavailable. Contact the site operator.",
+    });
+    expect(await getBalance(actor)).toBe(balance);
+    await setCreativeAvailability(
+      {
+        id: referenceId,
+        displayEnabled: false,
+        creationEnabled: false,
+        featured: false,
+        sortOrder: 80,
+      },
+      actor,
+    );
+  });
 });

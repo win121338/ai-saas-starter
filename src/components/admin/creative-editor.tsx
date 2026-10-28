@@ -8,7 +8,10 @@ import {
   creativeUploadAction,
 } from "@/app/(app)/admin/templates/creative-actions";
 import type { CreativeDefinition } from "@/lib/creative/schema";
-import { artModels } from "@/config/image-model-catalog";
+import {
+  artModels,
+  supportsStyleReference,
+} from "@/config/image-model-catalog";
 import { ART_ASPECT_RATIOS } from "@/config/art-aspect-ratios";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
@@ -99,10 +102,16 @@ export function CreativeEditor({
     [items[index], items[target]] = [items[target], items[index]];
     setDraft({ ...draft, cases: items });
   }
-  function upload(file: File, index?: number, before = false) {
+  function upload(
+    file: File,
+    index?: number,
+    before = false,
+    reference = false,
+  ) {
     setError("");
     const form = new FormData();
     form.set("image", file);
+    form.set("usage", reference ? "reference" : "case");
     startUpload(async () => {
       try {
         const result = await creativeUploadAction(form);
@@ -111,6 +120,15 @@ export function CreativeEditor({
           return;
         }
         setDraft((current) => {
+          if (reference)
+            return {
+              ...current,
+              recipe: {
+                ...current.recipe,
+                inputMode: "photo-with-reference",
+                referenceImage: result.image,
+              },
+            };
           if (index !== undefined)
             return {
               ...current,
@@ -396,6 +414,54 @@ export function CreativeEditor({
             onChange={(event) => recipe({ prompt: event.target.value })}
           />
         </label>
+        <fieldset className="space-y-3">
+          <legend className="text-sm font-semibold">
+            {t(locale, "Style reference image")}
+          </legend>
+          <p className="text-xs leading-6 text-muted-foreground">
+            {t(
+              locale,
+              "With a reference: image 1 is the style, image 2 is the user's photo. Without a reference: only the user's photo is sent. Publish a new version after changing it.",
+            )}
+          </p>
+          {draft.recipe.referenceImage ? (
+            <>
+              <Image
+                {...draft.recipe.referenceImage}
+                alt={t(locale, "Style reference image")}
+                unoptimized
+                className="h-48 w-full rounded-xl bg-secondary object-contain"
+              />
+              <button
+                type="button"
+                disabled={uploading}
+                className="artora-quiet-action text-sm"
+                onClick={() =>
+                  recipe({
+                    inputMode: "single-photo",
+                    referenceImage: undefined,
+                  })
+                }
+              >
+                {t(locale, "Remove style reference")}
+              </button>
+            </>
+          ) : null}
+          <label className="inline-block cursor-pointer rounded-xl border border-border px-4 py-3 text-sm">
+            {t(locale, uploading ? "Uploading…" : "Upload style reference")}
+            <input
+              type="file"
+              aria-label={t(locale, "Upload style reference")}
+              accept="image/jpeg,image/png,image/webp"
+              disabled={uploading}
+              className="sr-only"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) upload(file, undefined, false, true);
+              }}
+            />
+          </label>
+        </fieldset>
         <label className="block text-sm font-semibold">
           {t(locale, "Fixed style rule")}
           <textarea
@@ -438,6 +504,11 @@ export function CreativeEditor({
                 <input
                   type="checkbox"
                   checked={draft.recipe.modelIds.includes(model.id)}
+                  disabled={
+                    Boolean(draft.recipe.referenceImage) &&
+                    !supportsStyleReference(model.id) &&
+                    !draft.recipe.modelIds.includes(model.id)
+                  }
                   onChange={(event) =>
                     recipe({
                       modelIds: event.target.checked

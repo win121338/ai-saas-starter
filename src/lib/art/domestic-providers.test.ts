@@ -28,6 +28,77 @@ beforeEach(() => {
 
 describe("domestic image providers", () => {
   it.each([
+    "qwen-image-2.1-turbo",
+    "qwen-image-3.0-pro",
+    "wan2.7-image",
+    "wan2.7-image-pro",
+    "doubao-seedream-5-0-flash-260915",
+  ])(
+    "sends style first and subject second to %s, and omits the reference when absent",
+    async (model) => {
+      const fetchMock = vi
+        .fn()
+        .mockImplementation(
+          async () =>
+            new Response(
+              JSON.stringify({
+                output: { task_id: "reference-task" },
+                data: [{ b64_json: Buffer.from("result").toString("base64") }],
+              }),
+              { status: 200 },
+            ),
+        );
+      vi.stubGlobal("fetch", fetchMock);
+      const reference = Buffer.from("style-reference-not-the-user");
+      const send = (ref?: Buffer) =>
+        model.startsWith("qwen")
+          ? submitQwen(photo, "roles and instructions", model, undefined, ref)
+          : model.startsWith("wan")
+            ? submitWanx(photo, "roles and instructions", model, undefined, ref)
+            : generateSeedream(
+                photo,
+                "roles and instructions",
+                model,
+                undefined,
+                ref,
+              );
+      const uri = (bytes: Buffer) =>
+        `data:image/webp;base64,${bytes.toString("base64")}`;
+      await send(reference);
+      const first = JSON.parse(fetchMock.mock.calls[0][1].body);
+      if (model.startsWith("doubao"))
+        expect(first.image).toEqual([uri(reference), uri(photo)]);
+      else
+        expect(first.input.messages[0].content).toEqual([
+          { image: uri(reference) },
+          { image: uri(photo) },
+          { text: "roles and instructions" },
+        ]);
+      await send();
+      const second = JSON.parse(fetchMock.mock.calls[1][1].body);
+      if (model.startsWith("doubao")) expect(second.image).toBe(uri(photo));
+      else
+        expect(second.input.messages[0].content).toEqual([
+          { image: uri(photo) },
+          { text: "roles and instructions" },
+        ]);
+    },
+  );
+  it("rejects a style reference for the archived single-image Wan model before a request", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    await expect(
+      submitWanx(
+        photo,
+        "paint",
+        "wanx2.1-imageedit",
+        undefined,
+        Buffer.from("reference"),
+      ),
+    ).rejects.toBeInstanceOf(DefiniteArtFailure);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it.each([
     [404, "ModelNotOpen", "provider_model_not_open"],
     [401, "AuthenticationError", "provider_authentication_failed"],
     [403, "AccessDenied", "provider_access_denied"],

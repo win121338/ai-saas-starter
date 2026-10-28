@@ -9,7 +9,10 @@ import {
   listCreativeTemplates,
 } from "@/lib/creative/catalog";
 import { artModelAvailable, FAL_MODEL } from "@/lib/art/provider";
-import { artModels } from "@/config/image-model-catalog";
+import {
+  artModels,
+  supportsStyleReference,
+} from "@/config/image-model-catalog";
 import { getSiteAnnouncement, listModelSettings } from "@/lib/admin/settings";
 import { env } from "@/lib/env";
 import { getLocale } from "@/lib/i18n-server";
@@ -96,9 +99,14 @@ export default async function GeneratePage({
     fields: item.recipe.fields,
     aspectRatio: item.recipe.aspectRatio,
     tested: item.recipe.tested,
+    usesReference: Boolean(item.recipe.referenceImage),
     defaultModel: item.recipe.defaultModel,
     models: availableModels
-      .filter((model) => item.recipe.modelIds.includes(model.id))
+      .filter(
+        (model) =>
+          item.recipe.modelIds.includes(model.id) &&
+          (!item.recipe.referenceImage || supportsStyleReference(model.id)),
+      )
       .map(({ id, label }) => ({ id, label })),
   }));
   return (

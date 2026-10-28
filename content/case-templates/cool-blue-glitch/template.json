@@ -1,0 +1,525 @@
+{
+  "schemaVersion": 1,
+  "id": "cool-blue-glitch",
+  "name": {
+    "zh": "掉进冷蓝漫画频道",
+    "en": "Cool Blue Comic Signal"
+  },
+  "summary": {
+    "zh": "冷蓝色块与珊瑚暖色交错，重绘带有错版与信号失真的动漫场景。",
+    "en": "Cool blue planes and warm coral accents redraw daily scenes with comic print misregistration."
+  },
+  "tags": [
+    "comic",
+    "portrait",
+    "blue",
+    "glitch"
+  ],
+  "subjectTags": [
+    "portrait"
+  ],
+  "status": "ready",
+  "generationReady": false,
+  "promotion": "candidate",
+  "provenance": "collected-reference",
+  "source": {
+    "platform": "douyin",
+    "url": null,
+    "author": null
+  },
+  "displayPermission": "unknown",
+  "processingDate": "2026-10-27",
+  "intakeBatch": "2026-10-27-references",
+  "sourceFolder": "case3",
+  "coverCaseId": "001",
+  "comparisonCaseId": "001",
+  "featuredCaseIds": [
+    "001",
+    "002",
+    "003"
+  ],
+  "coverReason": "人物、长椅与场景层级明确，冷蓝与珊瑚色差能代表本组重绘方向。",
+  "coverAlternatives": [
+    {
+      "caseId": "002",
+      "reason": "补充人物与神态场景。"
+    },
+    {
+      "caseId": "003",
+      "reason": "补充服装与姿态变化。"
+    }
+  ],
+  "prompt": {
+    "original": "p.md",
+    "prepared": "prompt-v1.md",
+    "version": 1,
+    "referenceRequired": true,
+    "referenceFiles": [
+      "references/refer.png",
+      "references/3642297fb7b820937f4f0c60fa68abfcf57e0a7d9e7e720f9ce71cb06b6d0f7c.webp"
+    ]
+  },
+  "reference": {
+    "sourceSha256": "70f1300afcaf7c2a2fb979f41a685fe5d6daa1ea666e0fe6b7f18a5d94b3249b",
+    "sourceSize": [
+      1206,
+      2622
+    ],
+    "cropRect": [
+      0,
+      288,
+      1206,
+      1797
+    ],
+    "image": {
+      "src": "/creative-references/cool-blue-glitch/3642297fb7b820937f4f0c60fa68abfcf57e0a7d9e7e720f9ce71cb06b6d0f7c.webp",
+      "width": 1206,
+      "height": 1797
+    },
+    "sha256": "3642297fb7b820937f4f0c60fa68abfcf57e0a7d9e7e720f9ce71cb06b6d0f7c"
+  },
+  "generation": {
+    "tested": false,
+    "model": null,
+    "publishedStyleSlug": null,
+    "publishedPromptVersion": null,
+    "testReport": null,
+    "draftImportedAt": "2026-10-27"
+  },
+  "evaluation": {
+    "visualAppeal": null,
+    "useMotivation": null,
+    "stability": null,
+    "subjectCoverage": null,
+    "costAndEffort": null,
+    "totalScore": null
+  },
+  "cases": [
+    {
+      "id": "001",
+      "title": "长椅上的冷蓝午后",
+      "titleEn": "Blue Afternoon on the Bench",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：长椅上的冷蓝午后",
+        "en": "Cool Blue Comic Signal: Blue Afternoon on the Bench"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/1.png",
+      "sourceSha256": "a3d0309091c61ae9a51586300a9207217c434ba5c742ccd4f3b8355a43bd008e",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          413,
+          383,
+          381,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/001-before.webp",
+        "after": "/cases/cool-blue-glitch/001-after.webp",
+        "compare": "/cases/cool-blue-glitch/001-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/001-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          381,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "a1990ef61f53904926f0fd803b374aa09ad22bd95df7130e7a4ca804aa94b018",
+        "after": "8fe357944441d680ed7aea4e354d4587052fe5e9928f7202c09c635a40391cad",
+        "compare": "ed3b1d0dc1f6512477bccafda4c303ea8fbf821b559698e562258ad8f8ddd4d3",
+        "thumb": "c6600a3b9c1ff1fcc23073a1b768ba87d256095f6c4d871bb00dd0328c48bb92"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "002",
+      "title": "蓝裙与树影",
+      "titleEn": "Blue Dress and Tree Shade",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：蓝裙与树影",
+        "en": "Cool Blue Comic Signal: Blue Dress and Tree Shade"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/2.png",
+      "sourceSha256": "5f8cb569b847626234b892566fb6282172ddde55b101c9741320077b24376147",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          402,
+          383,
+          402,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/002-before.webp",
+        "after": "/cases/cool-blue-glitch/002-after.webp",
+        "compare": "/cases/cool-blue-glitch/002-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/002-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          402,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "1b441ebb51fef5aaaaab975b3cec1ffc92a829aa92e8eb6bd0f0070888c044db",
+        "after": "883ca606d744767ed326e4f00ee7b4138eb06048177c8fa1a9cdb6ffb5d75b58",
+        "compare": "5c33dbed767e30ee567d8761e464b4172d361f89a8d130cde31679e542751b65",
+        "thumb": "dc43e7472089abc98c69733282e27a6d4b92854a91d70942390bfa53550f0226"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "003",
+      "title": "晴空台阶",
+      "titleEn": "Steps Under Blue Skies",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：晴空台阶",
+        "en": "Cool Blue Comic Signal: Steps Under Blue Skies"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/3.png",
+      "sourceSha256": "9102c2fd00287df91806a05b8d32a7367fbcf7e0f2189e0b9c60ec99688922c1",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          400,
+          383,
+          406,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/003-before.webp",
+        "after": "/cases/cool-blue-glitch/003-after.webp",
+        "compare": "/cases/cool-blue-glitch/003-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/003-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          406,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "d9bf1a1bfb61c51a5b2fed4f0d1079159cb07c933dd04c648a6d8d42c9be2f36",
+        "after": "cf317dc39f3bbc596dbd8227e25f149b66e9834803ce30881700459f086f73eb",
+        "compare": "374cb419c9d206b99af288b99f08fffde6cb605f07691094b73f49e9f44d2456",
+        "thumb": "bf4fef8c5d937fd93cb4748857453e5adcb6e3697a0a0a796a06f1172587b6e6"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "004",
+      "title": "抬眼的瞬间",
+      "titleEn": "An Upward Glance",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：抬眼的瞬间",
+        "en": "Cool Blue Comic Signal: An Upward Glance"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/4.png",
+      "sourceSha256": "99b203216abe04df24d5dc5d11a1f10404977c2831978abf55b1c8120743cb76",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          413,
+          383,
+          380,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/004-before.webp",
+        "after": "/cases/cool-blue-glitch/004-after.webp",
+        "compare": "/cases/cool-blue-glitch/004-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/004-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          380,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "c3e63682796f3696b68740139a4e7f2c775df5bfacfec2d03dbc4caea7b0cf1f",
+        "after": "020c9fcf8377706ff5d3dad5c3c23b4d94e1323af84832325b64ecc68c23b66f",
+        "compare": "e25c4fb1b56b5b5786a87d7cb7ab3e4883e6daab157e5d60d232162cf99437db",
+        "thumb": "324742abb3b7c5cae75450d24a3416ede1e6e58738bc2c7978fd93099e222024"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "005",
+      "title": "指间的目光",
+      "titleEn": "A Framed Glance",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：指间的目光",
+        "en": "Cool Blue Comic Signal: A Framed Glance"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/5.png",
+      "sourceSha256": "7e60be7a7985f44a4f7080b473e9a5a3532faa4b5720938caad1c5861aa19ac9",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          401,
+          383,
+          403,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/005-before.webp",
+        "after": "/cases/cool-blue-glitch/005-after.webp",
+        "compare": "/cases/cool-blue-glitch/005-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/005-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          403,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "fa58c1cada11c95e225b3dc2cfeabf5538a0467aaba025436f3cd63e4f9d24d2",
+        "after": "af83d31203fcfd5a1a6b3dc1424f902d8b7784351edbf94a12b9e26603361f6d",
+        "compare": "03c01b4c967a99a925d3b12cc08da4692b3d2f13019cb7b14e5a2056bdcdc416",
+        "thumb": "2b35a7ff97dd09000634812a1c852955cbf01ca542eec329936b3f3e2e993b11"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    },
+    {
+      "id": "006",
+      "title": "举杯入夜",
+      "titleEn": "An Evening Toast",
+      "alt": {
+        "zh": "掉进冷蓝漫画频道：举杯入夜",
+        "en": "Cool Blue Comic Signal: An Evening Toast"
+      },
+      "subjectTags": [
+        "portrait"
+      ],
+      "sourceFile": "originals/6.png",
+      "sourceSha256": "ed8f70995369411484b6d8f915330758e95c0b3f3672b4725f3d0f9f71db5a31",
+      "sourceSize": [
+        1206,
+        2622
+      ],
+      "cropRects": {
+        "before": [
+          377,
+          383,
+          452,
+          402
+        ],
+        "after": [
+          0,
+          785,
+          1206,
+          1206
+        ],
+        "compare": [
+          0,
+          383,
+          1206,
+          1608
+        ]
+      },
+      "assets": {
+        "before": "/cases/cool-blue-glitch/006-before.webp",
+        "after": "/cases/cool-blue-glitch/006-after.webp",
+        "compare": "/cases/cool-blue-glitch/006-compare.webp",
+        "thumb": "/cases/cool-blue-glitch/006-thumb.webp"
+      },
+      "assetSizes": {
+        "before": [
+          452,
+          402
+        ],
+        "after": [
+          1206,
+          1206
+        ],
+        "compare": [
+          1206,
+          1608
+        ],
+        "thumb": [
+          640,
+          640
+        ]
+      },
+      "assetSha256": {
+        "before": "e74408fe4aea3157ccba2992c180ac900466cf0c6c8dd731f64cd131aa2ee02f",
+        "after": "d21514900fdd2d0100b62bb089488ddb77d1fcaf0e417fcbe5c714514e813066",
+        "compare": "bf7cedd8ac7e6f95508ce31b650292ef3cb4cee27c0b288b4ace32605e6ff930",
+        "thumb": "d45cceb2b1d857e2def54e9976525f6411f7d5a3b3f77334c09393581071a9ed"
+      },
+      "review": "passed",
+      "notes": "来源截图，非本站生成；原照为截图提取。"
+    }
+  ],
+  "visualReview": {
+    "checkedAt": "2026-10-27",
+    "scope": "全部源图、全部 4 类案例衍生图及风格参考图，逐项联系表检查",
+    "result": "passed",
+    "notes": "参考图含巨大头像、杯子及小型人物等复合元素，配方只取色块、线条与错版语言，不复制这些人物和道具。原照为截图提取，部分背景含其他人物，主体识别与简化效果待实测。"
+  }
+}

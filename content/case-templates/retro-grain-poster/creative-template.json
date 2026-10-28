@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "id": "retro-grain-poster",
+  "name": {
+    "zh": "把生活印成复古海报",
+    "en": "Retro Grain Poster"
+  },
+  "summary": {
+    "zh": "高饱和色面、纸张颗粒与套印偏移，让日常照片带上复古印刷质感。",
+    "en": "Rich color, paper grain and offset ink give everyday photos a vintage print finish."
+  },
+  "suitability": {
+    "zh": "适合人物清晰、姿态明确的单人日常照。保留照片骨架与真实神态，强调色彩和印刷质感；低清与极暗照片待验证。",
+    "en": "Use a clear single-person photo with a readable pose. The recipe keeps the photographic structure while changing color and print texture."
+  },
+  "tags": [
+    "poster",
+    "portrait",
+    "retro",
+    "print"
+  ],
+  "coverCaseId": "001",
+  "featuredCaseIds": [
+    "001",
+    "002",
+    "003"
+  ],
+  "recipe": {
+    "inputMode": "photo-with-reference",
+    "referenceImage": {
+      "src": "/creative-references/retro-grain-poster/9d329598a4587515e6f151e0d43821194d94af87d6c1f185dc270f3629406c82.webp",
+      "width": 1206,
+      "height": 804
+    },
+    "prompt": "参考图一的视觉风格、色彩气质与印刷质感，保留图二真实照片中人物的面部神态、五官比例、表情特征、发型轮廓、身体姿态与主体识别度，将其转换为\n一艺术印刷海报\n整体采用:\nretro art poster, editorial portrait poster, grainprinted texture, risograph-inspired phototreatment, screen print grain, vintage magazine\ncover aesthetic, stylized photographic poster 风\n无任何文字，主体人物保持清晰可识别，\n必须保留原照片中的真实面部神态、眼神方向、嘴部\n表情、头部角度、发型轮廓和身体姿态在构图上可以进行轻微艺术化调整:\n增加更干净的背景留白\n强化人物与背景之间的色彩对比，\n让画面更像一张独立杂志封面或艺术展览海报。但整体仍需基于原始照片的核心构图关系而是保留照片骨架和人物真实感，\n在照片基础上进行艺术化平面处理:\n轻微色块化轻微边缘简化、轻微轮廓强化轻微印刷套色偏移局部半调网点粗颗粒纸张纹理\n复古印刷噪点\n高饱和复古印刷色调，整体鲜明、快乐、图形化\n可使用 bright red、warm yellow、deep cobalt\nblue, vivid green, soft pink, cream white...\n背景可以使用纯色、留白或简洁色面，\n画面质感:\ncoarse paper grain,\nrisograph grain,\nscreen printing texture.\nhalftone dots\nslight ink bleeding.\nslight color misregistration,\nvintage print noise,\n最终画面气质像:\n应该像真实照片经过艺术印刷与复古杂志处理\n复古艺术杂志人物封面、\n独立影像海报\n带有印刷颗粒的时尚肖像摄影、轻微图形化处理的真实人物照片。",
+    "rule": "图一只提供风格，图二只提供用户人物身份、原有表情、姿态和场景锚点。仅生成最终作品，不拼接对比、不添加手机界面。禁止复制参考图的人物、香烟、文字、商标、水印、署名或无关道具。保持用户照片主体数量，不凭空增加人物和肢体。",
+    "aspectRatio": "1:1",
+    "modelIds": [
+      "qwen-image-2.1-turbo",
+      "qwen-image-3.0-pro",
+      "wan2.7-image-pro",
+      "wan2.7-image",
+      "doubao-seedream-5-0-flash-260915"
+    ],
+    "defaultModel": "qwen-image-2.1-turbo",
+    "fields": [],
+    "tested": false,
+    "testReport": ""
+  },
+  "cases": [
+    {
+      "id": "001",
+      "title": {
+        "zh": "街角的蓝与粉",
+        "en": "Blue and Pink Afternoon"
+      },
+      "alt": {
+        "zh": "把生活印成复古海报：街角的蓝与粉",
+        "en": "Retro Grain Poster: Blue and Pink Afternoon"
+      },
+      "before": {
+        "src": "/cases/retro-grain-poster/001-before.webp",
+        "width": 617,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/retro-grain-poster/001-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/retro-grain-poster/001-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "poster",
+        "portrait",
+        "retro",
+        "print"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "002",
+      "title": {
+        "zh": "黄色上衣的午后",
+        "en": "Yellow Shirt Afternoon"
+      },
+      "alt": {
+        "zh": "把生活印成复古海报：黄色上衣的午后",
+        "en": "Retro Grain Poster: Yellow Shirt Afternoon"
+      },
+      "before": {
+        "src": "/cases/retro-grain-poster/002-before.webp",
+        "width": 625,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/retro-grain-poster/002-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/retro-grain-poster/002-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "poster",
+        "portrait",
+        "retro",
+        "print"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "003",
+      "title": {
+        "zh": "红黄棒球衫",
+        "en": "Red and Yellow Jersey"
+      },
+      "alt": {
+        "zh": "把生活印成复古海报：红黄棒球衫",
+        "en": "Retro Grain Poster: Red and Yellow Jersey"
+      },
+      "before": {
+        "src": "/cases/retro-grain-poster/003-before.webp",
+        "width": 819,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/retro-grain-poster/003-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/retro-grain-poster/003-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "poster",
+        "portrait",
+        "retro",
+        "print"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "004",
+      "title": {
+        "zh": "咖啡馆里的托腮",
+        "en": "Cafe Daydream"
+      },
+      "alt": {
+        "zh": "把生活印成复古海报：咖啡馆里的托腮",
+        "en": "Retro Grain Poster: Cafe Daydream"
+      },
+      "before": {
+        "src": "/cases/retro-grain-poster/004-before.webp",
+        "width": 625,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/retro-grain-poster/004-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/retro-grain-poster/004-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "poster",
+        "portrait",
+        "retro",
+        "print"
+      ],
+      "provenance": "collected-reference"
+    },
+    {
+      "id": "005",
+      "title": {
+        "zh": "慢饮一口",
+        "en": "A Slow Sip"
+      },
+      "alt": {
+        "zh": "把生活印成复古海报：慢饮一口",
+        "en": "Retro Grain Poster: A Slow Sip"
+      },
+      "before": {
+        "src": "/cases/retro-grain-poster/005-before.webp",
+        "width": 588,
+        "height": 402
+      },
+      "after": {
+        "src": "/cases/retro-grain-poster/005-after.webp",
+        "width": 1206,
+        "height": 1206
+      },
+      "thumbnail": {
+        "src": "/cases/retro-grain-poster/005-thumb.webp",
+        "width": 640,
+        "height": 640
+      },
+      "tags": [
+        "poster",
+        "portrait",
+        "retro",
+        "print"
+      ],
+      "provenance": "collected-reference"
+    }
+  ]
+}

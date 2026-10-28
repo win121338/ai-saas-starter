@@ -30,6 +30,7 @@ export type StudioTemplate = {
   fields: CreativeDefinition["recipe"]["fields"];
   aspectRatio: CreativeDefinition["recipe"]["aspectRatio"];
   tested: boolean;
+  usesReference?: boolean;
   defaultModel: string;
   models: { id: string; label: string }[];
 };
@@ -361,6 +362,14 @@ export function CreativeStudio({
                 : "Recipe not yet tested. The collected examples illustrate the intended direction.",
             )}
           </p>
+          {template.usesReference ? (
+            <p className="text-xs leading-6 text-muted-foreground">
+              {t(
+                locale,
+                "The template style reference is included automatically. Your photo supplies the subject; the reference supplies the style.",
+              )}
+            </p>
+          ) : null}
           <fieldset className="space-y-3">
             <legend className="text-sm font-semibold">
               {t(locale, "Output ratio")}

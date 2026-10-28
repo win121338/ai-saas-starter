@@ -18,6 +18,55 @@ export const fixture = () =>
   );
 
 describe("creative template import and options", () => {
+  it("validates the new reference packages and fixes input roles without changing historical recipes", () => {
+    expect(creativeInstruction(fixture(), {})).not.toContain(
+      "INPUT IMAGE ROLES",
+    );
+    for (const id of [
+      "indie-ink-portrait",
+      "retro-grain-poster",
+      "cool-blue-glitch",
+    ]) {
+      const definition = creativeDefinition.parse(
+        JSON.parse(
+          readFileSync(
+            `content/case-templates/${id}/creative-template.json`,
+            "utf8",
+          ),
+        ),
+      );
+      expect(definition.recipe.inputMode).toBe("photo-with-reference");
+      expect(definition.recipe.referenceImage?.src).toMatch(
+        /\/creative-references\/.+\/[a-f0-9]{64}\.webp$/,
+      );
+      const instruction = creativeInstruction(definition, {});
+      expect(instruction).toContain("Image 1 is the style reference only");
+      expect(instruction).toContain("Image 2 is the user's photo");
+      expect(definition.recipe.tested).toBe(false);
+    }
+  });
+  it("rejects missing references, ambiguous modes and arbitrary reference paths", () => {
+    const item = fixture();
+    item.recipe.inputMode = "photo-with-reference";
+    expect(creativeDefinition.safeParse(item).success).toBe(false);
+    item.recipe.referenceImage = {
+      src: `/creative-references/indie-ink-portrait/${"a".repeat(64)}.webp`,
+      width: 600,
+      height: 400,
+    };
+    expect(creativeDefinition.safeParse(item).success).toBe(true);
+    item.recipe.inputMode = "single-photo";
+    expect(creativeDefinition.safeParse(item).success).toBe(false);
+    item.recipe.inputMode = "photo-with-reference";
+    for (const src of [
+      "https://attacker.test/reference.webp",
+      "/creative-references/../secret.webp",
+      "/cases/case1/refer.png",
+    ]) {
+      item.recipe.referenceImage.src = src;
+      expect(creativeDefinition.safeParse(item).success).toBe(false);
+    }
+  });
   it("retains historical instructions and decodes new canvas settings separately", () => {
     const item = fixture();
     const original = creativeInstruction(item, { title: "HELLO" });

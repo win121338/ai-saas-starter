@@ -10,7 +10,7 @@ export async function GET(
     .uuid()
     .safeParse(filename.endsWith(".webp") ? filename.slice(0, -5) : "");
   if (!id.success) return new Response(null, { status: 404 });
-  const bytes = await readCreativeMedia(id.data);
+  const bytes = await readCreativeMedia(id.data, true);
   if (!bytes) return new Response(null, { status: 404 });
   return new Response(bytes, {
     headers: {

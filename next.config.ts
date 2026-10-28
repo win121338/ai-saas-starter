@@ -6,13 +6,14 @@ const nextConfig: NextConfig = {
   // may be open; each needs its own build cache and lock file.
   distDir: process.env.PLAYWRIGHT_E2E === "true" ? ".next-e2e" : ".next",
   experimental: { serverActions: { bodySizeLimit: "11mb" } },
-  // Marketing reads the approved case catalog at render time. Trace only
-  // manifests; prompts, original screenshots and review records stay local.
+  // Trace template packages and effective reference WebPs for server workers.
+  // Raw manuscripts, screenshots and review records stay out of the bundle.
   outputFileTracingIncludes: {
     "/*": [
       "./content/case-templates/catalog.json",
       "./content/case-templates/*/template.json",
       "./content/case-templates/*/creative-template.json",
+      "./content/case-templates/*/references/*.webp",
     ],
   },
 };

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { randomUUID } from "node:crypto";
 import { desc, eq, ilike, sql } from "drizzle-orm";
 import { z } from "zod";
 
@@ -9,6 +10,7 @@ import { localizedHref } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
 import { getLocale } from "@/lib/i18n-server";
 import { grantAdminAction } from "../actions";
+import { MemberCreditGrant } from "@/components/admin/member-credit-grant";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +107,7 @@ export default async function MembersPage({
                 <th className="px-3 py-3">{t(locale, "Credits")}</th>
                 <th className="px-3 py-3">{t(locale, "Image jobs")}</th>
                 <th className="px-3 py-3">{t(locale, "Access")}</th>
+                <th className="px-3 py-3">{t(locale, "Actions")}</th>
               </tr>
             </thead>
             <tbody>
@@ -128,6 +131,15 @@ export default async function MembersPage({
                     {isBootstrapOwner(member.id)
                       ? "owner"
                       : (member.adminRole ?? "—")}
+                  </td>
+                  <td className="px-3 py-3">
+                    <MemberCreditGrant
+                      userId={member.id}
+                      email={member.email}
+                      balance={member.balance}
+                      initialRequestId={randomUUID()}
+                      locale={locale}
+                    />
                   </td>
                 </tr>
               ))}
