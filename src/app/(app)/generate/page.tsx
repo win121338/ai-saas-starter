@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth/session";
 import { requireAdmin } from "@/lib/admin/auth";
 import {
   getCreativeVersion,
-  listCreativeTemplates,
+  listPublishedCreativeTemplates,
 } from "@/lib/creative/catalog";
 import { artModelAvailable, FAL_MODEL } from "@/lib/art/provider";
 import {
@@ -47,7 +47,7 @@ export default async function GeneratePage({
   const preview = params.previewVersion !== undefined;
   if (preview) await requireAdmin();
   const [rows, settings, announcement] = await Promise.all([
-    listCreativeTemplates(),
+    preview ? Promise.resolve([]) : listPublishedCreativeTemplates("creation"),
     listModelSettings(),
     getSiteAnnouncement(),
   ]);
@@ -92,7 +92,7 @@ export default async function GeneratePage({
       zh: adaptableCanvasText(item.suitability.zh),
     },
     version,
-    cover: item.cases.find((art) => art.id === item.coverCaseId)!.after,
+    cover: item.cases.find((art) => art.id === item.coverCaseId)!.thumbnail,
     samples: item.cases
       .slice(0, 3)
       .map((art) => ({ image: art.thumbnail, title: art.title })),

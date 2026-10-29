@@ -7,6 +7,7 @@ import { Check, RefreshCw } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/i18n-copy";
 import { checkArtJobAction } from "./actions";
+import { visibleInterval } from "@/lib/visible-interval";
 
 const stages = ["Queued", "Sent to model", "Creating artwork"] as const;
 
@@ -35,38 +36,49 @@ export function StatusRefresher({
 }) {
   const router = useRouter();
   const checking = useRef(false);
+  const lifecycle = useRef({ active: false, generation: 0 });
   const [isChecking, setIsChecking] = useState(false);
   const [checkFailed, setCheckFailed] = useState(false);
   const [now, setNow] = useState<number | null>(null);
 
   const checkNow = useCallback(async () => {
-    if (checking.current) return;
+    if (checking.current || !lifecycle.current.active || document.hidden)
+      return;
+    const generation = lifecycle.current.generation;
+    const current = () =>
+      lifecycle.current.active && lifecycle.current.generation === generation;
     checking.current = true;
     setIsChecking(true);
     try {
       if (driveLocalWorker) await checkArtJobAction(jobId);
-      setCheckFailed(false);
+      if (current()) setCheckFailed(false);
     } catch {
-      setCheckFailed(true);
+      if (current()) setCheckFailed(true);
     } finally {
-      router.refresh();
       checking.current = false;
-      setIsChecking(false);
+      if (current()) {
+        if (!document.hidden) router.refresh();
+        setIsChecking(false);
+      }
     }
   }, [driveLocalWorker, jobId, router]);
 
   useEffect(() => {
+    const lifetime = lifecycle.current;
+    lifetime.active = true;
+    lifetime.generation++;
     const initialClock = setTimeout(() => setNow(Date.now()), 0);
-    const clock = setInterval(() => setNow(Date.now()), 1_000);
-    const refresh = setInterval(() => void checkNow(), 10_000);
+    const clock = visibleInterval(() => setNow(Date.now()), 1_000);
+    const refresh = visibleInterval(() => void checkNow(), 10_000);
     const initialCheck = driveLocalWorker
       ? setTimeout(() => void checkNow(), 0)
       : null;
     return () => {
+      lifetime.active = false;
       clearTimeout(initialClock);
       if (initialCheck !== null) clearTimeout(initialCheck);
-      clearInterval(clock);
-      clearInterval(refresh);
+      clock();
+      refresh();
     };
   }, [checkNow, driveLocalWorker]);
 

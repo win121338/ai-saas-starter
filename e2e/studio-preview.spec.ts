@@ -24,7 +24,7 @@ async function fullFramePhoto() {
 
 test("studio opens after Next image optimization has loaded sharp", async ({
   page,
-}) => {
+}, testInfo) => {
   const optimized = await page.request.get(
     "/_next/image?url=%2Fcases%2Fblue-paper-comic%2F001-thumb.webp&w=640&q=75",
   );
@@ -37,6 +37,22 @@ test("studio opens after Next image optimization has loaded sharp", async ({
   await expect(
     page.getByRole("group", { name: "选择创作模板" }).getByRole("button"),
   ).toHaveCount(3);
+  await page.locator('nav a[href="/zh/creations"]').first().click();
+  await expect(page).toHaveURL(/\/zh\/creations$/);
+  await page.locator('nav a[href="/zh/generate"]').first().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "做一张属于你的作品。",
+  );
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(
+    await page
+      .locator(".route-enter")
+      .first()
+      .evaluate((element) =>
+        parseFloat(getComputedStyle(element).animationDuration),
+      ),
+  ).toBeLessThanOrEqual(0.00001);
+  await page.screenshot({ path: testInfo.outputPath("navigation-studio.png") });
 });
 
 for (const viewport of [

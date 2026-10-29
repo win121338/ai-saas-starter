@@ -30,6 +30,7 @@ import {
   getCreativeCatalog,
   getCreativeVersion,
   listCreativeTemplates,
+  listPublishedCreativeTemplates,
 } from "./catalog";
 import {
   activateCreativeVersion,
@@ -318,6 +319,16 @@ describe.sequential("creative template lifecycle and creation", () => {
       },
       actor,
     );
+    expect(
+      (await listPublishedCreativeTemplates("display")).some(
+        (item) => item.id === id,
+      ),
+    ).toBe(false);
+    expect(
+      (await listPublishedCreativeTemplates("creation")).some(
+        (item) => item.id === id,
+      ),
+    ).toBe(false);
     if (previous)
       await setCreativeAvailability(
         {

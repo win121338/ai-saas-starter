@@ -44,7 +44,7 @@ export function FeaturedCase({
           <figure className="case-hero-original absolute left-0 top-9 w-[27%] max-w-[142px] rotate-[-7deg] rounded-xl border border-white/50 bg-[#e9e3d8] p-1.5 shadow-[0_12px_30px_rgba(0,0,0,0.3)] sm:top-12 sm:p-2">
             <Image
               {...cover.before}
-              unoptimized
+              sizes="142px"
               alt={`${t(locale, "Original photo")}: ${cover.title[locale]}`}
               className="h-auto w-full rounded-md"
             />

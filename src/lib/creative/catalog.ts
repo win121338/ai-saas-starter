@@ -45,10 +45,43 @@ export async function getCreativeVersion(id: string, version: number) {
   return row ? creativeDefinition.parse(row.definition) : null;
 }
 
+// Public pages never need unpublished drafts or disabled collections.
+export const listPublishedCreativeTemplates = cache(
+  async (purpose: "display" | "creation") => {
+    const rows = await db
+      .select({
+        id: creativeTemplates.id,
+        activeVersion: creativeTemplates.activeVersion,
+        creationEnabled: creativeTemplates.creationEnabled,
+        featured: creativeTemplates.featured,
+        definition: creativeTemplateVersions.definition,
+      })
+      .from(creativeTemplates)
+      .innerJoin(
+        creativeTemplateVersions,
+        and(
+          eq(creativeTemplates.id, creativeTemplateVersions.templateId),
+          eq(creativeTemplates.activeVersion, creativeTemplateVersions.version),
+        ),
+      )
+      .where(
+        eq(
+          purpose === "display"
+            ? creativeTemplates.displayEnabled
+            : creativeTemplates.creationEnabled,
+          true,
+        ),
+      )
+      .orderBy(asc(creativeTemplates.sortOrder), asc(creativeTemplates.id));
+    return rows.map(({ definition, ...row }) => ({
+      ...row,
+      published: creativeDefinition.parse(definition),
+    }));
+  },
+);
+
 export const getCreativeCatalog = cache(async (): Promise<CaseCatalog> => {
-  const rows = (await listCreativeTemplates()).filter(
-    (row) => row.displayEnabled && row.published,
-  );
+  const rows = await listPublishedCreativeTemplates("display");
   const templates: CaseTemplate[] = rows.map((row) => {
     const item = row.published!;
     return {

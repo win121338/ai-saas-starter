@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { NavigationFeedback } from "@/components/navigation-feedback";
 import { usePathname } from "next/navigation";
 import {
   CreditCard,
@@ -57,7 +58,7 @@ export function SidebarNav({
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors",
+              "relative flex shrink-0 items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-semibold transition-colors",
               active
                 ? "border border-primary/30 bg-primary/10 text-primary"
                 : "border border-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",
@@ -65,6 +66,7 @@ export function SidebarNav({
           >
             <item.icon className="size-[18px]" strokeWidth={1.8} aria-hidden />
             {t(locale, item.label)}
+            <NavigationFeedback />
           </Link>
         );
       })}

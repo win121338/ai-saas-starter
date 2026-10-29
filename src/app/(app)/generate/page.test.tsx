@@ -11,7 +11,7 @@ vi.mock("@/lib/auth/session", () => ({ requireSession: fake.requireSession }));
 vi.mock("@/lib/admin/auth", () => ({ requireAdmin: fake.requireAdmin }));
 vi.mock("@/lib/i18n-server", () => ({ getLocale: async () => "zh" }));
 vi.mock("@/lib/creative/catalog", () => ({
-  listCreativeTemplates: fake.list,
+  listPublishedCreativeTemplates: fake.list,
   getCreativeVersion: async () => null,
 }));
 vi.mock("@/lib/art/provider", () => ({

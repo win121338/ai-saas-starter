@@ -634,8 +634,20 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
+  .route-enter {
+    animation: route-enter 160ms ease-out;
+  }
   .sparkle-spin {
     animation: sparkle-spin 0.9s linear infinite;
+  }
+}
+
+@keyframes route-enter {
+  from {
+    opacity: 0.65;
+  }
+  to {
+    opacity: 1;
   }
 }
 

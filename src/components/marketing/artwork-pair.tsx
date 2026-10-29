@@ -35,7 +35,7 @@ export function ArtworkPair({
             </figcaption>
             <Image
               {...artwork.before}
-              unoptimized
+              sizes="230px"
               alt={`${t(locale, "Original photo")}: ${artwork.title[locale]}`}
               className="max-h-[260px] w-auto max-w-full rounded-xl border border-white/10 object-contain"
             />

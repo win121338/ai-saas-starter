@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NavigationFeedback } from "@/components/navigation-feedback";
 import { ArrowUpRight } from "lucide-react";
 
 import { LogoMark } from "@/components/logo-mark";
@@ -41,9 +42,10 @@ export async function MarketingNav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
+              <NavigationFeedback />
             </Link>
           ))}
         </nav>
@@ -60,10 +62,11 @@ export async function MarketingNav() {
           <div className="hidden sm:block">
             <Link
               href={localizedHref("/generate", locale)}
-              className="artora-action min-h-10 px-4 text-sm"
+              className="artora-action relative min-h-10 px-4 text-sm"
             >
               {t(locale, "Open studio")}{" "}
               <ArrowUpRight className="size-4" aria-hidden />
+              <NavigationFeedback />
             </Link>
           </div>
           <MobileMenu
